@@ -34,11 +34,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void OnLevelWasLoaded(int index)
-    {
-        level++;
-        InitGame();
-    }
 
     void InitGame()
     {
@@ -52,6 +47,12 @@ public class GameManager : MonoBehaviour
 
         enemies.Clear();
         boardScript.SetupScene(level);
+    }
+
+    private void OnLevelWasLoaded(int index)
+    {
+        level++;
+        InitGame();
     }
 
     private void HideLevelImage()

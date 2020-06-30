@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -49,10 +50,21 @@ public class GameManager : MonoBehaviour
         boardScript.SetupScene(level);
     }
 
-    private void OnLevelWasLoaded(int index)
+    //    private void OnLevelWasLoaded(int index)
+    void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         level++;
         InitGame();
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnLevelFinishedLoading;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
     }
 
     private void HideLevelImage()

@@ -9,15 +9,15 @@ public class GameManager : MonoBehaviour
     public float levelStartDelay = 2f;
     public float turnDelay = .1f;
     public static GameManager instance = null;
-    public int playerFoodPoints = 100;
+    public int defaultReputation = 50;
     [HideInInspector] public bool playersTurn = true;
 
     private Text levelText;
     private GameObject levelImage;
     private BoardManager boardScript;
     private int level = 1;
-    private List<Enemy> enemies;
-    private bool enemiesMoving;
+    private List<Character> characters;
+    private bool charactersMoving;
     private bool doingSetup;
 
     // Start is called before the first frame update
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-        enemies = new List<Enemy>();
+        characters = new List<Character>();
         boardScript = GetComponent<BoardManager>();
         InitGame();
 
@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
 
-        enemies.Clear();
+        characters.Clear();
         boardScript.SetupScene(level);
     }
 
@@ -85,34 +85,34 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playersTurn || enemiesMoving || doingSetup)
+        if (playersTurn || charactersMoving || doingSetup)
             return;
 
-        StartCoroutine(MoveEnemies());
+        StartCoroutine(MoveCharacters());
     }
 
-    public void AddEnemyToList(Enemy script)
+    public void AddCharacterToList(Character script)
     {
-        enemies.Add(script);
+        characters.Add(script);
     }
 
-    IEnumerator MoveEnemies()
+    IEnumerator MoveCharacters()
     {
-        enemiesMoving = true;
+        charactersMoving = true;
         yield return new WaitForSeconds(turnDelay);
-        //if (enemies.Count == 0)
+        //if (characters.Count == 0)
         //{
         //    yield return new WaitForSeconds(turnDelay);
         //}
 
-        for (int i = 0; i < enemies.Count; i++)
+        for (int i = 0; i < characters.Count; i++)
         {
-            enemies[i].MoveEnemy();
-            //yield return new WaitForSeconds(enemies[i].moveTime);
+            characters[i].MoveCharacter();
+            //yield return new WaitForSeconds(characters[i].moveTime);
         }
 
         playersTurn = true;
-        enemiesMoving = false;
+        charactersMoving = false;
     }
 
 }

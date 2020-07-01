@@ -8,16 +8,15 @@ public class InteractableObject : MonoBehaviour
 
     public int health;
     public bool damageable;
-    // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
-    public bool leavesCorpse;
+    public bool leavesCorpse; // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
     public bool isCorpse;
 
     public Sprite damagedSprite;
     public Sprite corpseSprite;
     private SpriteRenderer spriteRenderer;
 
-    private BoxCollider2D boxCollider;
-    private Rigidbody2D rb2D;
+    protected BoxCollider2D boxCollider;
+    protected Rigidbody2D rb2D;
 
 
     // Start is called before the first frame update
@@ -26,6 +25,8 @@ public class InteractableObject : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
+
+        health = 10;
 
         isCorpse = false;
     }
@@ -36,7 +37,7 @@ public class InteractableObject : MonoBehaviour
      * 
      * @param damage How much health the action takes away
      */
-    public void takeDamage(int damage)
+    public virtual void takeDamage(int damage)
     {
         if (!damageable) return;
 

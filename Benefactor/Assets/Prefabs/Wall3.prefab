@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7663243397121557893}
   - component: {fileID: 4190726031670861746}
   - component: {fileID: 3176712841743467043}
-  - component: {fileID: -747953108208746787}
+  - component: {fileID: -1513372233822811544}
   m_Layer: 8
   m_Name: Wall3
   m_TagString: Untagged
@@ -109,7 +109,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-747953108208746787
+--- !u!114 &-1513372233822811544
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,8 +118,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 8065689519987455722}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e50624fe8eebeed4f9bb7b02d4265b91, type: 3}
+  m_Script: {fileID: 11500000, guid: 2600fd7fc31304e4f9e29d9ff040aeae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmgSprite: {fileID: 21300100, guid: fbe1e7b94bb1a4a099d5bcb15a00141c, type: 3}
-  HP: 4
+  Collisions:
+    serializedVersion: 2
+    m_Bits: 0
+  health: 0
+  damageable: 0
+  leavesCorpse: 0
+  isCorpse: 0
+  damagedSprite: {fileID: 0}
+  corpseSprite: {fileID: 0}

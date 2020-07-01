@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5495209542717074603}
   - component: {fileID: 5711645656472339633}
   - component: {fileID: 9098429775825877268}
-  - component: {fileID: 9041799921547000221}
+  - component: {fileID: 382401937710076465}
   m_Layer: 8
   m_Name: Enemy1
   m_TagString: Enemy
@@ -151,7 +151,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
---- !u!114 &9041799921547000221
+--- !u!114 &382401937710076465
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,11 +160,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 5495209542717074604}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46667a3751ab40a4480886f10d2a84cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 21825f0c59a08b3489267517aabe7f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTime: 0
   Collisions:
     serializedVersion: 2
     m_Bits: 256
-  playerDamage: 10
+  health: 0
+  damageable: 0
+  leavesCorpse: 0
+  isCorpse: 0
+  damagedSprite: {fileID: 0}
+  corpseSprite: {fileID: 0}
+  moveTime: 0
+  moves: 0
+  reputation: 0
+  strength: 0

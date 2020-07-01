@@ -4,32 +4,23 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Player : MovingObject
+public class Player : Character
 {
-    public int wallDamage = 1;
-    public int pointsPerFood = 10;
-    public int pointsPerSoda = 20;
     public float restartLevelDelay = 1f;
-    public Text foodText;
-
-    private Animator animator;
-    private int food;
+    public Text reputationText;
 
     // Start is called before the first frame update
     protected override void Start()
     {
-        animator = GetComponent<Animator>();
 
-        food = GameManager.instance.playerFoodPoints;
-
-        foodText.text = "Food: " + food;
+        //reputationText.text = "Reputation: " + reputation;
 
         base.Start();
     }
 
     private void OnDisable()
     {
-        GameManager.instance.playerFoodPoints = food;
+        GameManager.instance.defaultReputation = reputation;
     }
 
     // Update is called once per frame
@@ -52,13 +43,8 @@ public class Player : MovingObject
 
     protected override void AttemptMove<T>(int xDir, int yDir)
     {
-        food--;
-
-        foodText.text = "Food: " + food;
 
         base.AttemptMove<T>(xDir, yDir);
-
-        RaycastHit2D hit;
 
         CheckIfGameOver();
 
@@ -72,24 +58,17 @@ public class Player : MovingObject
             Invoke("Restart", restartLevelDelay);
             enabled = false;
         } 
-        else if (other.tag == "Food")
-        {
-            food += pointsPerFood;
-            foodText.text = "Food: " + food;
-            other.gameObject.SetActive(false);
-        }
-        else if (other.tag == "Soda")
-        {
-            food += pointsPerSoda;
-            foodText.text = "Food: " + food;
-            other.gameObject.SetActive(false);
-        }
+        //else if (other.tag == "Food")
+        //{
+        //    food += pointsPerFood;
+        //    foodText.text = "Food: " + food;
+        //    other.gameObject.SetActive(false);
+        //}
     }
 
     protected override void OnCantMove<T>(T component)
     {
-        Wall hitWall = component as Wall;
-        hitWall.DamageWall(wallDamage);
+        base.OnCantMove<T>(component);
         animator.SetTrigger("playerChop");
     }
 
@@ -98,17 +77,16 @@ public class Player : MovingObject
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void LoseFood (int loss)
+    public override void takeDamage (int loss)
     {
+        base.takeDamage(loss);
         animator.SetTrigger("playerHit");
-        food -= loss;
-        foodText.text = "Food: " + food;
         CheckIfGameOver();
     }
 
     private void CheckIfGameOver ()
     {
-        if (food <= 0)
+        if (health <= 0)
         {
             GameManager.instance.GameOver();
         }

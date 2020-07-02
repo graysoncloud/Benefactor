@@ -7,15 +7,16 @@ using UnityEngine.UI;
 public class Player : Character
 {
     public float restartLevelDelay = 1f;
-    public Text reputationText;
+    public Text healthText;
 
     // Start is called before the first frame update
     protected override void Start()
     {
 
-        //reputationText.text = "Reputation: " + reputation;
         base.Start();
-        health = 10;
+        maxHealth = 10;
+        health = maxHealth;
+        healthText.text = "Health: " + health;
     }
 
     private void OnDisable()
@@ -60,10 +61,12 @@ public class Player : Character
         }
         else if (other.tag == "Food")
         {
+            heal(3);
             other.gameObject.SetActive(false);
         }
         else if (other.tag == "Soda")
         {
+            heal(1);
             other.gameObject.SetActive(false);
         }
     }
@@ -82,8 +85,15 @@ public class Player : Character
     public override void takeDamage (int loss)
     {
         base.takeDamage(loss);
+        healthText.text = "Health: " + health;
         animator.SetTrigger("playerHit");
         CheckIfGameOver();
+    }
+
+    public override void heal (int amount)
+    {
+        base.heal(amount);
+        healthText.text = "Health: " + health;
     }
 
     private void CheckIfGameOver ()

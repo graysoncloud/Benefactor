@@ -26,7 +26,8 @@ public class InteractableObject : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
 
-        health = 10;
+        health = 2;
+        damageable = true;
 
         isCorpse = false;
     }

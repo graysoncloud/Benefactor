@@ -18,6 +18,8 @@ public class Character : InteractableObject
     // Start is called before the first frame update
     protected override void Start()
     {
+        strength = 1;
+
         animator = GetComponent<Animator>();
         reputation = GameManager.instance.defaultReputation;
         inverseMoveTime = 1 / moveTime;
@@ -113,8 +115,8 @@ public class Character : InteractableObject
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    //void Update()
+    //{
         
-    }
+    //}
 }

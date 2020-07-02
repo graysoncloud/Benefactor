@@ -14,8 +14,8 @@ public class Player : Character
     {
 
         //reputationText.text = "Reputation: " + reputation;
-
         base.Start();
+        health = 10;
     }
 
     private void OnDisable()
@@ -38,7 +38,7 @@ public class Player : Character
             vertical = 0;
 
         if (horizontal != 0 || vertical != 0)
-            AttemptMove<Wall>(horizontal, vertical);
+            AttemptMove<InteractableObject>(horizontal, vertical);
     }
 
     protected override void AttemptMove<T>(int xDir, int yDir)
@@ -57,13 +57,15 @@ public class Player : Character
         {
             Invoke("Restart", restartLevelDelay);
             enabled = false;
-        } 
-        //else if (other.tag == "Food")
-        //{
-        //    food += pointsPerFood;
-        //    foodText.text = "Food: " + food;
-        //    other.gameObject.SetActive(false);
-        //}
+        }
+        else if (other.tag == "Food")
+        {
+            other.gameObject.SetActive(false);
+        }
+        else if (other.tag == "Soda")
+        {
+            other.gameObject.SetActive(false);
+        }
     }
 
     protected override void OnCantMove<T>(T component)

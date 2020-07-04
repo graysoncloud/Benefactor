@@ -7,7 +7,6 @@ public class Character : InteractableObject
 {
     public float moveTime;
     public int moves;
-    public int reputation;
     public int strength;
 
     protected Animator animator;
@@ -21,13 +20,13 @@ public class Character : InteractableObject
         strength = 1;
 
         animator = GetComponent<Animator>();
-        reputation = GameManager.instance.defaultReputation;
         inverseMoveTime = 1 / moveTime;
 
         GameManager.instance.AddCharacterToList(this);
         target = GameObject.FindGameObjectWithTag("Player").transform; //update with unique objective
 
         base.Start();
+        reputation = GameManager.instance.defaultReputation;
     }
 
     /**
@@ -111,7 +110,6 @@ public class Character : InteractableObject
     {
         InteractableObject hitObject = component as InteractableObject;
         hitObject.takeDamage(strength);
-        // animator.SetTrigger("playerChop");
     }
 
     // Update is called once per frame

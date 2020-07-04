@@ -7,8 +7,9 @@ public class InteractableObject : MonoBehaviour
 {
     public LayerMask Collisions;
 
-    public int health;
-    public int maxHealth;
+    public double health;
+    public double maxHealth;
+    public int reputation;
     public bool damageable;
     public bool leavesCorpse; // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
     public bool isCorpse;
@@ -28,9 +29,11 @@ public class InteractableObject : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
 
+        reputation = 0;
         health = 2;
         damageable = true;
 
+        //leavesCorpse = false;
         isCorpse = false;
     }
 
@@ -40,7 +43,7 @@ public class InteractableObject : MonoBehaviour
      * 
      * @param damage How much health the action takes away
      */
-    public virtual void takeDamage(int damage)
+    public virtual void takeDamage(double damage)
     {
         if (!damageable) return;
 
@@ -54,6 +57,8 @@ public class InteractableObject : MonoBehaviour
         } else if (health <= 0)
         {
             gameObject.SetActive(false);
+            // For some reason, this didn't work, so instead, GameManager just doesn't move characters at <= 0 health
+            // GameManager.instance.RemoveDeadCharacters();
         }
     }
 

@@ -6,16 +6,19 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public int level = 0;
     public float levelStartDelay = 2f;
     public float turnDelay = .1f;
     public static GameManager instance = null;
     public int defaultReputation = 50;
     [HideInInspector] public bool playersTurn = true;
 
+    public double playerHealth;
+    public double playerRationale;
+
     private Text levelText;
     private GameObject levelImage;
     private BoardManager boardScript;
-    private int level = 1;
     private List<Character> characters;
     private bool charactersMoving;
     private bool doingSetup;
@@ -31,7 +34,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         characters = new List<Character>();
         boardScript = GetComponent<BoardManager>();
-        InitGame();
+        //InitGame();
 
     }
 
@@ -96,6 +99,15 @@ public class GameManager : MonoBehaviour
         characters.Add(script);
     }
 
+    public void RemoveDeadCharacters()
+    {
+        for (int i = 0; i < characters.Count; i++)
+        {
+            if (characters[i].health <= 0)
+                characters.RemoveAt(i);
+        }
+    }
+
     IEnumerator MoveCharacters()
     {
         charactersMoving = true;
@@ -107,7 +119,8 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < characters.Count; i++)
         {
-            characters[i].MoveCharacter();
+            if (characters[i].health > 0)
+                characters[i].MoveCharacter();
             //yield return new WaitForSeconds(characters[i].moveTime);
         }
 

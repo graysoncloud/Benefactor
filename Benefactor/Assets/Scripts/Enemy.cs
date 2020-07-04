@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Right now, Enemies inherit from the character class. Use this to add unique functionality
+
 public class Enemy : Character
 {
     //public int playerDamage;

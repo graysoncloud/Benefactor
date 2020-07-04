@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// OBSOLETE CLASS
+// Remnant of Roguelike Tutorial
+
 public abstract class MovingObject : MonoBehaviour
 {
-
+   
     public float moveTime;
     public LayerMask Collisions;
 

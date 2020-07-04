@@ -7,7 +7,10 @@ using UnityEngine.UI;
 public class Player : Character
 {
     public float restartLevelDelay = 1f;
+    public Text rationaleText;
     public Text healthText;
+
+    public double rationale;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -15,13 +18,26 @@ public class Player : Character
 
         base.Start();
         maxHealth = 10;
-        health = maxHealth;
+
+        health = GameManager.instance.playerHealth;
+        rationale = GameManager.instance.playerRationale;
+
+        if (GameManager.instance.level == 1)
+        {
+            health = maxHealth;
+            rationale = 50;
+        }
+        
+        
         healthText.text = "Health: " + health;
+        rationaleText.text = "Rationale: " + rationale;
     }
 
     private void OnDisable()
     {
         GameManager.instance.defaultReputation = reputation;
+        GameManager.instance.playerHealth = health;
+        GameManager.instance.playerRationale = rationale;
     }
 
     // Update is called once per frame
@@ -56,6 +72,7 @@ public class Player : Character
     {
         if (other.tag == "Exit")
         {
+            rationale += 3;
             Invoke("Restart", restartLevelDelay);
             enabled = false;
         }
@@ -73,8 +90,16 @@ public class Player : Character
 
     protected override void OnCantMove<T>(T component)
     {
-        base.OnCantMove<T>(component);
+        InteractableObject hitObject = component as InteractableObject;
+        hitObject.takeDamage(strength * (rationale / 50));
+
         animator.SetTrigger("playerChop");
+
+        if (hitObject.health <= 0)
+        {
+            rationale -= (hitObject.reputation * 0.1);
+            rationaleText.text = "Rationale: " + rationale;
+        }
     }
 
     private void Restart()
@@ -82,7 +107,7 @@ public class Player : Character
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public override void takeDamage (int loss)
+    public override void takeDamage (double loss)
     {
         base.takeDamage(loss);
         healthText.text = "Health: " + health;

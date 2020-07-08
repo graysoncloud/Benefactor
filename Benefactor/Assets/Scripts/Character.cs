@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Character : InteractableObject
 {
-    public float moveTime;
+    public float moveTime = 0.5f;
     public int moves;
     public int strength;
 

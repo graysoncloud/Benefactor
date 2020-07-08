@@ -234,13 +234,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e00fddaf3bcbf6d4fb04e8e627985d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
-  toFollow: {fileID: 0}
+  moveSpeed: 0.1
+  toFollow: {fileID: 1854034759}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -640,6 +640,11 @@ PrefabInstance:
       propertyPath: rationaleText
       value: 
       objectReference: {fileID: 70341998}
+    - target: {fileID: 6594416824975255306, guid: 9dfdcd00a8877bb4d8342c8be1806065,
+        type: 3}
+      propertyPath: moveTime
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9dfdcd00a8877bb4d8342c8be1806065, type: 3}
 --- !u!1 &1094112120
@@ -965,6 +970,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1788682311}
   m_CullTransparentMesh: 0
+--- !u!4 &1854034759 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6594416824975255319, guid: 9dfdcd00a8877bb4d8342c8be1806065,
+    type: 3}
+  m_PrefabInstance: {fileID: 666195557}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2062476240
 GameObject:
   m_ObjectHideFlags: 0

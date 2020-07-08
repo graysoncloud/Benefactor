@@ -44,15 +44,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3853c53c88e1ca84ea30c24c41c6fb3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 8
-  rows: 8
+  columns: 20
+  rows: 20
   wallCount:
     minimum: 5
     maximum: 9
   foodCount:
     minimum: 1
     maximum: 5
-  player: {fileID: 4373082396570546646, guid: 9dfdcd00a8877bb4d8342c8be1806065, type: 3}
+  houseCount:
+    minimum: 1
+    maximum: 4
+  houseWallLength:
+    minimum: 3
+    maximum: 5
+  player: {fileID: 6594416824975255305, guid: 9dfdcd00a8877bb4d8342c8be1806065, type: 3}
   exit: {fileID: 4738714068660868784, guid: eb35feb23eb52bd4d986e17334b1d9f3, type: 3}
   floorTiles:
   - {fileID: 6793900256970249569, guid: 89c8331683823014e9900980e63e7b52, type: 3}
@@ -82,6 +88,10 @@ MonoBehaviour:
   - {fileID: 6977616781966003654, guid: 752e6837d8cb81049b0fa40abd211097, type: 3}
   - {fileID: 1556591848960847974, guid: 028afe84125832f42b3f5ed9e91df154, type: 3}
   - {fileID: 74827881571744996, guid: 51b24de1afb6b1b419c7268059d798f5, type: 3}
+  houseWallTiles:
+  - {fileID: 7991227353612988546, guid: 09a647a8d5f41a54ea0acd103fd5e609, type: 3}
+  - {fileID: 7991227353612988546, guid: 2df4a3cc6978edc44a19911f9ebf43be, type: 3}
+  - {fileID: 7991227353612988546, guid: a3ca0183fb83a57438e4b22b725b5ad3, type: 3}
 --- !u!114 &2784425834404376429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,7 +104,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e3a2d8ff607f64b913ce2e61e1d7fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  level: 0
   levelStartDelay: 2
   turnDelay: 0.1
-  playerFoodPoints: 100
+  defaultReputation: 50
   playersTurn: 1
+  playerHealth: 0
+  playerRationale: 0

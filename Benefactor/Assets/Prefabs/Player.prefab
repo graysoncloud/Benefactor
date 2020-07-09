@@ -167,14 +167,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   health: 0
+  maxHealth: 0
+  reputation: 0
   damageable: 0
   leavesCorpse: 0
   isCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
   moveTime: 0
-  moves: 0
-  reputation: 0
+  moves: 3
+  movesUsed: 0
+  isMoving: 0
   strength: 0
   restartLevelDelay: 1
-  reputationText: {fileID: 0}
+  rationaleText: {fileID: 0}
+  healthText: {fileID: 0}
+  rationale: 0

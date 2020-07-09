@@ -9,15 +9,18 @@ public class Player : Character
     public float restartLevelDelay = 1f;
     public Text rationaleText;
     public Text healthText;
+    public List<Vector3> tilesVisited;
 
     public double rationale;
 
     // Start is called before the first frame update
     protected override void Start()
     {
-
+        moveTime = 0.5f;
         base.Start();
         maxHealth = 10;
+        moves = 3;
+        movesUsed = 0;
 
         health = GameManager.instance.playerHealth;
         rationale = GameManager.instance.playerRationale;
@@ -44,6 +47,8 @@ public class Player : Character
     void Update()
     {
         if (!GameManager.instance.playersTurn) return;
+        if (movesUsed >= moves) return;
+        if (transform.position.x % 1 != 0 || transform.position.y % 1 != 0) return;
 
         int horizontal = 0;
         int vertical = 0;
@@ -60,12 +65,22 @@ public class Player : Character
 
     protected override void AttemptMove<T>(int xDir, int yDir)
     {
+        isMoving = true;
 
         base.AttemptMove<T>(xDir, yDir);
 
+        if (!tilesVisited.Contains(transform.position))
+        {
+            tilesVisited.Add(transform.position);
+            movesUsed++;
+        }
+
         CheckIfGameOver();
 
-        GameManager.instance.playersTurn = false;
+        isMoving = false;
+
+
+        //GameManager.instance.playersTurn = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -100,6 +115,12 @@ public class Player : Character
             rationale -= (hitObject.reputation * 0.1);
             rationaleText.text = "Rationale: " + rationale;
         }
+    }
+
+    public void EndTurn()
+    {
+        GameManager.instance.playersTurn = false;
+        tilesVisited.Clear();
     }
 
     private void Restart()

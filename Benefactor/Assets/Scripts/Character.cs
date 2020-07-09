@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class Character : InteractableObject
 {
-    public float moveTime = 0.5f;
+    public float moveTime;
     public int moves;
+    public int movesUsed;
+    public float actionDelay;
+    public bool isMoving;
     public int strength;
 
     protected Animator animator;
@@ -18,6 +21,9 @@ public class Character : InteractableObject
     protected override void Start()
     {
         strength = 1;
+        isMoving = false;
+        moveTime = .5f;
+        actionDelay = .5f;
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
@@ -57,7 +63,9 @@ public class Character : InteractableObject
 
         if (hit.transform == null)
         {
+            //isMoving = true;
             StartCoroutine(SmoothMovement(end));
+            //isMoving = false;
             return true;
         }
 
@@ -79,11 +87,14 @@ public class Character : InteractableObject
     protected virtual void AttemptMove<T>(int xDir, int yDir)
         where T : Component
     {
+
         RaycastHit2D hit;
         bool canMove = Move(xDir, yDir, out hit);
 
         if (hit.transform == null)
+        {
             return;
+        }
 
         T hitComponent = hit.transform.GetComponent<T>();
 
@@ -110,6 +121,12 @@ public class Character : InteractableObject
     {
         InteractableObject hitObject = component as InteractableObject;
         hitObject.takeDamage(strength);
+        postActionDelay();
+    }
+
+    protected IEnumerator postActionDelay()
+    {
+        yield return new WaitForSeconds(actionDelay);
     }
 
     // Update is called once per frame

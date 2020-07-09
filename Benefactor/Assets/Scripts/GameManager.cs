@@ -119,11 +119,15 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < characters.Count; i++)
         {
-            if (characters[i].health > 0)
+            if (characters[i].health > 0 && characters[i].GetType() != typeof(Player))
                 characters[i].MoveCharacter();
+
             //yield return new WaitForSeconds(characters[i].moveTime);
         }
 
+        // Set up players turn
+        GameObject.FindObjectOfType<Player>().movesUsed = 0;
+        GameObject.FindObjectOfType<Player>().tilesVisited.Add(GameObject.FindObjectOfType<Player>().transform.position);
         playersTurn = true;
         charactersMoving = false;
     }

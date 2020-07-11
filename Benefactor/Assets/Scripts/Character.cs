@@ -47,7 +47,6 @@ public class Character : InteractableObject
     virtual protected void Update()
     {
         if (!isTurn || gettingTarget || isActing) return;
-        //if (transform.position.x % 1 != 0 || transform.position.y % 1 != 0) return;
         if (movesUsed >= moves)
         {
             isTurn = false;

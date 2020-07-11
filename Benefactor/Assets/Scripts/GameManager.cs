@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     public float levelStartDelay = 2f;
     public float turnDelay = .1f;
     public static GameManager instance = null;
-    [HideInInspector] public bool playersTurn = true;
 
     public double defaultHealth;
     public double defaultRationale;
@@ -93,7 +92,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (characters.Count > 0) { doingSetup = false;  }
+        if (characters.Count > 0) { doingSetup = false;  } //kinda sketchy way of making sure characters have been loaded in, might change to a time delay?
         if (!doingSetup && activeCharacterIndex == -1)
         {
             nextTurn();
@@ -103,8 +102,6 @@ public class GameManager : MonoBehaviour
     public void nextTurn()
     {
         activeCharacterIndex++;
-        Debug.Log("Index: " + activeCharacterIndex);
-
         if (activeCharacterIndex >= characters.Count)
         {
             nextRound();
@@ -112,7 +109,7 @@ public class GameManager : MonoBehaviour
         }
 
         activeCharacter = characters[activeCharacterIndex];
-
+        Debug.Log("Active Character Index: " + activeCharacterIndex);
         activeCharacter.StartTurn();
     }
 
@@ -136,31 +133,5 @@ public class GameManager : MonoBehaviour
                 characters.RemoveAt(i);
         }
     }
-
-    //IEnumerator MoveCharacters()
-    //{
-    //    charactersMoving = true;
-    //    yield return new WaitForSeconds(turnDelay);
-    //    //if (characters.Count == 0)
-    //    //{
-    //    //    yield return new WaitForSeconds(turnDelay);
-    //    //}
-
-    //    for (int i = 0; i < characters.Count; i++)
-    //    {
-    //        if (characters[i].health > 0 && characters[i].GetType() != typeof(Player))
-    //            characters[i].isTurn = true;
-    //            characters[i].Act();
-    //            while (characters[i].isTurn) { }
-
-    //        //yield return new WaitForSeconds(characters[i].moveTime);
-    //    }
-
-    //    // Set up players turn
-    //    GameObject.FindObjectOfType<Player>().movesUsed = 0;
-    //    GameObject.FindObjectOfType<Player>().tilesVisited.Add(GameObject.FindObjectOfType<Player>().transform.position);
-    //    playersTurn = true;
-    //    charactersMoving = false;
-    //}
 
 }

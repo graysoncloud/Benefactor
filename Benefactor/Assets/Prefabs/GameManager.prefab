@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2784425834404376431}
   - component: {fileID: 2784425834404376430}
-  - component: {fileID: 2784425834404376429}
+  - component: {fileID: 5498348103610966037}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -92,7 +92,7 @@ MonoBehaviour:
   - {fileID: 7991227353612988546, guid: 09a647a8d5f41a54ea0acd103fd5e609, type: 3}
   - {fileID: 7991227353612988546, guid: 2df4a3cc6978edc44a19911f9ebf43be, type: 3}
   - {fileID: 7991227353612988546, guid: a3ca0183fb83a57438e4b22b725b5ad3, type: 3}
---- !u!114 &2784425834404376429
+--- !u!114 &5498348103610966037
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,7 +107,14 @@ MonoBehaviour:
   level: 0
   levelStartDelay: 2
   turnDelay: 0.1
-  defaultReputation: 50
   playersTurn: 1
-  playerHealth: 0
-  playerRationale: 0
+  defaultHealth: 10
+  defaultRationale: 100
+  defaultReputation: 50
+  defaultMoves: 3
+  defaultStrength: 1
+  defaultMoveTime: 0.5
+  defaultActionDelay: 0.5
+  activeCharacterIndex: 0
+  activeCharacter: {fileID: 0}
+  round: 0

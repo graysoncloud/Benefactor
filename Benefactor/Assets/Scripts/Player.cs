@@ -6,52 +6,40 @@ using UnityEngine.UI;
 
 public class Player : Character
 {
-    public float restartLevelDelay = 1f;
     public Text rationaleText;
     public Text healthText;
     public List<Vector3> tilesVisited;
 
-    public double rationale;
+    private int horizontal;
+    private int vertical;
 
     // Start is called before the first frame update
     protected override void Start()
     {
-        moveTime = 0.5f;
         base.Start();
-        maxHealth = 10;
-        moves = 3;
-        movesUsed = 0;
-
-        health = GameManager.instance.playerHealth;
-        rationale = GameManager.instance.playerRationale;
-
-        if (GameManager.instance.level == 1)
-        {
-            health = maxHealth;
-            rationale = 50;
-        }
-        
-        
-        healthText.text = "Health: " + health;
-        rationaleText.text = "Rationale: " + rationale;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.instance.defaultReputation = reputation;
-        GameManager.instance.playerHealth = health;
-        GameManager.instance.playerRationale = rationale;
+        //healthText.text = "Health: " + health;
+        //rationaleText.text = "Rationale: " + rationale;
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        if (!GameManager.instance.playersTurn) return;
-        if (movesUsed >= moves) return;
-        if (transform.position.x % 1 != 0 || transform.position.y % 1 != 0) return;
+        if (gettingTarget)
+        {
+            gettingTarget = GetInput();
+            if (!gettingTarget)
+            {
+                Debug.Log("Horizontal: " + horizontal + ", Vertical: " + vertical);
+            }
+        }
 
-        int horizontal = 0;
-        int vertical = 0;
+        base.Update();
+    }
+
+    bool GetInput()
+    {
+        horizontal = 0;
+        vertical = 0;
 
         horizontal = (int)Input.GetAxisRaw("Horizontal");
         vertical = (int)Input.GetAxisRaw("Vertical");
@@ -59,68 +47,31 @@ public class Player : Character
         if (horizontal != 0)
             vertical = 0;
 
-        if (horizontal != 0 || vertical != 0)
-            AttemptMove<InteractableObject>(horizontal, vertical);
+        return (horizontal == 0 && vertical == 0);
     }
 
-    protected override void AttemptMove<T>(int xDir, int yDir)
+    protected override void GetTarget()
     {
-        isMoving = true;
-
-        base.AttemptMove<T>(xDir, yDir);
-
-        if (!tilesVisited.Contains(transform.position))
-        {
-            tilesVisited.Add(transform.position);
-            movesUsed++;
-        }
-
-        CheckIfGameOver();
-
-        isMoving = false;
-
-
-        //GameManager.instance.playersTurn = false;
+        gettingTarget = true;
+        Debug.Log("Player waiting for input");
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    protected override void TrackTarget()
+    {
+        RaycastHit2D hit;
+        Move(horizontal, vertical, out hit);
+    }
+
+    public override void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Exit")
         {
             rationale += 3;
-            Invoke("Restart", restartLevelDelay);
+            Invoke("Restart", 1f);
             enabled = false;
         }
-        else if (other.tag == "Food")
-        {
-            heal(3);
-            other.gameObject.SetActive(false);
-        }
-        else if (other.tag == "Soda")
-        {
-            heal(1);
-            other.gameObject.SetActive(false);
-        }
-    }
 
-    protected override void OnCantMove<T>(T component)
-    {
-        InteractableObject hitObject = component as InteractableObject;
-        hitObject.takeDamage(strength * (rationale / 50));
-
-        animator.SetTrigger("playerChop");
-
-        if (hitObject.health <= 0)
-        {
-            rationale -= (hitObject.reputation * 0.1);
-            rationaleText.text = "Rationale: " + rationale;
-        }
-    }
-
-    public void EndTurn()
-    {
-        GameManager.instance.playersTurn = false;
-        tilesVisited.Clear();
+        base.OnTriggerEnter2D(other);
     }
 
     private void Restart()
@@ -128,18 +79,18 @@ public class Player : Character
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public override void takeDamage (double loss)
+    public override void TakeDamage (double loss)
     {
-        base.takeDamage(loss);
-        healthText.text = "Health: " + health;
+        base.TakeDamage(loss);
+        //healthText.text = "Health: " + health;
         animator.SetTrigger("playerHit");
         CheckIfGameOver();
     }
 
-    public override void heal (int amount)
+    public override void Heal (int amount)
     {
-        base.heal(amount);
-        healthText.text = "Health: " + health;
+        base.Heal(amount);
+        //healthText.text = "Health: " + health;
     }
 
     private void CheckIfGameOver ()

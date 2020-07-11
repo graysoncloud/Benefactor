@@ -7,41 +7,102 @@ public class Character : InteractableObject
 {
     public float moveTime;
     public int moves;
-    public int movesUsed;
     public float actionDelay;
-    public bool isMoving;
     public int strength;
+    public double rationale;
+    //public int reputation;
+
+    public bool isTurn;
+    public bool gettingTarget;
+    public bool isActing;
+    public int movesUsed;
 
     protected Animator animator;
     private float inverseMoveTime;
     private Transform target;
-    private bool skipMove;
 
     // Start is called before the first frame update
     protected override void Start()
     {
-        strength = 1;
-        isMoving = false;
-        moveTime = .5f;
-        actionDelay = .5f;
+        health = GameManager.instance.defaultHealth;
+        rationale = GameManager.instance.defaultRationale;
+        //reputation = GameManager.instance.defaultReputation;
+        moves = GameManager.instance.defaultMoves;
+        strength = GameManager.instance.defaultStrength;
+        moveTime = GameManager.instance.defaultMoveTime;
+        actionDelay = GameManager.instance.defaultActionDelay;
+
+        isTurn = false;
+        gettingTarget = false;
+        isActing = false;
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
 
         GameManager.instance.AddCharacterToList(this);
-        target = GameObject.FindGameObjectWithTag("Player").transform; //update with unique objective
 
         base.Start();
-        reputation = GameManager.instance.defaultReputation;
     }
 
-    /**
-     * Ideally, MoveTo will utilize a SingleMove() function to provide smooth movement one tile at a time, but this will function for the MVP
-     * @param toMoveTo The intended destination for the object
-     */
-    public void MoveTo(Vector3 toMoveTo)
+    virtual protected void Update()
     {
-        transform.position = toMoveTo;
+        if (!isTurn || gettingTarget || isActing) return;
+        //if (transform.position.x % 1 != 0 || transform.position.y % 1 != 0) return;
+        if (movesUsed >= moves)
+        {
+            isTurn = false;
+            GameManager.instance.nextTurn();
+            return;
+        }
+
+        StartCoroutine(Act());
+    }
+
+    public void StartTurn()
+    {
+        movesUsed = 0;
+        isTurn = true;
+        GetTarget();
+    }
+
+    public void GetAvailableActions()
+    {
+
+    }
+
+    virtual protected void GetTarget()
+    {
+        gettingTarget = true;
+        target = GameObject.FindGameObjectWithTag("Player").transform; //update with unique objective
+        gettingTarget = false;
+    }
+
+    public IEnumerator Act()
+    {
+        isActing = true;
+        movesUsed++;
+        Debug.Log("Moves Used: " + movesUsed + ", Total Moves: " + moves);
+        TrackTarget();
+        yield return new WaitForSeconds(moveTime);
+        isActing = false;
+        if (movesUsed < moves)
+        {
+            GetTarget();
+        }
+    }
+
+    virtual protected void TrackTarget()
+    {
+        int xDir = 0;
+        int yDir = 0;
+
+        if (Mathf.Abs(target.position.x - transform.position.x) < float.Epsilon)
+            yDir = target.position.y < transform.position.y ? -1 : 1;
+        else
+            xDir = target.position.x < transform.position.x ? -1 : 1;
+
+        RaycastHit2D hit;
+        Move(xDir, yDir, out hit);
     }
 
     protected bool Move(int xDir, int yDir, out RaycastHit2D hit)
@@ -54,18 +115,9 @@ public class Character : InteractableObject
         hit = Physics2D.Linecast(start, end, Collisions);
         boxCollider.enabled = true;
 
-        if (skipMove)
-        {
-            skipMove = false;
-            return false;
-        }
-        skipMove = true;
-
         if (hit.transform == null)
         {
-            //isMoving = true;
             StartCoroutine(SmoothMovement(end));
-            //isMoving = false;
             return true;
         }
 
@@ -84,44 +136,32 @@ public class Character : InteractableObject
         }
     }
 
-    protected virtual void AttemptMove<T>(int xDir, int yDir)
-        where T : Component
+    public virtual void OnTriggerEnter2D(Collider2D other)
     {
-
-        RaycastHit2D hit;
-        bool canMove = Move(xDir, yDir, out hit);
-
-        if (hit.transform == null)
+        if (other.tag == "Food")
         {
-            return;
+            Heal(3);
+            other.gameObject.SetActive(false);
         }
-
-        T hitComponent = hit.transform.GetComponent<T>();
-
-        if (!canMove && hitComponent != null)
+        else if (other.tag == "Soda")
         {
-            OnCantMove(hitComponent);
+            Heal(1);
+            other.gameObject.SetActive(false);
         }
     }
 
-    public void MoveCharacter()
-    {
-        int xDir = 0;
-        int yDir = 0;
-
-        if (Mathf.Abs(target.position.x - transform.position.x) < float.Epsilon)
-            yDir = target.position.y < transform.position.y ? -1 : 1;
-        else
-            xDir = target.position.x < transform.position.x ? -1 : 1;
-
-        AttemptMove<Player>(xDir, yDir);
-    }
-
-    protected virtual void OnCantMove<T>(T component)
+    protected void Attack<T>(T component)
     {
         InteractableObject hitObject = component as InteractableObject;
-        hitObject.takeDamage(strength);
-        postActionDelay();
+        hitObject.TakeDamage(strength * (rationale / 50));
+
+        animator.SetTrigger("playerChop");
+
+        if (hitObject.health <= 0)
+        {
+            rationale -= (hitObject.reputation * 0.1);
+            //rationaleText.text = "Rationale: " + rationale;
+        }
     }
 
     protected IEnumerator postActionDelay()
@@ -129,9 +169,4 @@ public class Character : InteractableObject
         yield return new WaitForSeconds(actionDelay);
     }
 
-    // Update is called once per frame
-    //void Update()
-    //{
-        
-    //}
 }

@@ -8,7 +8,6 @@ public class Player : Character
 {
     public Text rationaleText;
     public Text healthText;
-    public List<Vector3> tilesVisited;
 
     private int horizontal;
     private int vertical;

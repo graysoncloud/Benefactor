@@ -92,6 +92,10 @@ public class Character : InteractableObject
                 paths.Remove(next);
                 paths.Add(next, newPath);
             }
+            else
+            {
+                return;
+            }
         }
 
         remainingMoves--;

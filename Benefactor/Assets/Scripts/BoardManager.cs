@@ -20,8 +20,8 @@ public class BoardManager : MonoBehaviour
     }
 
 
-    public int columns = 5;
-    public int rows    = 5;
+    public int columns = 20;
+    public int rows    = 20;
 
     public Count wallCount = new Count(5, 9);
     public Count foodCount = new Count(1, 5);

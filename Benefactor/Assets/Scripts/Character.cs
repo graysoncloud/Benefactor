@@ -16,11 +16,13 @@ public class Character : InteractableObject
     public bool isTurn;
     public bool gettingTarget;
     public bool isActing;
+    public bool isMoving;
     public int movesUsed;
 
     protected Animator animator;
     private float inverseMoveTime;
-    private Transform target;
+    protected Vector2 target;
+    protected Transform objective;
     protected Dictionary<Vector2, Vector2[]> paths;
 
     // Start is called before the first frame update
@@ -37,6 +39,7 @@ public class Character : InteractableObject
         isTurn = false;
         gettingTarget = false;
         isActing = false;
+        isMoving = false;
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
@@ -49,38 +52,26 @@ public class Character : InteractableObject
 
     virtual protected void Update()
     {
-        if (!isTurn || gettingTarget || isActing) return;
-        if (movesUsed >= moves)
-        {
-            isTurn = false;
-            GameManager.instance.nextTurn();
-            return;
-        }
 
-        StartCoroutine(Act());
     }
 
     public void StartTurn()
     {
-        movesUsed = 0;
         isTurn = true;
-        GetTarget();
-    }
-
-    virtual protected void GetTarget()
-    {
+        movesUsed = 0;
         gettingTarget = true;
-        target = GameObject.FindGameObjectWithTag("Player").transform; //update with unique objective
-        gettingTarget = false;
+        StartCoroutine(GetPaths());
     }
 
-    protected void GetPaths()
+    protected IEnumerator GetPaths()
     {
         paths.Clear();
         GetPaths(transform.position, new Vector2[0], moves);
+        yield return new WaitForSeconds(moveTime);
+        GetTarget();
     }
 
-    public void GetPaths(Vector2 next, Vector2[] path, int remainingMoves)
+    protected void GetPaths(Vector2 next, Vector2[] path, int remainingMoves)
     {
         if (Array.Exists(path, element => element == next)) { return; }
         Vector2 previous = ((path.Length == 0) ? (Vector2) transform.position : path[path.Length - 1]);
@@ -93,6 +84,15 @@ public class Character : InteractableObject
         Array.Copy(path, newPath, path.Length);
         newPath[newPath.Length - 1] = next;
         if (!paths.ContainsKey(next)) { paths.Add(next, newPath);  }
+        else
+        {
+            paths.TryGetValue(next, out path);
+            if (newPath.Length < path.Length)
+            {
+                paths.Remove(next);
+                paths.Add(next, newPath);
+            }
+        }
 
         remainingMoves--;
         if (remainingMoves >= 0)
@@ -104,7 +104,7 @@ public class Character : InteractableObject
         }
     }
 
-    public void LogPaths()
+    protected void LogPaths()
     {
         String actions = "Available Moves (" + paths.Count + "): ";
         foreach(KeyValuePair<Vector2, Vector2[]> entry in paths)
@@ -114,53 +114,101 @@ public class Character : InteractableObject
         Debug.Log(actions);
     }
 
-
-    public IEnumerator Act()
+    virtual protected void GetTarget()
     {
-        isActing = true;
-        movesUsed++;
-        Debug.Log("Moves Used: " + movesUsed + ", Total Moves: " + moves);
-        TrackTarget();
-        yield return new WaitForSeconds(moveTime);
-        isActing = false;
-        if (movesUsed < moves)
+        objective = GameObject.FindGameObjectWithTag("Player").transform; //update with unique objective
+        if (paths.ContainsKey(objective.position))
         {
-            GetTarget();
-        }
-    }
-
-    virtual protected void TrackTarget()
-    {
-        int xDir = 0;
-        int yDir = 0;
-
-        if (Mathf.Abs(target.position.x - transform.position.x) < float.Epsilon)
-            yDir = target.position.y < transform.position.y ? -1 : 1;
-        else
-            xDir = target.position.x < transform.position.x ? -1 : 1;
-
-        RaycastHit2D hit;
-        Move(xDir, yDir, out hit);
-    }
-
-    protected bool Move(int xDir, int yDir, out RaycastHit2D hit)
-    {
-
-        Vector2 start = transform.position;
-        Vector2 end = start + new Vector2(xDir, yDir);
-
-        boxCollider.enabled = false;
-        hit = Physics2D.Linecast(start, end, Collisions);
-        boxCollider.enabled = true;
-
-        if (hit.transform == null)
+            target = objective.position;
+        } else
         {
-            StartCoroutine(SmoothMovement(end));
-            return true;
+            target = transform.position;
         }
-
-        return false;
+        gettingTarget = false;
+        StartCoroutine(FollowPath());
     }
+
+
+    //public IEnumerator Act()
+    //{
+    //    isActing = true;
+    //    movesUsed++;
+    //    Debug.Log("Moves Used: " + movesUsed + ", Total Moves: " + moves);
+    //    TrackTarget();
+    //    yield return new WaitForSeconds(moveTime);
+    //    isActing = false;
+    //    if (movesUsed < moves)
+    //    {
+    //        GetTarget();
+    //    }
+    //}
+
+    protected IEnumerator FollowPath()
+    {
+        if (target != (Vector2)transform.position)
+        {
+            isMoving = true;
+            Vector2 end = target;
+            Vector2[] path;
+            paths.TryGetValue(end, out path);
+            foreach (Vector2 coords in path)
+            {
+                if (coords != (Vector2)transform.position)
+                {
+                    movesUsed++;
+                    StartCoroutine(SmoothMovement(coords));
+                    yield return new WaitForSeconds(moveTime);
+                }
+            }
+            isMoving = false;
+        }
+        Act();
+    }
+
+    protected void Act()
+    {
+        //isActing = true;
+        endTurn();
+    }
+
+    protected void endTurn()
+    {
+        isTurn = false;
+        GameManager.instance.nextTurn();
+    }
+
+    //virtual protected void TrackTarget()
+    //{
+    //    int xDir = 0;
+    //    int yDir = 0;
+
+    //    if (Mathf.Abs(target.position.x - transform.position.x) < float.Epsilon)
+    //        yDir = target.position.y < transform.position.y ? -1 : 1;
+    //    else
+    //        xDir = target.position.x < transform.position.x ? -1 : 1;
+
+    //    RaycastHit2D hit;
+    //    Move(xDir, yDir, out hit);
+    //}
+
+    //protected bool Move(int xDir, int yDir, out RaycastHit2D hit)
+    //{
+
+    //    Vector2 start = transform.position;
+    //    Vector2 end = start + new Vector2(xDir, yDir);
+
+    //    boxCollider.enabled = false;
+    //    hit = Physics2D.Linecast(start, end, Collisions);
+    //    boxCollider.enabled = true;
+
+    //    if (hit.transform == null)
+    //    {
+    //        StartCoroutine(SmoothMovement(end));
+    //        return true;
+    //    }
+
+    //    return false;
+    //}
 
     protected IEnumerator SmoothMovement(Vector3 end)
     {

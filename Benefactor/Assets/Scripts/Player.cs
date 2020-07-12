@@ -28,40 +28,50 @@ public class Player : Character
             gettingTarget = GetInput();
             if (!gettingTarget)
             {
-                Debug.Log("Horizontal: " + horizontal + ", Vertical: " + vertical);
+                StartCoroutine(FollowPath());
             }
         }
-
-        base.Update();
     }
+
+    //bool GetInput()
+    //{
+    //    horizontal = 0;
+    //    vertical = 0;
+
+    //    horizontal = (int)Input.GetAxisRaw("Horizontal");
+    //    vertical = (int)Input.GetAxisRaw("Vertical");
+
+    //    if (horizontal != 0)
+    //        vertical = 0;
+
+    //    return (horizontal == 0 && vertical == 0);
+    //}
 
     bool GetInput()
     {
-        horizontal = 0;
-        vertical = 0;
+        int x;
+        int y;
+        Vector2 coords = new Vector2();
+        if (Input.GetMouseButtonDown(0))
+        {
+            x = (int)((Input.mousePosition.x - Screen.width/2 - 28)/56 + transform.position.x + 1); //Don't know actual tile size yet!
+            y = (int)((Input.mousePosition.y - Screen.height/2 - 28)/56 + transform.position.y + 1);
+            coords = new Vector2(x, y);
+            Debug.Log("Mouse down at: " + coords);
 
-        horizontal = (int)Input.GetAxisRaw("Horizontal");
-        vertical = (int)Input.GetAxisRaw("Vertical");
+            if (paths.ContainsKey(coords))
+            {
+                target = coords;
+                return false;
+            }
+        }
 
-        if (horizontal != 0)
-            vertical = 0;
-
-        return (horizontal == 0 && vertical == 0);
+        return true;
     }
 
     protected override void GetTarget()
     {
-        gettingTarget = true;
-
-        GetPaths();
-        LogPaths();
         Debug.Log("Player waiting for input");
-    }
-
-    protected override void TrackTarget()
-    {
-        RaycastHit2D hit;
-        Move(horizontal, vertical, out hit);
     }
 
     public override void OnTriggerEnter2D(Collider2D other)

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Tilemaps;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class Character : InteractableObject
     protected Animator animator;
     private float inverseMoveTime;
     private Transform target;
+    protected Dictionary<Vector2, Vector2[]> availableActions;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -38,6 +40,7 @@ public class Character : InteractableObject
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
+        availableActions = new Dictionary<Vector2, Vector2[]>();
 
         GameManager.instance.AddCharacterToList(this);
 
@@ -64,17 +67,56 @@ public class Character : InteractableObject
         GetTarget();
     }
 
-    public void GetAvailableActions()
-    {
-
-    }
-
     virtual protected void GetTarget()
     {
         gettingTarget = true;
         target = GameObject.FindGameObjectWithTag("Player").transform; //update with unique objective
         gettingTarget = false;
     }
+
+    protected void GetAvailableActions()
+    {
+        availableActions.Clear();
+        GetAvailableActions(transform.position, new Vector2[0], moves);
+    }
+
+    public void GetAvailableActions(Vector2 next, Vector2[] path, int remainingMoves)
+    {
+        if (Array.Exists(path, element => element == next)) { return; }
+        //Vector2 start = ((path.Length == 0) ? new Vector2(0, 0) : path[0]);
+        Vector2 previous = ((path.Length == 0) ? new Vector2(0, 0) : path[path.Length - 1]);
+        boxCollider.enabled = false;
+        RaycastHit2D hit = Physics2D.Linecast(previous, next, Collisions);
+        boxCollider.enabled = true;
+        if (hit.transform != null) {
+            //Debug.Log("Previous: " + previous + ", Move: " + next + ", Collision: " + hit.transform);
+            return; }
+
+        Vector2[] newPath = new Vector2[path.Length + 1];
+        Array.Copy(path, newPath, path.Length);
+        newPath[newPath.Length - 1] = next;
+        if (!availableActions.ContainsKey(next)) { availableActions.Add(next, newPath);  }
+
+        remainingMoves--;
+        if (remainingMoves >= 0)
+        {
+            GetAvailableActions(next + new Vector2(1, 0), newPath, remainingMoves);
+            GetAvailableActions(next + new Vector2(-1, 0), newPath, remainingMoves);
+            GetAvailableActions(next + new Vector2(0, 1), newPath, remainingMoves);
+            GetAvailableActions(next + new Vector2(0, -1), newPath, remainingMoves);
+        }
+    }
+
+    public void LogAvailableActions()
+    {
+        String actions = "Available Actions (" + availableActions.Count + "): ";
+        foreach(KeyValuePair<Vector2, Vector2[]> entry in availableActions)
+        {
+            actions += entry.Key + ", ";
+        }
+        Debug.Log(actions);
+    }
+
 
     public IEnumerator Act()
     {

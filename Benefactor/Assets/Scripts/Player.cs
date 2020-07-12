@@ -52,6 +52,9 @@ public class Player : Character
     protected override void GetTarget()
     {
         gettingTarget = true;
+
+        GetAvailableActions();
+        LogAvailableActions();
         Debug.Log("Player waiting for input");
     }
 

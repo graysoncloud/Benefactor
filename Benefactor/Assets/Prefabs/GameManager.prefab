@@ -92,6 +92,9 @@ MonoBehaviour:
   - {fileID: 7991227353612988546, guid: 09a647a8d5f41a54ea0acd103fd5e609, type: 3}
   - {fileID: 7991227353612988546, guid: 2df4a3cc6978edc44a19911f9ebf43be, type: 3}
   - {fileID: 7991227353612988546, guid: a3ca0183fb83a57438e4b22b725b5ad3, type: 3}
+  tileIndicator: {fileID: 6793900256970249569, guid: 73dc820bc82c3724ab6d3f763aac8d46,
+    type: 3}
+  indicators: []
 --- !u!114 &5498348103610966037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,7 +110,6 @@ MonoBehaviour:
   level: 0
   levelStartDelay: 2
   turnDelay: 0.1
-  playersTurn: 1
   defaultHealth: 10
   defaultRationale: 100
   defaultReputation: 50
@@ -115,6 +117,8 @@ MonoBehaviour:
   defaultStrength: 1
   defaultMoveTime: 0.5
   defaultActionDelay: 0.5
+  boardScript: {fileID: 0}
+  characters: []
   activeCharacterIndex: 0
   activeCharacter: {fileID: 0}
   round: 0

@@ -35,6 +35,8 @@ public class BoardManager : MonoBehaviour
     public GameObject[] enemyTiles;
     public GameObject[] outerWallTiles;
     public GameObject[] houseWallTiles;
+    public GameObject tileIndicator;
+    public List<GameObject> indicators;
 
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
@@ -151,5 +153,18 @@ public class BoardManager : MonoBehaviour
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
         Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
         //Instantiate(player, new Vector3(0, 0, 0f), Quaternion.identity);
+    }
+
+    public void ShowPaths (Dictionary<Vector2, Vector2[]> paths)
+    {
+        foreach(GameObject indicator in indicators)
+        {
+            indicator.SetActive(false);
+        }
+
+        foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
+        {
+            indicators.Add(Instantiate(tileIndicator, entry.Key, Quaternion.identity));
+        }
     }
 }

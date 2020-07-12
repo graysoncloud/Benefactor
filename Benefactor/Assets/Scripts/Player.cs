@@ -9,12 +9,12 @@ public class Player : Character
     public Text rationaleText;
     public Text healthText;
 
-    private int horizontal;
-    private int vertical;
+    //private BoardManager boardScript;
 
     // Start is called before the first frame update
     protected override void Start()
     {
+        //boardScript = GetComponent<BoardManager>();
         base.Start();
         //healthText.text = "Health: " + health;
         //rationaleText.text = "Rationale: " + rationale;
@@ -54,8 +54,9 @@ public class Player : Character
         Vector2 coords = new Vector2();
         if (Input.GetMouseButtonDown(0))
         {
-            x = (int)((Input.mousePosition.x - Screen.width/2 - 28)/56 + transform.position.x + 1); //Don't know actual tile size yet!
-            y = (int)((Input.mousePosition.y - Screen.height/2 - 28)/56 + transform.position.y + 1);
+            int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
+            x = (int)((Input.mousePosition.x - Screen.width/2 - tileWidth/2)/tileWidth + transform.position.x + 1);
+            y = (int)((Input.mousePosition.y - Screen.height/2 - tileWidth/2)/tileWidth + transform.position.y + 1);
             coords = new Vector2(x, y);
             Debug.Log("Mouse down at: " + coords);
 
@@ -71,6 +72,7 @@ public class Player : Character
 
     protected override void GetTarget()
     {
+        GameManager.instance.boardScript.ShowPaths(paths);
         Debug.Log("Player waiting for input");
     }
 

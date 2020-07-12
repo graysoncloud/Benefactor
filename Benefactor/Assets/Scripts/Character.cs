@@ -21,7 +21,7 @@ public class Character : InteractableObject
     protected Animator animator;
     private float inverseMoveTime;
     private Transform target;
-    protected Dictionary<Vector2, Vector2[]> availableActions;
+    protected Dictionary<Vector2, Vector2[]> paths;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -40,7 +40,7 @@ public class Character : InteractableObject
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
-        availableActions = new Dictionary<Vector2, Vector2[]>();
+        paths = new Dictionary<Vector2, Vector2[]>();
 
         GameManager.instance.AddCharacterToList(this);
 
@@ -74,43 +74,40 @@ public class Character : InteractableObject
         gettingTarget = false;
     }
 
-    protected void GetAvailableActions()
+    protected void GetPaths()
     {
-        availableActions.Clear();
-        GetAvailableActions(transform.position, new Vector2[0], moves);
+        paths.Clear();
+        GetPaths(transform.position, new Vector2[0], moves);
     }
 
-    public void GetAvailableActions(Vector2 next, Vector2[] path, int remainingMoves)
+    public void GetPaths(Vector2 next, Vector2[] path, int remainingMoves)
     {
         if (Array.Exists(path, element => element == next)) { return; }
-        //Vector2 start = ((path.Length == 0) ? new Vector2(0, 0) : path[0]);
-        Vector2 previous = ((path.Length == 0) ? new Vector2(0, 0) : path[path.Length - 1]);
+        Vector2 previous = ((path.Length == 0) ? (Vector2) transform.position : path[path.Length - 1]);
         boxCollider.enabled = false;
         RaycastHit2D hit = Physics2D.Linecast(previous, next, Collisions);
         boxCollider.enabled = true;
-        if (hit.transform != null) {
-            //Debug.Log("Previous: " + previous + ", Move: " + next + ", Collision: " + hit.transform);
-            return; }
+        if (hit.transform != null) { return; }
 
         Vector2[] newPath = new Vector2[path.Length + 1];
         Array.Copy(path, newPath, path.Length);
         newPath[newPath.Length - 1] = next;
-        if (!availableActions.ContainsKey(next)) { availableActions.Add(next, newPath);  }
+        if (!paths.ContainsKey(next)) { paths.Add(next, newPath);  }
 
         remainingMoves--;
         if (remainingMoves >= 0)
         {
-            GetAvailableActions(next + new Vector2(1, 0), newPath, remainingMoves);
-            GetAvailableActions(next + new Vector2(-1, 0), newPath, remainingMoves);
-            GetAvailableActions(next + new Vector2(0, 1), newPath, remainingMoves);
-            GetAvailableActions(next + new Vector2(0, -1), newPath, remainingMoves);
+            GetPaths(next + new Vector2(1, 0), newPath, remainingMoves);
+            GetPaths(next + new Vector2(-1, 0), newPath, remainingMoves);
+            GetPaths(next + new Vector2(0, 1), newPath, remainingMoves);
+            GetPaths(next + new Vector2(0, -1), newPath, remainingMoves);
         }
     }
 
-    public void LogAvailableActions()
+    public void LogPaths()
     {
-        String actions = "Available Actions (" + availableActions.Count + "): ";
-        foreach(KeyValuePair<Vector2, Vector2[]> entry in availableActions)
+        String actions = "Available Moves (" + paths.Count + "): ";
+        foreach(KeyValuePair<Vector2, Vector2[]> entry in paths)
         {
             actions += entry.Key + ", ";
         }

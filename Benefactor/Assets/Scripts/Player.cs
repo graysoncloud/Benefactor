@@ -53,8 +53,8 @@ public class Player : Character
     {
         gettingTarget = true;
 
-        GetAvailableActions();
-        LogAvailableActions();
+        GetPaths();
+        LogPaths();
         Debug.Log("Player waiting for input");
     }
 

@@ -22,7 +22,8 @@ public class Character : InteractableObject
     protected Animator animator;
     private float inverseMoveTime;
     protected Vector2 target;
-    protected Transform objective;
+    protected Vector2 objective;
+    //protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
 
     // Start is called before the first frame update
@@ -120,13 +121,17 @@ public class Character : InteractableObject
 
     virtual protected void GetTarget()
     {
-        objective = GameObject.FindGameObjectWithTag("Player").transform; //update with unique objective
-        if (paths.ContainsKey(objective.position))
+        objective = GameObject.FindGameObjectWithTag("Player").transform.position; //update with unique objective
+        //might update to do A* search eventually to find shortest path
+        int minDistance = 999;
+        foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
         {
-            target = objective.position;
-        } else
-        {
-            target = transform.position;
+            int distance = (int)(Math.Abs(entry.Key.x - objective.x) + Math.Abs(entry.Key.y - objective.y));
+            if (distance < minDistance)
+            {
+                target = entry.Key;
+                minDistance = distance;
+            }
         }
         gettingTarget = false;
         StartCoroutine(FollowPath());

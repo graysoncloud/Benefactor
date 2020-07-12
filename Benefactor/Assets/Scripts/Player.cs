@@ -49,22 +49,27 @@ public class Player : Character
 
     bool GetInput()
     {
-        int x;
-        int y;
-        Vector2 coords = new Vector2();
-        if (Input.GetMouseButtonDown(0))
-        {
-            int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
-            x = (int)((Input.mousePosition.x - Screen.width/2 - tileWidth/2)/tileWidth + transform.position.x + 1);
-            y = (int)((Input.mousePosition.y - Screen.height/2 - tileWidth/2)/tileWidth + transform.position.y + 1);
-            coords = new Vector2(x, y);
-            Debug.Log("Mouse down at: " + coords);
+        int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
+        int x = (int)((Input.mousePosition.x - Screen.width / 2 - tileWidth / 2) / tileWidth + transform.position.x + 1);
+        int y = (int)((Input.mousePosition.y - Screen.height / 2 - tileWidth / 2) / tileWidth + transform.position.y + 1);
+        Vector2 coords = new Vector2(x, y);
 
-            if (paths.ContainsKey(coords))
+        if (paths.ContainsKey(coords))
+        {
+            Vector2[] path;
+            paths.TryGetValue(coords, out path);
+            GameManager.instance.boardScript.HighlightPath(path);
+
+            if (Input.GetMouseButtonDown(0))
             {
                 target = coords;
+                GameManager.instance.boardScript.HidePaths();
                 return false;
             }
+        }
+        else
+        {
+            GameManager.instance.boardScript.UnhighlightPath();
         }
 
         return true;

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public class BoardManager : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class BoardManager : MonoBehaviour
         public int minimum;
         public int maximum;
 
-        public Count (int min, int max)
+        public Count(int min, int max)
         {
             minimum = min;
             maximum = max;
@@ -21,7 +22,7 @@ public class BoardManager : MonoBehaviour
 
 
     public int columns = 20;
-    public int rows    = 20;
+    public int rows = 20;
 
     public Count wallCount = new Count(5, 9);
     public Count foodCount = new Count(1, 5);
@@ -44,7 +45,7 @@ public class BoardManager : MonoBehaviour
     void InitializeList()
     {
         gridPositions.Clear();
-        for(int x = 1; x < columns - 1; x++)
+        for (int x = 1; x < columns - 1; x++)
         {
             for (int y = 1; y < rows - 1; y++)
             {
@@ -58,9 +59,9 @@ public class BoardManager : MonoBehaviour
     {
         boardHolder = new GameObject("Board").transform;
 
-        for (int x = -1; x < columns + 1; x ++)
+        for (int x = -1; x < columns + 1; x++)
         {
-            for (int y = -1; y < rows + 1; y ++)
+            for (int y = -1; y < rows + 1; y++)
             {
                 GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
                 if (x == -1 || x == columns || y == -1 || y == rows)
@@ -142,7 +143,7 @@ public class BoardManager : MonoBehaviour
     }
 
 
-    public void SetupScene (int level)
+    public void SetupScene(int level)
     {
         BoardSetup();
         InitializeList();
@@ -155,16 +156,44 @@ public class BoardManager : MonoBehaviour
         //Instantiate(player, new Vector3(0, 0, 0f), Quaternion.identity);
     }
 
-    public void ShowPaths (Dictionary<Vector2, Vector2[]> paths)
+    public void ShowPaths(Dictionary<Vector2, Vector2[]> paths)
     {
-        foreach(GameObject indicator in indicators)
-        {
-            indicator.SetActive(false);
-        }
+        HidePaths();
 
         foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
         {
             indicators.Add(Instantiate(tileIndicator, entry.Key, Quaternion.identity));
+            indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+        }
+    }
+
+    public void HidePaths()
+    {
+        foreach (GameObject indicator in indicators)
+        {
+            indicator.SetActive(false);
+        }
+    }
+
+    public void HighlightPath(Vector2[] path)
+    {
+        foreach (GameObject indicator in indicators)
+        {
+            if (path.Contains((Vector2)indicator.transform.position))
+            {
+                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            } else
+            {
+                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+            }
+        }
+    }
+
+    public void UnhighlightPath()
+    {
+        foreach (GameObject indicator in indicators)
+        {
+            indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
         }
     }
 }

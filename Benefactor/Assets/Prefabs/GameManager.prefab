@@ -115,7 +115,7 @@ MonoBehaviour:
   defaultReputation: 50
   defaultMoves: 3
   defaultStrength: 1
-  defaultMoveTime: 0.5
+  defaultMoveTime: 0.1
   defaultActionDelay: 0.5
   boardScript: {fileID: 0}
   characters: []

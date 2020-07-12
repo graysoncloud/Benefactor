@@ -36,8 +36,6 @@ public class BoardManager : MonoBehaviour
     public GameObject[] enemyTiles;
     public GameObject[] outerWallTiles;
     public GameObject[] houseWallTiles;
-    public GameObject tileIndicator;
-    public List<GameObject> indicators;
 
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
@@ -154,46 +152,5 @@ public class BoardManager : MonoBehaviour
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
         Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
         //Instantiate(player, new Vector3(0, 0, 0f), Quaternion.identity);
-    }
-
-    public void ShowPaths(Dictionary<Vector2, Vector2[]> paths)
-    {
-        HidePaths();
-
-        foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
-        {
-            indicators.Add(Instantiate(tileIndicator, entry.Key, Quaternion.identity));
-            indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-        }
-    }
-
-    public void HidePaths()
-    {
-        foreach (GameObject indicator in indicators)
-        {
-            indicator.SetActive(false);
-        }
-    }
-
-    public void HighlightPath(Vector2[] path)
-    {
-        foreach (GameObject indicator in indicators)
-        {
-            if (path.Contains((Vector2)indicator.transform.position))
-            {
-                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-            } else
-            {
-                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-            }
-        }
-    }
-
-    public void UnhighlightPath()
-    {
-        foreach (GameObject indicator in indicators)
-        {
-            indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-        }
     }
 }

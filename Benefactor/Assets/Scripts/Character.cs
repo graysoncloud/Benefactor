@@ -128,21 +128,6 @@ public class Character : InteractableObject
         StartCoroutine(FollowPath());
     }
 
-
-    //public IEnumerator Act()
-    //{
-    //    isActing = true;
-    //    movesUsed++;
-    //    Debug.Log("Moves Used: " + movesUsed + ", Total Moves: " + moves);
-    //    TrackTarget();
-    //    yield return new WaitForSeconds(moveTime);
-    //    isActing = false;
-    //    if (movesUsed < moves)
-    //    {
-    //        GetTarget();
-    //    }
-    //}
-
     protected IEnumerator FollowPath()
     {
         if (target != (Vector2)transform.position)
@@ -176,39 +161,6 @@ public class Character : InteractableObject
         isTurn = false;
         GameManager.instance.nextTurn();
     }
-
-    //virtual protected void TrackTarget()
-    //{
-    //    int xDir = 0;
-    //    int yDir = 0;
-
-    //    if (Mathf.Abs(target.position.x - transform.position.x) < float.Epsilon)
-    //        yDir = target.position.y < transform.position.y ? -1 : 1;
-    //    else
-    //        xDir = target.position.x < transform.position.x ? -1 : 1;
-
-    //    RaycastHit2D hit;
-    //    Move(xDir, yDir, out hit);
-    //}
-
-    //protected bool Move(int xDir, int yDir, out RaycastHit2D hit)
-    //{
-
-    //    Vector2 start = transform.position;
-    //    Vector2 end = start + new Vector2(xDir, yDir);
-
-    //    boxCollider.enabled = false;
-    //    hit = Physics2D.Linecast(start, end, Collisions);
-    //    boxCollider.enabled = true;
-
-    //    if (hit.transform == null)
-    //    {
-    //        StartCoroutine(SmoothMovement(end));
-    //        return true;
-    //    }
-
-    //    return false;
-    //}
 
     protected IEnumerator SmoothMovement(Vector3 end)
     {

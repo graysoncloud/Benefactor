@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class Player : Character
 {
     public Text rationaleText;
     public Text healthText;
+
+    public GameObject tileIndicator;
+    public List<GameObject> indicators;
 
     //private BoardManager boardScript;
 
@@ -33,20 +37,6 @@ public class Player : Character
         }
     }
 
-    //bool GetInput()
-    //{
-    //    horizontal = 0;
-    //    vertical = 0;
-
-    //    horizontal = (int)Input.GetAxisRaw("Horizontal");
-    //    vertical = (int)Input.GetAxisRaw("Vertical");
-
-    //    if (horizontal != 0)
-    //        vertical = 0;
-
-    //    return (horizontal == 0 && vertical == 0);
-    //}
-
     bool GetInput()
     {
         int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
@@ -58,18 +48,18 @@ public class Player : Character
         {
             Vector2[] path;
             paths.TryGetValue(coords, out path);
-            GameManager.instance.boardScript.HighlightPath(path);
+            HighlightPath(path);
 
             if (Input.GetMouseButtonDown(0))
             {
                 target = coords;
-                GameManager.instance.boardScript.HidePaths();
+                HidePaths();
                 return false;
             }
         }
         else
         {
-            GameManager.instance.boardScript.UnhighlightPath();
+            UnhighlightPath();
         }
 
         return true;
@@ -77,7 +67,7 @@ public class Player : Character
 
     protected override void GetTarget()
     {
-        GameManager.instance.boardScript.ShowPaths(paths);
+        ShowPaths();
         Debug.Log("Player waiting for input");
     }
 
@@ -117,6 +107,51 @@ public class Player : Character
         if (health <= 0)
         {
             GameManager.instance.GameOver();
+        }
+    }
+
+    public void ShowPaths()
+    {
+        HidePaths();
+
+        foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
+        {
+            indicators.Add(Instantiate(tileIndicator, entry.Key, Quaternion.identity));
+            indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+        }
+    }
+
+    public void HidePaths()
+    {
+        foreach (GameObject indicator in indicators)
+        {
+            if (indicator == null) { break; }
+            indicator.SetActive(false);
+        }
+    }
+
+    public void HighlightPath(Vector2[] path)
+    {
+        foreach (GameObject indicator in indicators)
+        {
+            if (indicator == null) { break; }
+            if (path.Contains((Vector2)indicator.transform.position))
+            {
+                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            }
+            else
+            {
+                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+            }
+        }
+    }
+
+    public void UnhighlightPath()
+    {
+        foreach (GameObject indicator in indicators)
+        {
+            if (indicator == null) { break; }
+            indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
         }
     }
 }

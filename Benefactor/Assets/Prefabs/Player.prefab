@@ -182,7 +182,10 @@ MonoBehaviour:
   isTurn: 0
   gettingTarget: 0
   isActing: 0
+  isMoving: 0
   movesUsed: 0
   rationaleText: {fileID: 0}
   healthText: {fileID: 0}
-  tilesVisited: []
+  tileIndicator: {fileID: 6793900256970249569, guid: 73dc820bc82c3724ab6d3f763aac8d46,
+    type: 3}
+  indicators: []

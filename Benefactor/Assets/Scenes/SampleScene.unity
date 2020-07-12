@@ -318,7 +318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.1
-  toFollow: {fileID: 1854034759}
+  toFollow: {fileID: 0}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1180,12 +1180,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1788682311}
   m_CullTransparentMesh: 0
---- !u!4 &1854034759 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6594416824975255319, guid: 9dfdcd00a8877bb4d8342c8be1806065,
-    type: 3}
-  m_PrefabInstance: {fileID: 666195557}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2062476240
 GameObject:
   m_ObjectHideFlags: 0

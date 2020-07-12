@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     private Text levelText;
     private GameObject levelImage;
     private BoardManager boardScript;
-    private List<Character> characters;
+    public List<Character> characters;
     private bool doingSetup;
 
     public int activeCharacterIndex;

@@ -57,6 +57,7 @@ public class InteractableObject : MonoBehaviour
         } else if (health <= 0)
         {
             gameObject.SetActive(false);
+            GameManager.instance.RemoveDeadCharacters();
             // For some reason, this didn't work, so instead, GameManager just doesn't move characters at <= 0 health
             // GameManager.instance.RemoveDeadCharacters();
         }

@@ -14,14 +14,15 @@ public class Character : InteractableObject
     //public int reputation;
 
     public bool isTurn;
-    public bool gettingTarget;
-    public bool isActing;
+    public bool gettingMove;
+    public bool gettingAction;
     public bool isMoving;
     public int movesUsed;
 
     protected Animator animator;
     private float inverseMoveTime;
-    protected Vector2 target;
+    protected Vector2 toMove;
+    protected InteractableObject target;
     protected Vector2 objective;
     protected String objectiveAction;
     //protected Vector2[] pathToObjective;
@@ -39,8 +40,8 @@ public class Character : InteractableObject
         actionDelay = GameManager.instance.defaultActionDelay;
 
         isTurn = false;
-        gettingTarget = false;
-        isActing = false;
+        gettingMove = false;
+        gettingAction = false;
         isMoving = false;
 
         animator = GetComponent<Animator>();
@@ -62,7 +63,7 @@ public class Character : InteractableObject
     {
         isTurn = true;
         movesUsed = 0;
-        gettingTarget = true;
+        gettingMove = true;
         StartCoroutine(GetPaths());
     }
 
@@ -71,7 +72,7 @@ public class Character : InteractableObject
         paths.Clear();
         GetPaths(transform.position, new Vector2[0], moves);
         yield return new WaitForSeconds(moveTime);
-        GetTarget();
+        GetMove();
     }
 
     protected void GetPaths(Vector2 next, Vector2[] path, int remainingMoves)
@@ -121,7 +122,7 @@ public class Character : InteractableObject
         Debug.Log(actions);
     }
 
-    virtual protected void GetTarget()
+    virtual protected void GetMove()
     {
         objective = GameObject.FindGameObjectWithTag("Player").transform.position; //update with unique objective
         objectiveAction = "Attack";
@@ -132,20 +133,20 @@ public class Character : InteractableObject
             int distance = (int)(Math.Abs(entry.Key.x - objective.x) + Math.Abs(entry.Key.y - objective.y));
             if (distance < minDistance)
             {
-                target = entry.Key;
+                toMove = entry.Key;
                 minDistance = distance;
             }
         }
-        gettingTarget = false;
+        gettingMove = false;
         StartCoroutine(FollowPath());
     }
 
     protected IEnumerator FollowPath()
     {
-        if (target != (Vector2)transform.position)
+        if (toMove != (Vector2)transform.position)
         {
             isMoving = true;
-            Vector2 end = target;
+            Vector2 end = toMove;
             Vector2[] path;
             paths.TryGetValue(end, out path);
             foreach (Vector2 coords in path)
@@ -162,15 +163,15 @@ public class Character : InteractableObject
         Act();
     }
 
-    protected void Act()
+    virtual protected void Act()
     {
-        isActing = true;
         GetNearbyObjects();
-        if (nearbyObjects.Count > 0)
+        gettingAction = true;
+        if (nearbyObjects.Count > 1)
         {
-            Attack(nearbyObjects[0]);
+            Attack(nearbyObjects[1]);
         }
-        isActing = false;
+        gettingAction = false;
         EndTurn();
     }
 
@@ -178,6 +179,7 @@ public class Character : InteractableObject
     {
         nearbyObjects.Clear();
         boxCollider.enabled = false;
+        nearbyObjects.Add(this);
 
         Vector2 next = (Vector2)transform.position + new Vector2(1, 0);
         RaycastHit2D hit = Physics2D.Linecast(transform.position, next, Collisions);
@@ -225,7 +227,6 @@ public class Character : InteractableObject
         }
 
         boxCollider.enabled = true;
-
         Debug.Log(nearbyObjects);
     }
 

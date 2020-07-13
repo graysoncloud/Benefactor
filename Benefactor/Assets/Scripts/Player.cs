@@ -28,17 +28,27 @@ public class Player : Character
     // Update is called once per frame
     protected override void Update()
     {
-        if (gettingTarget)
+        if (gettingMove)
         {
-            gettingTarget = GetInput();
-            if (!gettingTarget)
+            gettingMove = GetMoveInput();
+            if (!gettingMove)
             {
                 StartCoroutine(FollowPath());
             }
         }
+        if (gettingAction)
+        {
+            gettingAction = GetActionInput();
+            if (!gettingAction)
+            {
+                if(target != this)
+                    Attack(target);
+                EndTurn();
+            }
+        }
     }
 
-    bool GetInput()
+    bool GetMoveInput()
     {
         int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
         Vector2 camera = Camera.main.transform.position;
@@ -55,8 +65,8 @@ public class Player : Character
             if (Input.GetMouseButtonDown(0))
             {
                 Debug.Log(camera);
-                target = coords;
-                HidePaths();
+                toMove = coords;
+                HideIndicators();
                 return false;
             }
         }
@@ -68,10 +78,53 @@ public class Player : Character
         return true;
     }
 
-    protected override void GetTarget()
+    bool GetActionInput()
+    {
+        int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
+        Vector2 camera = Camera.main.transform.position;
+        int x = (int)((Input.mousePosition.x - Screen.width / 2 - tileWidth / 2) / tileWidth + camera.x + 1);
+        int y = (int)((Input.mousePosition.y - Screen.height / 2 - tileWidth / 2) / tileWidth + camera.y + 1);
+        Vector2 coords = new Vector2(x, y);
+        Dictionary<Vector2, InteractableObject> targets = new Dictionary<Vector2, InteractableObject>();
+        foreach (InteractableObject nearbyObject in nearbyObjects)
+        {
+            targets.Add(nearbyObject.transform.position, nearbyObject);
+        }
+        if (targets.ContainsKey(coords))
+        {
+            HighlightPath(new Vector2[]{ coords });
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                targets.TryGetValue(coords, out target);
+                HideIndicators();
+                return false;
+            }
+        }
+        else
+        {
+            UnhighlightPath();
+        }
+
+        return true;
+    }
+
+    protected override void GetMove()
     {
         ShowPaths();
         Debug.Log("Player waiting for input");
+    }
+
+    protected override void Act()
+    {
+        GetNearbyObjects();
+        if (nearbyObjects.Count == 1)
+            EndTurn();
+        else
+        {
+            gettingAction = true;
+            ShowNearbyObjects();
+        }
     }
 
     public override void OnTriggerEnter2D(Collider2D other)
@@ -113,9 +166,9 @@ public class Player : Character
         }
     }
 
-    public void ShowPaths()
+    private void ShowPaths()
     {
-        HidePaths();
+        HideIndicators();
 
         foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
         {
@@ -124,7 +177,18 @@ public class Player : Character
         }
     }
 
-    public void HidePaths()
+    public void ShowNearbyObjects()
+    {
+        HideIndicators();
+
+        foreach (InteractableObject nearbyObject in nearbyObjects)
+        {
+            indicators.Add(Instantiate(tileIndicator, nearbyObject.transform.position, Quaternion.identity));
+            indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+        }
+    }
+
+    private void HideIndicators()
     {
         foreach (GameObject indicator in indicators)
         {
@@ -133,7 +197,7 @@ public class Player : Character
         }
     }
 
-    public void HighlightPath(Vector2[] path)
+    private void HighlightPath(Vector2[] path)
     {
         foreach (GameObject indicator in indicators)
         {
@@ -149,7 +213,7 @@ public class Player : Character
         }
     }
 
-    public void UnhighlightPath()
+    private void UnhighlightPath()
     {
         foreach (GameObject indicator in indicators)
         {

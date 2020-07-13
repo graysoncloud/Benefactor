@@ -178,8 +178,8 @@ public class Character : InteractableObject
     protected void GetNearbyObjects()
     {
         nearbyObjects.Clear();
-        boxCollider.enabled = false;
         nearbyObjects.Add(this);
+        boxCollider.enabled = false;
 
         Vector2 next = (Vector2)transform.position + new Vector2(1, 0);
         RaycastHit2D hit = Physics2D.Linecast(transform.position, next, Collisions);
@@ -227,7 +227,6 @@ public class Character : InteractableObject
         }
 
         boxCollider.enabled = true;
-        Debug.Log(nearbyObjects);
     }
 
     protected void EndTurn()

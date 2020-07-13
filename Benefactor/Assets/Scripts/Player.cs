@@ -13,15 +13,14 @@ public class Player : Character
     public GameObject tileIndicator;
     public List<GameObject> indicators;
 
-    //private BoardManager boardScript;
-
     // Start is called before the first frame update
     protected override void Start()
     {
-        //boardScript = GetComponent<BoardManager>();
         base.Start();
-        //healthText.text = "Health: " + health;
-        //rationaleText.text = "Rationale: " + rationale;
+        rationaleText = GameObject.Find("RationaleText").GetComponent<Text>();
+        healthText = GameObject.Find("HealthText").GetComponent<Text>();
+        rationaleText.text = "Rationale: " + rationale;
+        healthText.text = "Health: " + health;
     }
 
     // Update is called once per frame
@@ -93,7 +92,7 @@ public class Player : Character
     public override void TakeDamage (double loss)
     {
         base.TakeDamage(loss);
-        //healthText.text = "Health: " + health;
+        healthText.text = "Health: " + health;
         animator.SetTrigger("playerHit");
         CheckIfGameOver();
     }
@@ -101,7 +100,7 @@ public class Player : Character
     public override void Heal (int amount)
     {
         base.Heal(amount);
-        //healthText.text = "Health: " + health;
+        healthText.text = "Health: " + health;
     }
 
     private void CheckIfGameOver ()

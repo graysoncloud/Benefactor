@@ -31,7 +31,6 @@ public class Character : InteractableObject
     // Start is called before the first frame update
     protected override void Start()
     {
-        health = GameManager.instance.defaultHealth;
         rationale = GameManager.instance.defaultRationale;
         //reputation = GameManager.instance.defaultReputation;
         moves = GameManager.instance.defaultMoves;

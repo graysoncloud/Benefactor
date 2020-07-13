@@ -29,7 +29,8 @@ public class InteractableObject : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
 
-        health = 2;
+        maxHealth = GameManager.instance.defaultHealth;
+        health = maxHealth;
         damageable = true;
         reputation = GameManager.instance.defaultReputation;
 

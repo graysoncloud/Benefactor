@@ -96,6 +96,7 @@ public class Player : Character
 
             if (Input.GetMouseButtonDown(0))
             {
+                Debug.Log(camera);
                 targets.TryGetValue(coords, out target);
                 HideIndicators();
                 return false;
@@ -112,7 +113,7 @@ public class Player : Character
     protected override void GetMove()
     {
         ShowPaths();
-        Debug.Log("Player waiting for input");
+        Debug.Log("Player waiting for move input");
     }
 
     protected override void Act()
@@ -124,6 +125,7 @@ public class Player : Character
         {
             gettingAction = true;
             ShowNearbyObjects();
+            Debug.Log("Player waiting for act input");
         }
     }
 

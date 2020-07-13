@@ -151,14 +151,14 @@ public class Character : InteractableObject
             paths.TryGetValue(end, out path);
             foreach (Vector2 coords in path)
             {
-                if (coords != (Vector2)transform.position)
-                {
-                    movesUsed++;
-                    StartCoroutine(SmoothMovement(coords));
-                    yield return new WaitForSeconds(moveTime);
-                }
+                movesUsed++;
+                StartCoroutine(SmoothMovement(coords));
+                yield return new WaitForSeconds(moveTime);
             }
             isMoving = false;
+        } else
+        {
+            yield return new WaitForSeconds(moveTime);
         }
         Act();
     }

@@ -23,8 +23,10 @@ public class Character : InteractableObject
     private float inverseMoveTime;
     protected Vector2 target;
     protected Vector2 objective;
+    protected String objectiveAction;
     //protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
+    protected List<InteractableObject> nearbyObjects;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -45,6 +47,7 @@ public class Character : InteractableObject
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
         paths = new Dictionary<Vector2, Vector2[]>();
+        nearbyObjects = new List<InteractableObject>();
 
         GameManager.instance.AddCharacterToList(this);
 
@@ -122,6 +125,7 @@ public class Character : InteractableObject
     virtual protected void GetTarget()
     {
         objective = GameObject.FindGameObjectWithTag("Player").transform.position; //update with unique objective
+        objectiveAction = "Attack";
         //might update to do A* search eventually to find shortest path
         int minDistance = 999;
         foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
@@ -161,11 +165,72 @@ public class Character : InteractableObject
 
     protected void Act()
     {
-        //isActing = true;
-        endTurn();
+        isActing = true;
+        GetNearbyObjects();
+        if (nearbyObjects.Count > 0)
+        {
+            Attack(nearbyObjects[0]);
+        }
+        isActing = false;
+        EndTurn();
     }
 
-    protected void endTurn()
+    protected void GetNearbyObjects()
+    {
+        nearbyObjects.Clear();
+        boxCollider.enabled = false;
+
+        Vector2 next = (Vector2)transform.position + new Vector2(1, 0);
+        RaycastHit2D hit = Physics2D.Linecast(transform.position, next, Collisions);
+        InteractableObject hitObject;
+        if (hit.transform != null)
+        {
+            hitObject = hit.transform.GetComponent<InteractableObject>();
+            if (hitObject != null)
+            {
+                nearbyObjects.Add(hitObject);
+            }
+        }
+
+        next = (Vector2)transform.position + new Vector2(-1, 0);
+        hit = Physics2D.Linecast(transform.position, next, Collisions);
+        if (hit.collider != null)
+        {
+            hitObject = hit.transform.GetComponent<InteractableObject>();
+            if (hitObject != null)
+            {
+                nearbyObjects.Add(hitObject);
+            }
+        }
+
+        next = (Vector2)transform.position + new Vector2(0, 1);
+        hit = Physics2D.Linecast(transform.position, next, Collisions);
+        if (hit.collider != null)
+        {
+            hitObject = hit.transform.GetComponent<InteractableObject>();
+            if (hitObject != null)
+            {
+                nearbyObjects.Add(hitObject);
+            }
+        }
+
+        next = (Vector2)transform.position + new Vector2(0, -1);
+        hit = Physics2D.Linecast(transform.position, next, Collisions);
+        if (hit.collider != null)
+        {
+            hitObject = hit.transform.GetComponent<InteractableObject>();
+            if (hitObject != null)
+            {
+                nearbyObjects.Add(hitObject);
+            }
+        }
+
+        boxCollider.enabled = true;
+
+        Debug.Log(nearbyObjects);
+    }
+
+    protected void EndTurn()
     {
         isTurn = false;
         GameManager.instance.nextTurn();
@@ -197,16 +262,15 @@ public class Character : InteractableObject
         }
     }
 
-    protected void Attack<T>(T component)
+    protected void Attack (InteractableObject toAttack)
     {
-        InteractableObject hitObject = component as InteractableObject;
-        hitObject.TakeDamage(strength * (rationale / 50));
+        toAttack.TakeDamage(strength * (rationale / 50));
 
         animator.SetTrigger("playerChop");
 
-        if (hitObject.health <= 0)
+        if (toAttack.health <= 0)
         {
-            rationale -= (hitObject.reputation * 0.1);
+            rationale -= (toAttack.reputation * 0.1);
             //rationaleText.text = "Rationale: " + rationale;
         }
     }

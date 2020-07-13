@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour
 
     public void nextTurn()
     {
+        RemoveDeadCharacters(); //temp spot for this
         activeCharacterIndex++;
         if (activeCharacterIndex >= characters.Count)
         {

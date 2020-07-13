@@ -20,10 +20,18 @@ public class FollowPlayer : MonoBehaviour
         if (GameManager.instance.activeCharacter != null)
         {
             toFollow = GameManager.instance.activeCharacter.transform;
-            //transform.position = new Vector3(toFollow.position.x, toFollow.position.y, -10);
             Vector3 target = toFollow.position;
             target.z = -10;
+            float distance = System.Math.Abs(transform.position.x - target.x) + System.Math.Abs(transform.position.y - target.y);
+            if (distance < 0.1)
+            {
+                transform.position = new Vector3(target.x, target.y, -10);
+        }
+        else
+        {
+            moveSpeed = distance * 2;
             transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
         }
+    }
     }
 }

@@ -40,8 +40,9 @@ public class Player : Character
     bool GetInput()
     {
         int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
-        int x = (int)((Input.mousePosition.x - Screen.width / 2 - tileWidth / 2) / tileWidth + transform.position.x + 1);
-        int y = (int)((Input.mousePosition.y - Screen.height / 2 - tileWidth / 2) / tileWidth + transform.position.y + 1);
+        Vector2 camera = Camera.main.transform.position;
+        int x = (int)((Input.mousePosition.x - Screen.width / 2 - tileWidth / 2) / tileWidth + camera.x + 1);
+        int y = (int)((Input.mousePosition.y - Screen.height / 2 - tileWidth / 2) / tileWidth + camera.y + 1);
         Vector2 coords = new Vector2(x, y);
 
         if (paths.ContainsKey(coords))
@@ -52,6 +53,7 @@ public class Player : Character
 
             if (Input.GetMouseButtonDown(0))
             {
+                Debug.Log(camera);
                 target = coords;
                 HidePaths();
                 return false;

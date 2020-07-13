@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,14 +23,14 @@ public class FollowPlayer : MonoBehaviour
             toFollow = GameManager.instance.activeCharacter.transform;
             Vector3 target = toFollow.position;
             target.z = -10;
-            float distance = System.Math.Abs(transform.position.x - target.x) + System.Math.Abs(transform.position.y - target.y);
-            if (distance < 0.1)
+            float distance = Math.Abs(transform.position.x - target.x) + Math.Abs(transform.position.y - target.y);
+            if (distance < 0.03)
             {
                 transform.position = new Vector3(target.x, target.y, -10);
         }
         else
         {
-            moveSpeed = distance * 2;
+            moveSpeed = Math.Max(distance * 2, 0.03f);
             transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
         }
     }

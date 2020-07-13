@@ -232,7 +232,7 @@ public class Character : InteractableObject
     protected void EndTurn()
     {
         isTurn = false;
-        GameManager.instance.nextTurn();
+        StartCoroutine(GameManager.instance.nextTurn());
     }
 
     protected IEnumerator SmoothMovement(Vector3 end)

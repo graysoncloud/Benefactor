@@ -106,8 +106,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 0
   levelStartDelay: 2
-  turnDelay: 0.1
-  defaultHealth: 10
+  turnDelay: 0.2
+  defaultHealth: 2
   defaultRationale: 100
   defaultReputation: 50
   defaultMoves: 3

@@ -17,6 +17,8 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
+        maxHealth = 10;
+        health = maxHealth;
         rationaleText = GameObject.Find("RationaleText").GetComponent<Text>();
         healthText = GameObject.Find("HealthText").GetComponent<Text>();
         rationaleText.text = "Rationale: " + rationale;

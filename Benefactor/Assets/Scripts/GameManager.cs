@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public int level = 0;
     public float levelStartDelay = 2f;
-    public float turnDelay = .1f;
+    public float turnDelay;
     public static GameManager instance = null;
 
     public double defaultHealth;
@@ -95,21 +95,21 @@ public class GameManager : MonoBehaviour
         if (characters.Count > 0) { doingSetup = false;  } //kinda sketchy way of making sure characters have been loaded in, might change to a time delay?
         if (!doingSetup && activeCharacterIndex == -1)
         {
-            nextTurn();
+            StartCoroutine(nextTurn());
         }
     }
 
-    public void nextTurn()
+    public IEnumerator nextTurn()
     {
         activeCharacterIndex++;
         if (activeCharacterIndex >= characters.Count)
         {
             nextRound();
-            return;
+            yield break;
         }
-
         activeCharacter = characters[activeCharacterIndex];
         Debug.Log("Active Character Index: " + activeCharacterIndex);
+        yield return new WaitForSeconds(turnDelay);
         activeCharacter.StartTurn();
     }
 
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
     {
         round++;
         activeCharacterIndex = -1;
-        nextTurn();
+        StartCoroutine(nextTurn());
     }
 
     public void AddCharacterToList(Character script)

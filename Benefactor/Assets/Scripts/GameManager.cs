@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public int defaultStrength;
     public float defaultMoveTime;
     public float defaultActionDelay;
+    public string[] HoldableTypes = { "Medicine", "Tool", "Melee", "Gun", "Ammo", "Throwable", "Trap" };
 
     private Text levelText;
     private GameObject levelImage;

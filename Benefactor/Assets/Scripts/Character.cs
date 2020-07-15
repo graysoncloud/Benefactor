@@ -28,6 +28,7 @@ public class Character : InteractableObject
     //protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
     protected List<InteractableObject> nearbyObjects;
+    protected Dictionary<String, List<HoldableObject>> inventory;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -48,6 +49,7 @@ public class Character : InteractableObject
         inverseMoveTime = 1 / moveTime;
         paths = new Dictionary<Vector2, Vector2[]>();
         nearbyObjects = new List<InteractableObject>();
+        inventory = new Dictionary<String, List<HoldableObject>>();
 
         GameManager.instance.AddCharacterToList(this);
 
@@ -249,16 +251,37 @@ public class Character : InteractableObject
 
     public virtual void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Food")
+        if (other.gameObject.GetComponent<HoldableObject>() != null)
         {
-            Heal(3);
-            other.gameObject.SetActive(false);
+            Pickup(other.gameObject.GetComponent<HoldableObject>());
         }
-        else if (other.tag == "Soda")
+
+        //if (other.tag == "Food")
+        //{
+        //    //Heal(3);
+        //    //other.gameObject.SetActive(false);
+        //}
+        //else if (other.tag == "Soda")
+        //{
+        //    //Heal(1);
+        //    //other.gameObject.SetActive(false);
+        //}
+    }
+
+    protected void Pickup (HoldableObject toPickup)
+    {
+        Debug.Log(toPickup);
+        if (inventory.ContainsKey(toPickup.type))
         {
-            Heal(1);
-            other.gameObject.SetActive(false);
+            List<HoldableObject> toPickupList;
+            inventory.TryGetValue(toPickup.type, out toPickupList);
+            toPickupList.Add(toPickup);
         }
+        else
+        {
+            inventory.Add(toPickup.type, new List<HoldableObject>{toPickup});
+        }
+        toPickup.gameObject.SetActive(false);
     }
 
     protected void Attack (InteractableObject toAttack)

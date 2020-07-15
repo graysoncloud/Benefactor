@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5825892001369049002}
   - component: {fileID: 47434802031549853}
   - component: {fileID: 1627213246511906828}
+  - component: {fileID: 4113108135208300180}
   m_Layer: 0
   m_Name: Soda
   m_TagString: Soda
@@ -108,3 +109,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4113108135208300180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6156389141310141637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fbb2adf646450e469834e1ab731ee8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: Food
+  uses: 0
+  amount: 0
+  range: 0
+  blastRadius: 0

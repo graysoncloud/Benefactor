@@ -194,9 +194,9 @@ public class Player : Character
     {
         foreach (GameObject indicator in indicators)
         {
-            if (indicator == null) { break; }
-            indicator.SetActive(false);
+            Destroy(indicator);
         }
+        indicators.Clear();
     }
 
     private void HighlightPath(Vector2[] path)

@@ -45,7 +45,9 @@ public class Player : Character
             gettingTarget = GetTargetInput();
             if (!gettingTarget)
             {
-                if (target.receiveActions.Count > 1)
+                if (target == this)
+                    GetActionInput("");
+                else if (target.receiveActions.Count > 1)
                 {
                     actionMenu.alpha = 1f;
                     actionMenu.blocksRaycasts = true;
@@ -55,6 +57,12 @@ public class Player : Character
                     GetActionInput(target.receiveActions[0]);
             }
         }
+    }
+
+    protected override void GetMove()
+    {
+        ShowPaths();
+        Debug.Log("Player waiting for move input");
     }
 
     bool GetMoveInput()
@@ -85,6 +93,19 @@ public class Player : Character
         }
 
         return true;
+    }
+
+    protected override void GetTarget()
+    {
+        GetNearbyObjects();
+        if (nearbyObjects.Count == 1)
+            EndTurn();
+        else
+        {
+            gettingTarget = true;
+            ShowNearbyObjects();
+            Debug.Log("Player waiting for target input");
+        }
     }
 
     bool GetTargetInput()
@@ -125,25 +146,6 @@ public class Player : Character
         actionMenu.blocksRaycasts = false;
         targetAction = action;
         Act();
-    }
-
-    protected override void GetMove()
-    {
-        ShowPaths();
-        Debug.Log("Player waiting for move input");
-    }
-
-    protected override void GetTarget()
-    {
-        GetNearbyObjects();
-        if (nearbyObjects.Count == 1)
-            EndTurn();
-        else
-        {
-            gettingTarget = true;
-            ShowNearbyObjects();
-            Debug.Log("Player waiting for target input");
-        }
     }
 
     public override void OnTriggerEnter2D(Collider2D other)

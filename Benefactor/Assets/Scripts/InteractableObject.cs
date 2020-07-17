@@ -13,6 +13,7 @@ public class InteractableObject : MonoBehaviour
     public bool leavesCorpse; // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
     public bool isCorpse;
     public int reputation;
+    public List<string> receiveActions;
 
     public Sprite damagedSprite;
     public Sprite corpseSprite;
@@ -28,14 +29,15 @@ public class InteractableObject : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
+        receiveActions = new List<string>();
 
         maxHealth = GameManager.instance.defaultHealth;
+        reputation = GameManager.instance.defaultReputation;
         health = maxHealth;
         damageable = true;
-        reputation = GameManager.instance.defaultReputation;
-
         //leavesCorpse = false;
         isCorpse = false;
+        receiveActions.Add("Attack");
     }
 
     /**

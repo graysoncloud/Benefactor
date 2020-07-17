@@ -15,15 +15,16 @@ public class Character : InteractableObject
 
     public bool isTurn;
     public bool gettingMove;
-    public bool gettingAction;
+    public bool gettingTarget;
     public bool isMoving;
     public int movesUsed;
 
     protected Animator animator;
     private float inverseMoveTime;
     protected Vector2 toMove;
-    protected InteractableObject target;
-    protected Vector2 objective;
+    protected InteractableObject target; //target is the object the character is targeting this turn
+    protected String targetAction;
+    protected Vector2 objective; //objective is the position/object is ultimately trying to reach
     protected String objectiveAction;
     //protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
@@ -42,7 +43,7 @@ public class Character : InteractableObject
 
         isTurn = false;
         gettingMove = false;
-        gettingAction = false;
+        gettingTarget = false;
         isMoving = false;
 
         animator = GetComponent<Animator>();
@@ -54,6 +55,7 @@ public class Character : InteractableObject
         GameManager.instance.AddCharacterToList(this);
 
         base.Start();
+        receiveActions.Add("Talk");
     }
 
     virtual protected void Update()
@@ -162,18 +164,41 @@ public class Character : InteractableObject
         {
             yield return new WaitForSeconds(moveTime);
         }
+        GetTarget();
+    }
+
+    virtual protected void GetTarget()
+    {
+        GetNearbyObjects();
+        gettingTarget = true;
+        if (nearbyObjects.Count > 1)
+        {
+            target = nearbyObjects[1];
+            if (target.receiveActions.Count == 1)
+                targetAction = target.receiveActions[0];
+            else //add AI choosing
+                targetAction = target.receiveActions[0];
+        } else
+        {
+            targetAction = "";
+        }
+        gettingTarget = false;
         Act();
     }
 
     virtual protected void Act()
     {
-        GetNearbyObjects();
-        gettingAction = true;
-        if (nearbyObjects.Count > 1)
+        switch(targetAction)
         {
-            Attack(nearbyObjects[1]);
+            case "Attack":
+                Attack(target);
+                break;
+            case "Talk":
+                TalkTo(target);
+                break;
+            default:
+                break;
         }
-        gettingAction = false;
         EndTurn();
     }
 
@@ -189,7 +214,7 @@ public class Character : InteractableObject
         if (hit.transform != null)
         {
             hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null)
+            if (hitObject != null && hitObject.receiveActions.Count > 0)
             {
                 nearbyObjects.Add(hitObject);
             }
@@ -200,7 +225,7 @@ public class Character : InteractableObject
         if (hit.collider != null)
         {
             hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null)
+            if (hitObject != null && hitObject.receiveActions.Count > 0)
             {
                 nearbyObjects.Add(hitObject);
             }
@@ -211,7 +236,7 @@ public class Character : InteractableObject
         if (hit.collider != null)
         {
             hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null)
+            if (hitObject != null && hitObject.receiveActions.Count > 0)
             {
                 nearbyObjects.Add(hitObject);
             }
@@ -222,7 +247,7 @@ public class Character : InteractableObject
         if (hit.collider != null)
         {
             hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null)
+            if (hitObject != null && hitObject.receiveActions.Count > 0)
             {
                 nearbyObjects.Add(hitObject);
             }
@@ -295,6 +320,11 @@ public class Character : InteractableObject
             rationale -= (toAttack.reputation * 0.1);
             //rationaleText.text = "Rationale: " + rationale;
         }
+    }
+
+    protected void TalkTo (InteractableObject toTalkTo)
+    {
+
     }
 
     protected IEnumerator postActionDelay()

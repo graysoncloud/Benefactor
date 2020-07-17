@@ -172,6 +172,7 @@ MonoBehaviour:
   leavesCorpse: 0
   isCorpse: 0
   reputation: 0
+  receiveActions: []
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
   moveTime: 0
@@ -180,8 +181,8 @@ MonoBehaviour:
   strength: 0
   rationale: 0
   isTurn: 0
+  gettingMove: 0
   gettingTarget: 0
-  isActing: 0
   isMoving: 0
   movesUsed: 0
   rationaleText: {fileID: 0}
@@ -189,3 +190,5 @@ MonoBehaviour:
   tileIndicator: {fileID: 6793900256970249569, guid: 73dc820bc82c3724ab6d3f763aac8d46,
     type: 3}
   indicators: []
+  actionMenu: {fileID: 3376424737115475739, guid: f2694a768cbe4e8469fa3ae5b8aef60a,
+    type: 3}

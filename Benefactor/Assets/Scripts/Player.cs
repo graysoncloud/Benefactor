@@ -12,6 +12,7 @@ public class Player : Character
 
     public GameObject tileIndicator;
     public List<GameObject> indicators;
+    public CanvasGroup actionMenu;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -20,9 +21,12 @@ public class Player : Character
         maxHealth = 10;
         health = maxHealth;
         rationaleText = GameObject.Find("RationaleText").GetComponent<Text>();
-        healthText = GameObject.Find("HealthText").GetComponent<Text>();
         rationaleText.text = "Rationale: " + rationale;
+        healthText = GameObject.Find("HealthText").GetComponent<Text>();
         healthText.text = "Health: " + health;
+        actionMenu = GameObject.Find("ActionPanel").GetComponent<CanvasGroup>();
+        actionMenu.alpha = 0f;
+        actionMenu.blocksRaycasts = false;
     }
 
     // Update is called once per frame
@@ -36,14 +40,19 @@ public class Player : Character
                 StartCoroutine(FollowPath());
             }
         }
-        if (gettingAction)
+        if (gettingTarget)
         {
-            gettingAction = GetActionInput();
-            if (!gettingAction)
+            gettingTarget = GetTargetInput();
+            if (!gettingTarget)
             {
-                if(target != this)
-                    Attack(target);
-                EndTurn();
+                if (target.receiveActions.Count > 1)
+                {
+                    actionMenu.alpha = 1f;
+                    actionMenu.blocksRaycasts = true;
+                    Debug.Log("Player waiting for act input");
+                }
+                else
+                    GetActionInput(target.receiveActions[0]);
             }
         }
     }
@@ -78,7 +87,7 @@ public class Player : Character
         return true;
     }
 
-    bool GetActionInput()
+    bool GetTargetInput()
     {
         int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
         Vector2 camera = Camera.main.transform.position;
@@ -110,22 +119,30 @@ public class Player : Character
         return true;
     }
 
+    public void GetActionInput(string action)
+    {
+        actionMenu.alpha = 0f;
+        actionMenu.blocksRaycasts = false;
+        targetAction = action;
+        Act();
+    }
+
     protected override void GetMove()
     {
         ShowPaths();
         Debug.Log("Player waiting for move input");
     }
 
-    protected override void Act()
+    protected override void GetTarget()
     {
         GetNearbyObjects();
         if (nearbyObjects.Count == 1)
             EndTurn();
         else
         {
-            gettingAction = true;
+            gettingTarget = true;
             ShowNearbyObjects();
-            Debug.Log("Player waiting for act input");
+            Debug.Log("Player waiting for target input");
         }
     }
 

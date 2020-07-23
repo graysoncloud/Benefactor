@@ -47,8 +47,12 @@ public class Player : Character
             {
                 if (target == this)
                     GetActionInput("");
-                else if (target.receiveActions.Count > 1)
+                else if (target.receiveActions.Count > 1) //make new function?
                 {
+                    RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
+                    panelRectTransform.sizeDelta = new Vector2(175, 50 * target.receiveActions.Count); //panelRectTransform.sizeDelta.y //0.2f * target.receiveActions.Count
+                    Debug.Log(panelRectTransform.sizeDelta);
+
                     actionMenu.alpha = 1f;
                     actionMenu.blocksRaycasts = true;
                     Debug.Log("Player waiting for act input");

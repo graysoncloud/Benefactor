@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
+using System;
 
 public class Player : Character
 {
@@ -13,6 +14,7 @@ public class Player : Character
     public GameObject tileIndicator;
     public List<GameObject> indicators;
     public CanvasGroup actionMenu;
+    private List<GameObject> actionButtons;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -27,6 +29,7 @@ public class Player : Character
         actionMenu = GameObject.Find("ActionPanel").GetComponent<CanvasGroup>();
         actionMenu.alpha = 0f;
         actionMenu.blocksRaycasts = false;
+        actionButtons = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -47,15 +50,9 @@ public class Player : Character
             {
                 if (target == this)
                     GetActionInput("");
-                else if (target.receiveActions.Count > 1) //make new function?
+                else if (target.receiveActions.Count > 1)
                 {
-                    RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
-                    panelRectTransform.sizeDelta = new Vector2(175, 50 * target.receiveActions.Count); //panelRectTransform.sizeDelta.y //0.2f * target.receiveActions.Count
-                    Debug.Log(panelRectTransform.sizeDelta);
-
-                    actionMenu.alpha = 1f;
-                    actionMenu.blocksRaycasts = true;
-                    Debug.Log("Player waiting for act input");
+                    SetupActionMenu();
                 }
                 else
                     GetActionInput(target.receiveActions[0]);
@@ -144,10 +141,43 @@ public class Player : Character
         return true;
     }
 
-    public void GetActionInput(string action)
+    void SetupActionMenu()
+    {
+        int index = 0,
+            buttonHeight = 30,
+            buttonWidth = 160,
+            startPosition = buttonHeight * (int)target.receiveActions.Count / 2;
+        RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
+        panelRectTransform.sizeDelta = new Vector2(buttonWidth + 10, (buttonHeight+10) * target.receiveActions.Count); //panelRectTransform.sizeDelta.y
+        foreach (string action in receiveActions)
+        {
+            GameObject button = GameObject.Find($"{action}Button");
+            //button.SetActive(true);
+            actionButtons.Add(button);
+            button.transform.position = new Vector2(Screen.width / 2, Screen.height / 2 + startPosition - 5 - (buttonHeight+10)*index);
+            index++;
+        }
+
+        actionMenu.alpha = 1f;
+        actionMenu.blocksRaycasts = true;
+        Debug.Log("Player waiting for act input");
+    }
+
+    void HideActionMenu()
     {
         actionMenu.alpha = 0f;
         actionMenu.blocksRaycasts = false;
+        //foreach (GameObject button in actionButtons)
+        //{
+        //    button.SetActive(false);
+        //}
+        actionButtons.Clear();
+    }
+
+    public void GetActionInput(string action)
+    {
+        HideActionMenu();
+
         targetAction = action;
         Act();
     }

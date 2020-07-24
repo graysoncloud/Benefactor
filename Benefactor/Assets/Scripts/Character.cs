@@ -56,6 +56,7 @@ public class Character : InteractableObject
 
         base.Start();
         receiveActions.Add("Talk");
+        receiveActions.Add("Heal");
     }
 
     virtual protected void Update()
@@ -195,6 +196,9 @@ public class Character : InteractableObject
                 break;
             case "Talk":
                 TalkTo(target);
+                break;
+            case "Heal":
+                target.Heal(1);
                 break;
             default:
                 break;

@@ -1,0 +1,51 @@
+<?xml version= "1.0" encoding= "UTF-8" standalone= "yes"?>
+
+<chapter_1 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+<page number = "0">
+
+<name>Mark</name>
+
+<dialogue>This is a test!</dialogue>
+
+</page>
+
+<page number = "1">
+
+<name>Tony</name>
+
+<dialogue>This is a second test. It is a bit longer than the first! Notice the punctuation pauses? Pretty nifty.</dialogue>
+
+</page>
+
+<page number = "2">
+
+<name>Carol</name>
+
+<dialogue>This is a third test.</dialogue>
+
+</page>
+
+<page number = "3">
+
+<name>Kristie</name>
+
+<dialogue>This is a fourth test.</dialogue>
+
+</page>
+
+<page number = "4">
+
+<name>Jeff</name>
+
+<dialogue>This is a fifth test.</dialogue>
+
+</page>
+
+<page number = "5">
+
+<name>Frank</name>
+
+<dialogue>This is a sixth test.</dialogue>
+
+</page> </chapter_1>

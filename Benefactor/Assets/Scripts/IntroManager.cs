@@ -22,8 +22,13 @@ public class IntroManager : MonoBehaviour
     public Text dialogueUI;
     public float typingSpeed = .05f;
     public float punctuationDelay = .5f;
+    private float alphaIncrementRate = .02f;
+    private float alphaIncrementAmount = .005f;
+    private float postTransitionDelay = .5f;
+
     public bool typingInProgress;
     private bool fastForwardText;
+    private bool transitioning;
 
     void Start()
     {
@@ -34,7 +39,9 @@ public class IntroManager : MonoBehaviour
         StartCoroutine("AssignData");
         typingInProgress = false;
         fastForwardText = false;
-        StartCoroutine("readLine");
+
+        GameObject.Find("Cover").GetComponent<Image>().color += new Color(0, 0, 0, 1);
+        executeNext();
     }
 
     void LoadXML()
@@ -50,14 +57,18 @@ public class IntroManager : MonoBehaviour
         {
             if (item.Parent.Attribute("number").Value.ToString() == assignmentIndex.ToString())
             {
+                string tempType = item.Parent.Element("type").Value.Trim();
                 int tempPageNum = int.Parse(item.Parent.Attribute("number").Value);
-                string tempCharacter = item.Parent.Element("name").Value.Trim();
+                string tempBackdrop = item.Parent.Element("backdrop").Value.Trim();
+                string tempSFX = item.Parent.Element("SFX").Value.Trim();
+                string tempCharName = item.Parent.Element("character").Value.Trim();
+                string tempPortrait = item.Parent.Element("portrait").Value.Trim();
                 string tempDialogue = item.Parent.Element("dialogue").Value.Trim();
 
-                data.Add(new XMLData(tempPageNum, tempCharacter, tempDialogue));
-                Debug.Log(data[assignmentIndex].dialogueText);
+                data.Add(new XMLData(tempType, tempPageNum, tempBackdrop, tempSFX, tempCharName, tempPortrait, tempDialogue));
+                //Debug.Log(data[assignmentIndex].dialogueText);
+                //Debug.Log(assignmentIndex);
                 assignmentIndex++;
-                Debug.Log(assignmentIndex);
             }
         }
         yield return null;
@@ -65,23 +76,47 @@ public class IntroManager : MonoBehaviour
 
     private void Update()
     {
+        if (transitioning) return;
+
         if (Input.GetMouseButtonDown(0) && !typingInProgress) 
         {
-            StartCoroutine("readLine");
+            executeNext();
         } else if (Input.GetMouseButtonDown(0))
         {
             fastForwardText = true;
         }
     }
 
-    IEnumerator readLine()
+    private void executeNext()
+    {
+        Debug.Log("executing page: " + currentIndex);
+        if (data[currentIndex].type == "Dialogue")
+        {
+            StartCoroutine("readDialogue");
+            currentIndex++;
+        }
+        else if (data[currentIndex].type == "NewScene")
+        {
+            GameObject.Find("Backdrop").GetComponent<BackdropManager>().changeBackdrop(data[currentIndex].backdrop);
+            StartCoroutine("fadeIn");
+            // executeNext and currentIndex++ are handled at the end of the fadeIn / fadeOut coroutines
+        }
+        else if (data[currentIndex].type == "FadeOut")
+        {
+            StartCoroutine("fadeOut");
+            // executeNext and currentIndex++ are handled at the end of the fadeIn / fadeOut coroutines
+        }
+    }
+
+    IEnumerator readDialogue()
     {
         typingInProgress = true;
 
         dialogueUI.text = "";
         currentDialogue = data[currentIndex].dialogueText;
 
-        // Add code to change portrait
+        GameObject.Find("SpeakingCharacter").GetComponent<Text>().text = data[currentIndex].characterName;
+        GameObject.Find("Portrait").GetComponent<PortraitManager>().changePortrait(data[currentIndex].portrait);
 
         foreach (char letter in currentDialogue)
         {
@@ -96,7 +131,6 @@ public class IntroManager : MonoBehaviour
                 dialogueUI.text = currentDialogue;
                 fastForwardText = false;
                 typingInProgress = false;
-                currentIndex++;
                 yield break;
             }
 
@@ -104,21 +138,63 @@ public class IntroManager : MonoBehaviour
         }
 
         typingInProgress = false;
+    }
+    IEnumerator fadeIn()
+    {
+        transitioning = true;
+        Image cover = GameObject.Find("Cover").GetComponent<Image>();
+
+        while (cover.color.a >= 0)
+        {
+            cover.color -= new Color(0, 0, 0, alphaIncrementAmount);
+            yield return new WaitForSeconds(alphaIncrementRate);
+        }
+
+        yield return new WaitForSeconds(postTransitionDelay);
+
+        transitioning = false;
         currentIndex++;
+        executeNext();
+    }
+
+    IEnumerator fadeOut()
+    {
+        transitioning = true;
+        Image cover = GameObject.Find("Cover").GetComponent<Image>();
+
+        while (cover.color.a <= 1)
+        {
+            cover.color += new Color (0, 0, 0, alphaIncrementAmount);
+            yield return new WaitForSeconds(alphaIncrementRate);
+        }
+
+        yield return new WaitForSeconds(postTransitionDelay);
+
+        transitioning = false;
+        currentIndex++;
+        executeNext();
     }
 
 }
 
 public class XMLData
 {
+    public string type;
     public int pageNum;
-    public string characterText;
+    public string backdrop;
+    public string SFX;
+    public string characterName;
+    public string portrait;
     public string dialogueText;
 
-    public XMLData(int page, string character, string dialogue)
+    public XMLData(string pageType, int page, string backdropName, string SoundEffect, string charName, string character, string dialogue)
     {
+        type = pageType;
         pageNum = page;
-        characterText = character;
+        backdrop = backdropName;
+        SFX = SoundEffect;
+        characterName = charName;
+        portrait = character;
         dialogueText = dialogue;
     }
 }

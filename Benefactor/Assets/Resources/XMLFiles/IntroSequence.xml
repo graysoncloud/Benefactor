@@ -1,51 +1,72 @@
 <?xml version= "1.0" encoding= "UTF-8" standalone= "yes"?>
 
-<chapter_1 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<IntroSequence>
+	
+	<!--START OF SCENE 0-->
+	<page number = "0">
+		<type>NewScene</type>
+		<backdrop>InterogationOffice</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+	
+	<page number = "1">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>. . .</dialogue>
+	</page>
 
-<page number = "0">
+	<page number = "2">
+		<type>FadeOut</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+	<!--END OF SCENE 0-->
+	
+	
+	<!--START OF SCENE 1-->
+	<page number = "3">
+		<type>NewScene</type>
+		<backdrop>Thoroughfair</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
 
-<name>Mark</name>
+	<page number = "4">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>Footstops</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>Hey Ivanovna</dialogue>
+	</page>
 
-<dialogue>This is a test!</dialogue>
+	<page number = "5">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Ivanovna</character>
+		<portrait>IvanovnaNeutral</portrait>
+		<dialogue>I do not care.</dialogue>
+	</page>
 
-</page>
-
-<page number = "1">
-
-<name>Tony</name>
-
-<dialogue>This is a second test. It is a bit longer than the first! Notice the punctuation pauses? Pretty nifty.</dialogue>
-
-</page>
-
-<page number = "2">
-
-<name>Carol</name>
-
-<dialogue>This is a third test.</dialogue>
-
-</page>
-
-<page number = "3">
-
-<name>Kristie</name>
-
-<dialogue>This is a fourth test.</dialogue>
-
-</page>
-
-<page number = "4">
-
-<name>Jeff</name>
-
-<dialogue>This is a fifth test.</dialogue>
-
-</page>
-
-<page number = "5">
-
-<name>Frank</name>
-
-<dialogue>This is a sixth test.</dialogue>
-
-</page> </chapter_1>
+	<page number = "6">
+		<type>FadeOut</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+	
+</IntroSequence>

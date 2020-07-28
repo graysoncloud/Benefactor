@@ -48,7 +48,7 @@
 		<SFX>Footstops</SFX>
 		<character>Raskolnikov</character>
 		<portrait>RaskolnikovNeutral</portrait>
-		<dialogue>Hey Ivanovna</dialogue>
+		<dialogue>Hey Ivanovna.</dialogue>
 	</page>
 
 	<page number = "5">

@@ -144,6 +144,11 @@ public class IntroManager : MonoBehaviour
         transitioning = true;
         Image cover = GameObject.Find("Cover").GetComponent<Image>();
 
+        GameObject.Find("DialogueBackground").GetComponent<Image>().enabled = false;
+        GameObject.Find("Portrait").GetComponent<Image>().enabled = false;
+        GameObject.Find("SpeakingCharacter").GetComponent<Text>().enabled = false;
+        GameObject.Find("Dialogue").GetComponent<Text>().enabled = false;
+
         while (cover.color.a >= 0)
         {
             cover.color -= new Color(0, 0, 0, alphaIncrementAmount);
@@ -151,6 +156,11 @@ public class IntroManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(postTransitionDelay);
+
+        GameObject.Find("DialogueBackground").GetComponent<Image>().enabled = true;
+        GameObject.Find("Portrait").GetComponent<Image>().enabled = true;
+        GameObject.Find("SpeakingCharacter").GetComponent<Text>().enabled = true;
+        GameObject.Find("Dialogue").GetComponent<Text>().enabled = true;
 
         transitioning = false;
         currentIndex++;

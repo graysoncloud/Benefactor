@@ -14,7 +14,7 @@ public class Player : Character
     public GameObject tileIndicator;
     public List<GameObject> indicators;
     public CanvasGroup actionMenu;
-    private List<GameObject> actionButtons;
+    private Dictionary<String, GameObject> actionButtons;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -27,9 +27,11 @@ public class Player : Character
         healthText = GameObject.Find("HealthText").GetComponent<Text>();
         healthText.text = "Health: " + health;
         actionMenu = GameObject.Find("ActionPanel").GetComponent<CanvasGroup>();
-        actionMenu.alpha = 0f;
-        actionMenu.blocksRaycasts = false;
-        actionButtons = new List<GameObject>();
+        actionButtons = new Dictionary<String, GameObject>();
+        actionButtons.Add("Attack", GameObject.Find("AttackButton"));
+        actionButtons.Add("Talk", GameObject.Find("TalkButton"));
+        actionButtons.Add("Heal", GameObject.Find("HealButton"));
+        HideActionMenu();
     }
 
     // Update is called once per frame
@@ -146,15 +148,15 @@ public class Player : Character
         int index = 0,
             buttonHeight = 30,
             buttonWidth = 160,
-            startPosition = buttonHeight * (int)target.receiveActions.Count / 2;
+            height = (buttonHeight+10) * (int)target.receiveActions.Count;
         RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
-        panelRectTransform.sizeDelta = new Vector2(buttonWidth + 10, (buttonHeight+10) * target.receiveActions.Count); //panelRectTransform.sizeDelta.y
+        panelRectTransform.sizeDelta = new Vector2(buttonWidth + 10, height);
         foreach (string action in receiveActions)
         {
-            GameObject button = GameObject.Find($"{action}Button");
-            //button.SetActive(true);
-            actionButtons.Add(button);
-            button.transform.position = new Vector2(Screen.width / 2, Screen.height / 2 + startPosition - 5 - (buttonHeight+10)*index);
+            GameObject button;
+            actionButtons.TryGetValue(action, out button);
+            button.SetActive(true);
+            button.transform.position = new Vector2(Screen.width / 2, Screen.height / 2 + height/2 - 5 - (buttonHeight+10)*index - buttonHeight/2);
             index++;
         }
 
@@ -167,11 +169,10 @@ public class Player : Character
     {
         actionMenu.alpha = 0f;
         actionMenu.blocksRaycasts = false;
-        //foreach (GameObject button in actionButtons)
-        //{
-        //    button.SetActive(false);
-        //}
-        actionButtons.Clear();
+        foreach (GameObject button in actionButtons.Values)
+        {
+            button.SetActive(false);
+        }
     }
 
     public void GetActionInput(string action)

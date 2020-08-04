@@ -179,7 +179,7 @@ public class Player : Character
     {
         HideActionMenu();
 
-        targetAction = action;
+        currentObjective = new Objective(new Vector2(0, 0), action);
         Act();
     }
 

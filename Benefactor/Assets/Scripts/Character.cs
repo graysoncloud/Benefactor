@@ -6,26 +6,36 @@ using UnityEngine;
 
 public class Character : InteractableObject
 {
+    public class Objective
+    {
+        public Vector2 coords;
+        public string action;
+
+        public Objective(Vector2 coords, string action)
+        {
+            this.coords = coords;
+            this.action = action;
+        }
+    }
+
     public float moveTime;
     public int moves;
     public float actionDelay;
     public int strength;
     public double rationale;
-    //public int reputation;
-
     public bool isTurn;
     public bool gettingMove;
     public bool gettingTarget;
     public bool isMoving;
     public int movesUsed;
+    //public List<string> selfActions;
 
     protected Animator animator;
     private float inverseMoveTime;
+    protected Queue<Objective> objectives;
+    protected Objective currentObjective;
     protected Vector2 toMove;
     protected InteractableObject target; //target is the object the character is targeting this turn
-    protected String targetAction;
-    protected Vector2 objective; //objective is the position/object is ultimately trying to reach
-    protected String objectiveAction;
     //protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
     protected List<InteractableObject> nearbyObjects;
@@ -35,7 +45,6 @@ public class Character : InteractableObject
     protected override void Start()
     {
         rationale = GameManager.instance.defaultRationale;
-        //reputation = GameManager.instance.defaultReputation;
         moves = GameManager.instance.defaultMoves;
         strength = GameManager.instance.defaultStrength;
         moveTime = GameManager.instance.defaultMoveTime;
@@ -48,6 +57,7 @@ public class Character : InteractableObject
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
+        objectives = new Queue<Objective>();
         paths = new Dictionary<Vector2, Vector2[]>();
         nearbyObjects = new List<InteractableObject>();
         inventory = new Dictionary<String, List<HoldableObject>>();
@@ -129,13 +139,13 @@ public class Character : InteractableObject
 
     virtual protected void GetMove()
     {
-        objective = GameObject.FindGameObjectWithTag("Player").transform.position; //update with unique objective
-        objectiveAction = "Attack";
+        objectives.Enqueue(new Objective(GameObject.FindGameObjectWithTag("Player").transform.position, "Attack")); //update with unique objective
+        currentObjective = objectives.Dequeue();
         //might update to do A* search eventually to find shortest path
         int minDistance = 999;
         foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
         {
-            int distance = (int)(Math.Abs(entry.Key.x - objective.x) + Math.Abs(entry.Key.y - objective.y));
+            int distance = (int)(Math.Abs(entry.Key.x - currentObjective.coords.x) + Math.Abs(entry.Key.y - currentObjective.coords.y));
             if (distance < minDistance)
             {
                 toMove = entry.Key;
@@ -176,12 +186,12 @@ public class Character : InteractableObject
         {
             target = nearbyObjects[1];
             if (target.receiveActions.Count == 1)
-                targetAction = target.receiveActions[0];
+                currentObjective.action = target.receiveActions[0];
             else //add AI choosing
-                targetAction = target.receiveActions[0];
+                currentObjective.action = target.receiveActions[0];
         } else
         {
-            targetAction = "";
+            currentObjective.action = "";
         }
         gettingTarget = false;
         Act();
@@ -189,7 +199,7 @@ public class Character : InteractableObject
 
     virtual protected void Act()
     {
-        switch(targetAction)
+        switch(currentObjective.action)
         {
             case "Attack":
                 Attack(target);

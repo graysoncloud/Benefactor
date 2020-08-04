@@ -52,7 +52,7 @@ public class Player : Character
             {
                 if (target == this)
                     GetActionInput("");
-                else if (target.receiveActions.Count > 1)
+                else if (target.receiveActions.Length > 1)
                 {
                     SetupActionMenu();
                 }
@@ -148,7 +148,7 @@ public class Player : Character
         int index = 0,
             buttonHeight = 30,
             buttonWidth = 160,
-            height = (buttonHeight+10) * (int)target.receiveActions.Count;
+            height = (buttonHeight+10) * (int)target.receiveActions.Length;
         RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
         panelRectTransform.sizeDelta = new Vector2(buttonWidth + 10, height);
         foreach (string action in receiveActions)

@@ -28,7 +28,6 @@ public class Character : InteractableObject
     public bool gettingTarget;
     public bool isMoving;
     public int movesUsed;
-    //public List<string> selfActions;
 
     protected Animator animator;
     private float inverseMoveTime;
@@ -39,6 +38,7 @@ public class Character : InteractableObject
     //protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
     protected List<InteractableObject> nearbyObjects;
+    protected String[] selfActions;
     protected Dictionary<String, List<HoldableObject>> inventory;
 
     // Start is called before the first frame update
@@ -60,13 +60,15 @@ public class Character : InteractableObject
         objectives = new Queue<Objective>();
         paths = new Dictionary<Vector2, Vector2[]>();
         nearbyObjects = new List<InteractableObject>();
+        selfActions = new String[] { "Heal", "Wait" };
         inventory = new Dictionary<String, List<HoldableObject>>();
 
         GameManager.instance.AddCharacterToList(this);
 
         base.Start();
-        receiveActions.Add("Talk");
-        receiveActions.Add("Heal");
+        receiveActions = new String[] { "Attack", "Talk", "Heal" };
+        //receiveActions.Add("Talk");
+        //receiveActions.Add("Heal");
     }
 
     virtual protected void Update()
@@ -185,7 +187,7 @@ public class Character : InteractableObject
         if (nearbyObjects.Count > 1)
         {
             target = nearbyObjects[1];
-            if (target.receiveActions.Count == 1)
+            if (target.receiveActions.Length == 1)
                 currentObjective.action = target.receiveActions[0];
             else //add AI choosing
                 currentObjective.action = target.receiveActions[0];
@@ -228,7 +230,7 @@ public class Character : InteractableObject
         if (hit.transform != null)
         {
             hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null && hitObject.receiveActions.Count > 0)
+            if (hitObject != null && hitObject.receiveActions.Length > 0)
             {
                 nearbyObjects.Add(hitObject);
             }
@@ -239,7 +241,7 @@ public class Character : InteractableObject
         if (hit.collider != null)
         {
             hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null && hitObject.receiveActions.Count > 0)
+            if (hitObject != null && hitObject.receiveActions.Length > 0)
             {
                 nearbyObjects.Add(hitObject);
             }
@@ -250,7 +252,7 @@ public class Character : InteractableObject
         if (hit.collider != null)
         {
             hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null && hitObject.receiveActions.Count > 0)
+            if (hitObject != null && hitObject.receiveActions.Length > 0)
             {
                 nearbyObjects.Add(hitObject);
             }
@@ -261,7 +263,7 @@ public class Character : InteractableObject
         if (hit.collider != null)
         {
             hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null && hitObject.receiveActions.Count > 0)
+            if (hitObject != null && hitObject.receiveActions.Length > 0)
             {
                 nearbyObjects.Add(hitObject);
             }

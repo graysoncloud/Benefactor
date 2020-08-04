@@ -13,7 +13,7 @@ public class InteractableObject : MonoBehaviour
     public bool leavesCorpse; // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
     public bool isCorpse;
     public int reputation;
-    public String[] receiveActions;
+    public List<String> receiveActions;
 
     public Sprite damagedSprite;
     public Sprite corpseSprite;
@@ -29,7 +29,6 @@ public class InteractableObject : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
-        //receiveActions = new List<string>();
 
         maxHealth = GameManager.instance.defaultHealth;
         reputation = GameManager.instance.defaultReputation;
@@ -37,8 +36,7 @@ public class InteractableObject : MonoBehaviour
         damageable = true;
         //leavesCorpse = false;
         isCorpse = false;
-        receiveActions = new String[] { "Attack" };
-        //receiveActions.Add("Attack");
+        receiveActions = new List<String> { "Attack" };
     }
 
     /**
@@ -63,7 +61,6 @@ public class InteractableObject : MonoBehaviour
             gameObject.SetActive(false);
             GameManager.instance.RemoveDeadCharacters();
             // For some reason, this didn't work, so instead, GameManager just doesn't move characters at <= 0 health
-            // GameManager.instance.RemoveDeadCharacters();
         }
     }
 

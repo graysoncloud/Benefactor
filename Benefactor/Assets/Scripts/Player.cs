@@ -13,7 +13,7 @@ public class Player : Character
 
     public GameObject tileIndicator;
     public List<GameObject> indicators;
-    public CanvasGroup actionMenu;
+    private CanvasGroup actionMenu;
     private Dictionary<String, GameObject> actionButtons;
 
     // Start is called before the first frame update
@@ -31,6 +31,7 @@ public class Player : Character
         actionButtons.Add("Attack", GameObject.Find("AttackButton"));
         actionButtons.Add("Talk", GameObject.Find("TalkButton"));
         actionButtons.Add("Heal", GameObject.Find("HealButton"));
+        actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
     }
 
@@ -50,14 +51,7 @@ public class Player : Character
             gettingTarget = GetTargetInput();
             if (!gettingTarget)
             {
-                if (target == this)
-                    GetActionInput("");
-                else if (target.receiveActions.Length > 1)
-                {
-                    SetupActionMenu();
-                }
-                else
-                    GetActionInput(target.receiveActions[0]);
+                GetAction();
             }
         }
     }
@@ -68,7 +62,7 @@ public class Player : Character
         Debug.Log("Player waiting for move input");
     }
 
-    bool GetMoveInput()
+    private bool GetMoveInput()
     {
         int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
         Vector2 camera = Camera.main.transform.position;
@@ -102,7 +96,10 @@ public class Player : Character
     {
         GetNearbyObjects();
         if (nearbyObjects.Count == 1)
-            EndTurn();
+        {
+            target = this;
+            GetAction();
+        }
         else
         {
             gettingTarget = true;
@@ -111,7 +108,7 @@ public class Player : Character
         }
     }
 
-    bool GetTargetInput()
+    private bool GetTargetInput()
     {
         int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
         Vector2 camera = Camera.main.transform.position;
@@ -143,15 +140,33 @@ public class Player : Character
         return true;
     }
 
-    void SetupActionMenu()
+    private void GetAction()
     {
+        if (target == this)
+            if (selfActions.Count > 1)
+            {
+                SetupActionMenu(true);
+            }
+            else
+                GetActionInput(selfActions[0]);
+        else if (target.receiveActions.Count > 1)
+        {
+            SetupActionMenu(false);
+        }
+        else
+            GetActionInput(target.receiveActions[0]);
+    }
+
+    private void SetupActionMenu(bool self)
+    {
+        List<String> actions = self ? selfActions : target.receiveActions;
         int index = 0,
             buttonHeight = 30,
             buttonWidth = 160,
-            height = (buttonHeight+10) * (int)target.receiveActions.Length;
+            height = (buttonHeight+10) * actions.Count;
         RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
         panelRectTransform.sizeDelta = new Vector2(buttonWidth + 10, height);
-        foreach (string action in receiveActions)
+        foreach (string action in actions)
         {
             GameObject button;
             actionButtons.TryGetValue(action, out button);
@@ -165,7 +180,7 @@ public class Player : Character
         Debug.Log("Player waiting for act input");
     }
 
-    void HideActionMenu()
+    private void HideActionMenu()
     {
         actionMenu.alpha = 0f;
         actionMenu.blocksRaycasts = false;
@@ -175,7 +190,7 @@ public class Player : Character
         }
     }
 
-    public void GetActionInput(string action)
+    private void GetActionInput(string action)
     {
         HideActionMenu();
 

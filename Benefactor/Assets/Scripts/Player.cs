@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -45,7 +46,7 @@ public class Player : Character
     }
 
     // Update is called once per frame
-    protected override void Update()
+    void Update()
     {
         if (gettingMove)
         {
@@ -149,26 +150,31 @@ public class Player : Character
         return true;
     }
 
-    private void GetAction()
+    protected override void GetAction()
     {
         if (target == this)
-            if (selfActions.Count > 1)
-            {
-                SetupActionMenu(true);
-            }
-            else
-                GetActionInput(selfActions[0]);
-        else if (target.receiveActions.Count > 1)
         {
-            SetupActionMenu(false);
+            GetAvailableActions();
+            if (selfActions.Count > 1)
+                SetupActionMenu(true);
+            else
+                GetActionInput(selfActions.ElementAt(0));
         }
+        else if (target.receiveActions.Count > 1)
+            SetupActionMenu(false);
         else
-            GetActionInput(target.receiveActions[0]);
+            GetActionInput(target.receiveActions.ElementAt(0));
+    }
+
+    protected override void GetActionInput(string action)
+    {
+        HideActionMenu();
+        base.GetActionInput(action);
     }
 
     private void SetupActionMenu(bool self)
     {
-        List<String> actions = self ? selfActions : target.receiveActions;
+        SortedSet<String> actions = self ? selfActions : target.receiveActions;
         int index = 0,
             buttonHeight = 30,
             buttonWidth = 160,
@@ -197,14 +203,6 @@ public class Player : Character
         {
             button.SetActive(false);
         }
-    }
-
-    private void GetActionInput(string action)
-    {
-        HideActionMenu();
-
-        currentObjective = new Objective(new Vector2(0, 0), action);
-        Act();
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)

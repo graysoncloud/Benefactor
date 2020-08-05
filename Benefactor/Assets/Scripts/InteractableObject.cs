@@ -13,7 +13,7 @@ public class InteractableObject : MonoBehaviour
     public bool leavesCorpse; // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
     public bool isCorpse;
     public int reputation;
-    public List<String> receiveActions;
+    public SortedSet<String> receiveActions;
 
     public Sprite damagedSprite;
     public Sprite corpseSprite;
@@ -36,7 +36,7 @@ public class InteractableObject : MonoBehaviour
         damageable = true;
         //leavesCorpse = false;
         isCorpse = false;
-        receiveActions = new List<String> { "Attack" };
+        receiveActions = new SortedSet<String> { "Attack" };
     }
 
     /**

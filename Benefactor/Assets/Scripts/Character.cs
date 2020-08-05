@@ -38,7 +38,7 @@ public class Character : InteractableObject
     //protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
     protected List<InteractableObject> nearbyObjects;
-    protected List<String> selfActions;
+    protected SortedSet<String> selfActions;
     protected Dictionary<String, List<HoldableObject>> inventory;
 
     // Start is called before the first frame update
@@ -60,18 +60,13 @@ public class Character : InteractableObject
         objectives = new Queue<Objective>();
         paths = new Dictionary<Vector2, Vector2[]>();
         nearbyObjects = new List<InteractableObject>();
-        selfActions = new List<String> { "Heal", "Wait" };
+        selfActions = new SortedSet<String> { "Wait" };
         inventory = new Dictionary<String, List<HoldableObject>>();
 
         GameManager.instance.AddCharacterToList(this);
 
         base.Start();
-        receiveActions = new List<String> { "Attack", "Talk", "Heal" };
-    }
-
-    virtual protected void Update()
-    {
-
+        receiveActions = new SortedSet<String> { "Attack", "Talk", "Heal" };
     }
 
     public void StartTurn()
@@ -180,20 +175,53 @@ public class Character : InteractableObject
 
     virtual protected void GetTarget()
     {
+        //add AI ability to choose correct target
         GetNearbyObjects();
         gettingTarget = true;
         if (nearbyObjects.Count > 1)
         {
             target = nearbyObjects[1];
-            if (target.receiveActions.Count == 1)
-                currentObjective.action = target.receiveActions[0];
-            else //add AI choosing
-                currentObjective.action = target.receiveActions[0];
         } else
         {
-            currentObjective.action = "";
+            target = this;
         }
         gettingTarget = false;
+        GetAction();
+    }
+
+    virtual protected void GetAction()
+    {
+        //add AI ability to choose correct action
+        if (target == this)
+        {
+            GetAvailableActions();
+            if (health <= maxHealth && selfActions.Contains("Heal"))
+                GetActionInput("Heal");
+            else
+            GetActionInput("Wait");
+        }
+        else
+        {
+            if (target.receiveActions.Contains("Attack"))
+                GetActionInput("Attack");
+            else if (target.receiveActions.Contains("Talk"))
+                GetActionInput("Talk");
+            else
+                GetActionInput("Wait");
+        }
+    }
+
+    protected void GetAvailableActions()
+    {
+        if (inventory.ContainsKey("Food") && !selfActions.Contains("Food"))
+            selfActions.Add("Heal");
+        else if (selfActions.Contains("Food"))
+            selfActions.Remove("Heal");
+    }
+
+    virtual protected void GetActionInput(string action)
+    {
+        currentObjective = new Objective(new Vector2(0, 0), action);
         Act();
     }
 

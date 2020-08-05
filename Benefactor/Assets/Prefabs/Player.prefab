@@ -190,5 +190,4 @@ MonoBehaviour:
   tileIndicator: {fileID: 6793900256970249569, guid: 73dc820bc82c3724ab6d3f763aac8d46,
     type: 3}
   indicators: []
-  actionMenu: {fileID: 3376424737115475739, guid: f2694a768cbe4e8469fa3ae5b8aef60a,
-    type: 3}
+  itemsParent: {fileID: 0}

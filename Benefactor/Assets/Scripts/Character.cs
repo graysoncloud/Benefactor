@@ -290,7 +290,7 @@ public class Character : InteractableObject
         }
     }
 
-    public virtual void OnTriggerEnter2D(Collider2D other)
+    protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.GetComponent<HoldableObject>() != null)
         {
@@ -309,7 +309,7 @@ public class Character : InteractableObject
         //}
     }
 
-    protected void Pickup (HoldableObject toPickup)
+    protected virtual void Pickup (HoldableObject toPickup)
     {
         Debug.Log(toPickup);
         if (inventory.ContainsKey(toPickup.type))

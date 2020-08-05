@@ -16,16 +16,21 @@ public class Player : Character
     private CanvasGroup actionMenu;
     private Dictionary<String, GameObject> actionButtons;
 
+    public Transform itemsParent;
+    InventorySlot[] slots;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        
         maxHealth = 10;
         health = maxHealth;
         rationaleText = GameObject.Find("RationaleText").GetComponent<Text>();
         rationaleText.text = "Rationale: " + rationale;
         healthText = GameObject.Find("HealthText").GetComponent<Text>();
         healthText.text = "Health: " + health;
+        
         actionMenu = GameObject.Find("ActionPanel").GetComponent<CanvasGroup>();
         actionButtons = new Dictionary<String, GameObject>();
         actionButtons.Add("Attack", GameObject.Find("AttackButton"));
@@ -33,6 +38,10 @@ public class Player : Character
         actionButtons.Add("Heal", GameObject.Find("HealButton"));
         actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
+
+        itemsParent = GameObject.Find("Inventory").GetComponent<Transform>();
+        slots = itemsParent.GetComponentsInChildren<InventorySlot>();
+        UpdateInventory();
     }
 
     // Update is called once per frame
@@ -198,7 +207,7 @@ public class Player : Character
         Act();
     }
 
-    public override void OnTriggerEnter2D(Collider2D other)
+    protected override void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Exit")
         {
@@ -208,6 +217,30 @@ public class Player : Character
         }
 
         base.OnTriggerEnter2D(other);
+    }
+
+    protected override void Pickup (HoldableObject toPickup)
+    {
+        base.Pickup(toPickup);
+
+        UpdateInventory();
+    }
+
+    private void UpdateInventory()
+    {
+        List<HoldableObject> items;
+        inventory.TryGetValue("Food", out items);
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (items != null && i < items.Count)
+            {
+                slots[i].AddItem(items[i]);
+            }
+            else
+            {
+                slots[i].ClearSlot();
+            }
+        }
     }
 
     private void Restart()

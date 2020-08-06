@@ -4,11 +4,13 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Linq;
 using System;
 
 public class Player : Character
 {
+    public Transform itemsParent;
+    public GameObject inventoryUI;
+    public InventorySlot[] slots;
     public Text rationaleText;
     public Text healthText;
 
@@ -16,9 +18,6 @@ public class Player : Character
     public List<GameObject> indicators;
     private CanvasGroup actionMenu;
     private Dictionary<String, GameObject> actionButtons;
-
-    public Transform itemsParent;
-    InventorySlot[] slots;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -40,9 +39,10 @@ public class Player : Character
         actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
 
+        inventoryUI = GameObject.Find("InventoryParent");
         itemsParent = GameObject.Find("Inventory").GetComponent<Transform>();
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();
-        UpdateInventory();
+        HideInventory();
     }
 
     // Update is called once per frame
@@ -220,14 +220,13 @@ public class Player : Character
     protected override void Pickup (HoldableObject toPickup)
     {
         base.Pickup(toPickup);
-
-        UpdateInventory();
+        UpdateInventory(toPickup.type);
     }
 
-    private void UpdateInventory()
+    private void UpdateInventory(String type)
     {
         List<HoldableObject> items;
-        inventory.TryGetValue("Food", out items);
+        inventory.TryGetValue(type, out items);
         for (int i = 0; i < slots.Length; i++)
         {
             if (items != null && i < items.Count)
@@ -239,6 +238,22 @@ public class Player : Character
                 slots[i].ClearSlot();
             }
         }
+    }
+    protected override void SelectItem(String type)
+    {
+        UpdateInventory(type);
+        inventoryUI.SetActive(true);
+    }
+
+    override public void ChooseItem(HoldableObject item)
+    {
+        HideInventory();
+        base.ChooseItem(item);
+    }
+
+    private void HideInventory()
+    {
+        inventoryUI.SetActive(false);
     }
 
     private void Restart()

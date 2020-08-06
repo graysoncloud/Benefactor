@@ -26,6 +26,7 @@ public class Character : InteractableObject
     public bool isTurn;
     public bool gettingMove;
     public bool gettingTarget;
+    //public bool gettingItem;
     public bool isMoving;
     public int movesUsed;
 
@@ -40,6 +41,7 @@ public class Character : InteractableObject
     protected List<InteractableObject> nearbyObjects;
     protected SortedSet<String> selfActions;
     protected Dictionary<String, List<HoldableObject>> inventory;
+    protected HoldableObject currentItem;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -53,6 +55,7 @@ public class Character : InteractableObject
         isTurn = false;
         gettingMove = false;
         gettingTarget = false;
+        //gettingItem = false;
         isMoving = false;
 
         animator = GetComponent<Animator>();
@@ -213,9 +216,9 @@ public class Character : InteractableObject
 
     protected void GetAvailableActions()
     {
-        if (inventory.ContainsKey("Food") && !selfActions.Contains("Food"))
+        if (health < maxHealth && inventory.ContainsKey("Medicine") && !selfActions.Contains("Heal"))
             selfActions.Add("Heal");
-        else if (selfActions.Contains("Food"))
+        else if (selfActions.Contains("Heal"))
             selfActions.Remove("Heal");
     }
 
@@ -236,8 +239,8 @@ public class Character : InteractableObject
                 TalkTo(target);
                 break;
             case "Heal":
-                target.Heal(1);
-                break;
+                SelectItem("Medicine");
+                return;
             case "Wait":
                 break;
             default:
@@ -300,6 +303,21 @@ public class Character : InteractableObject
         boxCollider.enabled = true;
     }
 
+    virtual protected void SelectItem(String type)
+    {
+        List<HoldableObject> items;
+        inventory.TryGetValue(type, out items);
+
+        ChooseItem(items[0]);
+    }
+
+    virtual public void ChooseItem(HoldableObject item)
+    {
+        currentItem = item;
+        if (currentItem.type == "Medicine")
+            Heal(target);
+    }
+
     protected void EndTurn()
     {
         isTurn = false;
@@ -324,17 +342,6 @@ public class Character : InteractableObject
         {
             Pickup(other.gameObject.GetComponent<HoldableObject>());
         }
-
-        //if (other.tag == "Food")
-        //{
-        //    //Heal(3);
-        //    //other.gameObject.SetActive(false);
-        //}
-        //else if (other.tag == "Soda")
-        //{
-        //    //Heal(1);
-        //    //other.gameObject.SetActive(false);
-        //}
     }
 
     protected virtual void Pickup (HoldableObject toPickup)
@@ -353,11 +360,29 @@ public class Character : InteractableObject
         toPickup.gameObject.SetActive(false);
     }
 
+    virtual protected void Heal(InteractableObject toHeal)
+    {
+        toHeal.Heal(currentItem.amount);
+
+        Remove(currentItem);
+
+        EndTurn(); //TEMPORARY???
+    }
+
+    protected void Remove(HoldableObject item)
+    {
+        List<HoldableObject> items;
+        inventory.TryGetValue(item.type, out items);
+        items.Remove(item);
+        if (items.Count == 0)
+            inventory.Remove(item.type);
+    }
+
     protected void Attack (InteractableObject toAttack)
     {
         toAttack.TakeDamage(strength * (rationale / 50));
 
-        animator.SetTrigger("playerChop");
+        animator.SetTrigger("enemyAttack");
 
         if (toAttack.health <= 0)
         {

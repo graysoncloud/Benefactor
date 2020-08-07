@@ -194,10 +194,10 @@ public class Character : InteractableObject
 
     virtual protected void GetAction()
     {
+        GetAvailableActions(target == this ? selfActions : target.receiveActions);
         //add AI ability to choose correct action
         if (target == this)
         {
-            GetAvailableActions();
             if (health <= maxHealth && selfActions.Contains("Heal"))
                 GetActionInput("Heal");
             else
@@ -214,12 +214,12 @@ public class Character : InteractableObject
         }
     }
 
-    protected void GetAvailableActions()
+    protected void GetAvailableActions(SortedSet<String> actions)
     {
-        if (health < maxHealth && inventory.ContainsKey("Medicine") && !selfActions.Contains("Heal"))
-            selfActions.Add("Heal");
-        else if (selfActions.Contains("Heal"))
-            selfActions.Remove("Heal");
+        if (target.health < target.maxHealth && inventory.ContainsKey("Medicine") && !actions.Contains("Heal"))
+            actions.Add("Heal");
+        else if (actions.Contains("Heal"))
+            actions.Remove("Heal");
     }
 
     virtual protected void GetActionInput(string action)

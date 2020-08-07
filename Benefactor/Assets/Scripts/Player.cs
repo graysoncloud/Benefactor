@@ -152,9 +152,9 @@ public class Player : Character
 
     protected override void GetAction()
     {
+        GetAvailableActions(target == this ? selfActions : target.receiveActions);
         if (target == this)
         {
-            GetAvailableActions();
             if (selfActions.Count > 1)
                 SetupActionMenu(true);
             else

@@ -166,13 +166,18 @@ MonoBehaviour:
   Collisions:
     serializedVersion: 2
     m_Bits: 256
-  health: 0
+  maxHealth: 0
   damageable: 0
+  repairable: 0
   leavesCorpse: 0
-  isCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
   moveTime: 0
   moves: 0
-  reputation: 0
+  actionDelay: 0
   strength: 0
+  isTurn: 0
+  isMoving: 0
+  talkable: 0
+  startingItems:
+  - {fileID: -5498856414594888391, guid: 70791d2237bfa6f4fb33643eaed4084d, type: 3}

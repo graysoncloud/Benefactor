@@ -28,6 +28,7 @@ public class Character : InteractableObject
     public bool isMoving;
     public bool talkable;
     //public int movesUsed;
+    public HoldableObject[] startingItems;
 
     protected double rationale;
     protected Animator animator;
@@ -67,6 +68,10 @@ public class Character : InteractableObject
         attackableObjects = new List<InteractableObject>();
         actions = new SortedSet<String>();
         inventory = new Dictionary<String, List<HoldableObject>>();
+        foreach (HoldableObject item in startingItems)
+        {
+            Pickup(Instantiate(item));
+        }
 
         GameManager.instance.AddCharacterToList(this);
 
@@ -342,7 +347,7 @@ public class Character : InteractableObject
         }
     }
 
-    protected virtual void Pickup (HoldableObject toPickup)
+    protected virtual void Pickup (HoldableObject toPickup, Boolean start = false)
     {
         Debug.Log(toPickup);
         if (inventory.ContainsKey(toPickup.type))
@@ -355,7 +360,8 @@ public class Character : InteractableObject
         {
             inventory.Add(toPickup.type, new List<HoldableObject>{toPickup});
         }
-        toPickup.gameObject.SetActive(false);
+        if (!start)
+            toPickup.gameObject.SetActive(false);
     }
 
     protected void Remove(HoldableObject item)

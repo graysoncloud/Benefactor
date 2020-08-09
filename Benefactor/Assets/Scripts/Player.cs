@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SocialPlatforms;
 
 public class Player : Character
 {
@@ -25,11 +26,9 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
-        
-        maxHealth = 10;
-        health = maxHealth;
         gettingMove = false;
         gettingTarget = false;
+
         rationaleText = GameObject.Find("RationaleText").GetComponent<Text>();
         rationaleText.text = "Rationale: " + rationale;
         healthText = GameObject.Find("HealthText").GetComponent<Text>();
@@ -77,7 +76,6 @@ public class Player : Character
         GetPaths();
         yield return new WaitForSeconds(moveTime);
         SelectPath();
-        yield return null;
     }
 
     protected IEnumerator SelectedPath()
@@ -203,7 +201,7 @@ public class Player : Character
 
     protected override void SelectItem(String type)
     {
-        ShowInventory(type);
+        ShowInventory(type, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
         inventoryUI.SetActive(true);
     }
 
@@ -353,13 +351,13 @@ public class Player : Character
         }
     }
 
-    private void ShowInventory(String type)
+    private void ShowInventory(String type, int range = 0)
     {
         List<HoldableObject> items;
         inventory.TryGetValue(type, out items);
         for (int i = 0; i < slots.Length; i++)
         {
-            if (items != null && i < items.Count)
+            if (items != null && i < items.Count && (range == 0 || items[i].range >= range - 1))
             {
                 slots[i].AddItem(items[i]);
             }

@@ -23,11 +23,8 @@ public class Character : InteractableObject
     public float actionDelay;
     public double strength; //multiplier for range 1 weapon
     public bool isTurn;
-    //public bool gettingMove;
-    //public bool gettingTarget;
     public bool isMoving;
     public bool talkable;
-    //public int movesUsed;
     public HoldableObject[] startingItems;
 
     protected double rationale;
@@ -55,8 +52,6 @@ public class Character : InteractableObject
         actionDelay = GameManager.instance.defaultActionDelay;
 
         isTurn = false;
-        //gettingMove = false;
-        //gettingTarget = false;
         isMoving = false;
 
         animator = GetComponent<Animator>();
@@ -94,7 +89,7 @@ public class Character : InteractableObject
 
     protected virtual void UpdateObjectives()
     {
-        if (health < maxHealth && inventory.ContainsKey("Medicine") && !objectives.Contains(new Objective(this, "Heal")))
+        if (IsDamaged() && inventory.ContainsKey("Medicine") && !objectives.Contains(new Objective(this, "Heal")))
             objectives.Enqueue(new Objective(this, "Heal"));
         else if (!objectives.Contains(new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack")))
             objectives.Enqueue(new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack"));
@@ -209,20 +204,20 @@ public class Character : InteractableObject
         attackableObjects.Clear();
         HashSet<Vector2> visited = new HashSet<Vector2>();
         if (inventory.ContainsKey("Weapon"))
-        {
             GetObjectsToActOn(attackableObjects, "Attack", transform.position, visited, attackRange);
-            attackableObjects.Remove(this);
-        }
 
         healableObjects.Clear();
         visited.Clear();
         if (inventory.ContainsKey("Medicine"))
+        {
             GetObjectsToActOn(healableObjects, "Heal", transform.position, visited, 1);
+            if (IsDamaged())
+                healableObjects.Add(this);
+        }
 
         talkableObjects.Clear();
         visited.Clear();
         GetObjectsToActOn(talkableObjects, "Talk", transform.position, visited, 1);
-        talkableObjects.Remove(this);
     }
 
     protected void GetAttackRange()
@@ -314,7 +309,11 @@ public class Character : InteractableObject
         List<HoldableObject> items;
         inventory.TryGetValue(type, out items);
 
-        ChooseItem(items[0]);
+        int i = 0;
+        if (type == "Weapon")
+            while (items[i].range < GetDistance(currentObjective.target) - 1)
+                i++;
+        ChooseItem(items[i]);
     }
 
     public virtual void ChooseItem(HoldableObject item)

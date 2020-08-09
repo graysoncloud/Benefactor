@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     public float turnDelay;
     public static GameManager instance = null;
 
-    public double defaultHealth;
     public double defaultRationale;
     public int defaultReputation;
     public int defaultMoves;

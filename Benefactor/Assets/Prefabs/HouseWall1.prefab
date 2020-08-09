@@ -125,12 +125,10 @@ MonoBehaviour:
   Collisions:
     serializedVersion: 2
     m_Bits: 0
-  health: 0
-  maxHealth: 0
-  reputation: 0
-  damageable: 0
+  maxHealth: 2
+  damageable: 1
+  repairable: 0
   leavesCorpse: 0
-  isCorpse: 0
   damagedSprite: {fileID: -1007832776062502064, guid: c1ec50cdeb4614d43a656cfe494016c5,
     type: 3}
   corpseSprite: {fileID: 0}

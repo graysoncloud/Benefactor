@@ -166,9 +166,9 @@ MonoBehaviour:
   Collisions:
     serializedVersion: 2
     m_Bits: 256
-  maxHealth: 0
-  damageable: 0
-  repairable: 0
+  maxHealth: 10
+  damageable: 1
+  repairable: 1
   leavesCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}

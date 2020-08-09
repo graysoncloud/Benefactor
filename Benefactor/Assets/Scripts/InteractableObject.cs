@@ -27,11 +27,8 @@ public class InteractableObject : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
-
-        maxHealth = GameManager.instance.defaultHealth;
         reputation = GameManager.instance.defaultReputation;
         health = maxHealth;
-        damageable = true;
         //leavesCorpse = false;
         isCorpse = false;
         receiveActions = new SortedSet<String>();
@@ -73,6 +70,11 @@ public class InteractableObject : MonoBehaviour
         return health;
     }
 
+    public virtual bool IsDamaged()
+    {
+        return health < maxHealth;
+    }
+
     public virtual int GetReputation()
     {
         return reputation;
@@ -85,10 +87,15 @@ public class InteractableObject : MonoBehaviour
         if (damageable)
             receiveActions.Add("Attack");
 
-        if (repairable && health < maxHealth)
+        if (repairable && IsDamaged())
             receiveActions.Add("Heal");
 
         return receiveActions;
+    }
+
+    public virtual int GetDistance(InteractableObject o)
+    {
+        return (int)((o.transform.position.x - transform.position.x) + (o.transform.position.y - transform.position.y));
     }
 
     // Update is called once per frame

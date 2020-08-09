@@ -357,7 +357,7 @@ public class Player : Character
         inventory.TryGetValue(type, out items);
         for (int i = 0; i < slots.Length; i++)
         {
-            if (items != null && i < items.Count && (range == 0 || items[i].range >= range - 1))
+            if (items != null && i < items.Count && (range == 0 || items[i].range >= range))
             {
                 slots[i].AddItem(items[i]);
             }

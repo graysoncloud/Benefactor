@@ -311,7 +311,7 @@ public class Character : InteractableObject
 
         int i = 0;
         if (type == "Weapon")
-            while (items[i].range < GetDistance(currentObjective.target) - 1)
+            while (items[i].range < GetDistance(currentObjective.target))
                 i++;
         ChooseItem(items[i]);
     }

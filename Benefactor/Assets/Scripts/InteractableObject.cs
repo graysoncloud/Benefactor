@@ -95,7 +95,7 @@ public class InteractableObject : MonoBehaviour
 
     public virtual int GetDistance(InteractableObject o)
     {
-        return (int)((o.transform.position.x - transform.position.x) + (o.transform.position.y - transform.position.y));
+        return (int)(Math.Abs(o.transform.position.x - transform.position.x) + Math.Abs(o.transform.position.y - transform.position.y));
     }
 
     // Update is called once per frame

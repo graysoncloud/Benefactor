@@ -78,7 +78,8 @@ MonoBehaviour:
   - {fileID: 401109042432714246, guid: f07eb8a8f30e86c448faeaec0c59dcae, type: 3}
   - {fileID: 6549912615576886170, guid: 67c2cedc731587346820060d56ebbd98, type: 3}
   - {fileID: 6889720950204154999, guid: 0116be4fdc8edcb4d8861a576f38a2a8, type: 3}
-  foodTiles:
+  itemTiles:
+  - {fileID: 8913211509250880351, guid: ae876cd8e3a9f8c4c9af44a00acef1e0, type: 3}
   - {fileID: 8913211509250880351, guid: b67a25e2dbb90a64ba4959583c7d4227, type: 3}
   - {fileID: 6156389141310141637, guid: d7223e9ce65c5ff40a98ff9432da0fcf, type: 3}
   enemyTiles:

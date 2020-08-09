@@ -6,22 +6,20 @@ using UnityEngine;
 public class InteractableObject : MonoBehaviour
 {
     public LayerMask Collisions;
-
-    public double health;
     public double maxHealth;
     public bool damageable;
+    public bool repairable;
     public bool leavesCorpse; // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
-    public bool isCorpse;
-    public int reputation;
-    public SortedSet<String> receiveActions;
-
     public Sprite damagedSprite;
     public Sprite corpseSprite;
     private SpriteRenderer spriteRenderer;
 
+    protected double health;
+    protected bool isCorpse;
+    protected int reputation;
+    protected SortedSet<String> receiveActions;
     protected BoxCollider2D boxCollider;
     protected Rigidbody2D rb2D;
-
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -36,7 +34,7 @@ public class InteractableObject : MonoBehaviour
         damageable = true;
         //leavesCorpse = false;
         isCorpse = false;
-        receiveActions = new SortedSet<String> { "Attack" };
+        receiveActions = new SortedSet<String>();
     }
 
     /**
@@ -68,6 +66,29 @@ public class InteractableObject : MonoBehaviour
     {
         if (!damageable) return;
         health = Math.Min(health + amount, maxHealth);
+    }
+
+    public virtual double GetHealth()
+    {
+        return health;
+    }
+
+    public virtual int GetReputation()
+    {
+        return reputation;
+    }
+
+    public virtual SortedSet<String> GetActions()
+    {
+        receiveActions.Clear();
+
+        if (damageable)
+            receiveActions.Add("Attack");
+
+        if (repairable && health < maxHealth)
+            receiveActions.Add("Heal");
+
+        return receiveActions;
     }
 
     // Update is called once per frame

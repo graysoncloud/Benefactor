@@ -8,12 +8,12 @@ public class Character : InteractableObject
 {
     public class Objective
     {
-        public Vector2 coords;
+        public InteractableObject target;
         public string action;
 
-        public Objective(Vector2 coords, string action)
+        public Objective(InteractableObject target, string action)
         {
-            this.coords = coords;
+            this.target = target;
             this.action = action;
         }
     }
@@ -21,27 +21,28 @@ public class Character : InteractableObject
     public float moveTime;
     public int moves;
     public float actionDelay;
-    public int strength;
-    public double rationale;
+    public double strength; //multiplier for range 1 weapon
     public bool isTurn;
-    public bool gettingMove;
-    public bool gettingTarget;
-    //public bool gettingItem;
+    //public bool gettingMove;
+    //public bool gettingTarget;
     public bool isMoving;
-    public int movesUsed;
+    public bool talkable;
+    //public int movesUsed;
 
+    protected double rationale;
     protected Animator animator;
     private float inverseMoveTime;
     protected Queue<Objective> objectives;
     protected Objective currentObjective;
-    protected Vector2 toMove;
-    protected InteractableObject target; //target is the object the character is targeting this turn
     //protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
-    protected List<InteractableObject> nearbyObjects;
-    protected SortedSet<String> selfActions;
+    protected Vector2 toMove;
+    protected List<InteractableObject> healableObjects;
+    protected List<InteractableObject> talkableObjects;
+    protected List<InteractableObject> attackableObjects;
+    protected SortedSet<String> actions;
     protected Dictionary<String, List<HoldableObject>> inventory;
-    protected HoldableObject currentItem;
+    protected int attackRange;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -53,39 +54,53 @@ public class Character : InteractableObject
         actionDelay = GameManager.instance.defaultActionDelay;
 
         isTurn = false;
-        gettingMove = false;
-        gettingTarget = false;
-        //gettingItem = false;
+        //gettingMove = false;
+        //gettingTarget = false;
         isMoving = false;
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
         objectives = new Queue<Objective>();
         paths = new Dictionary<Vector2, Vector2[]>();
-        nearbyObjects = new List<InteractableObject>();
-        selfActions = new SortedSet<String> { "Wait" };
+        healableObjects = new List<InteractableObject>();
+        talkableObjects = new List<InteractableObject>();
+        attackableObjects = new List<InteractableObject>();
+        actions = new SortedSet<String>();
         inventory = new Dictionary<String, List<HoldableObject>>();
 
         GameManager.instance.AddCharacterToList(this);
 
         base.Start();
-        receiveActions = new SortedSet<String> { "Attack", "Talk", "Heal" };
     }
 
-    public void StartTurn()
+    public virtual IEnumerator StartTurn()
     {
         isTurn = true;
-        movesUsed = 0;
-        gettingMove = true;
-        StartCoroutine(GetPaths());
+        UpdateObjectives();
+        GetPaths();
+        yield return new WaitForSeconds(moveTime);
+        SelectPath();
+        yield return StartCoroutine(FollowPath());
+        GetAvailableTargets();
+        GetAvailableActions();
+        Act();
+        StartCoroutine(EndTurn());
     }
 
-    protected IEnumerator GetPaths()
+    protected virtual void UpdateObjectives()
+    {
+        if (health < maxHealth && inventory.ContainsKey("Medicine") && !objectives.Contains(new Objective(this, "Heal")))
+            objectives.Enqueue(new Objective(this, "Heal"));
+        else if (!objectives.Contains(new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack")))
+            objectives.Enqueue(new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack"));
+        if (currentObjective == null)
+            currentObjective = objectives.Dequeue();
+    }
+
+    protected void GetPaths()
     {
         paths.Clear();
         GetPaths(transform.position, new Vector2[0], moves);
-        yield return new WaitForSeconds(moveTime);
-        GetMove();
     }
 
     protected void GetPaths(Vector2 next, Vector2[] path, int remainingMoves)
@@ -135,23 +150,19 @@ public class Character : InteractableObject
         Debug.Log(actions);
     }
 
-    virtual protected void GetMove()
+    virtual protected void SelectPath()
     {
-        objectives.Enqueue(new Objective(GameObject.FindGameObjectWithTag("Player").transform.position, "Attack")); //update with unique objective
-        currentObjective = objectives.Dequeue();
         //might update to do A* search eventually to find shortest path
         int minDistance = 999;
         foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
         {
-            int distance = (int)(Math.Abs(entry.Key.x - currentObjective.coords.x) + Math.Abs(entry.Key.y - currentObjective.coords.y));
+            int distance = (int)(Math.Abs(entry.Key.x - currentObjective.target.transform.position.x) + Math.Abs(entry.Key.y - currentObjective.target.transform.position.y));
             if (distance < minDistance)
             {
                 toMove = entry.Key;
                 minDistance = distance;
             }
         }
-        gettingMove = false;
-        StartCoroutine(FollowPath());
     }
 
     protected IEnumerator FollowPath()
@@ -164,7 +175,7 @@ public class Character : InteractableObject
             paths.TryGetValue(end, out path);
             foreach (Vector2 coords in path)
             {
-                movesUsed++;
+                //movesUsed++;
                 StartCoroutine(SmoothMovement(coords));
                 yield return new WaitForSeconds(moveTime);
             }
@@ -173,155 +184,6 @@ public class Character : InteractableObject
         {
             yield return new WaitForSeconds(moveTime);
         }
-        GetTarget();
-    }
-
-    virtual protected void GetTarget()
-    {
-        //add AI ability to choose correct target
-        GetNearbyObjects();
-        gettingTarget = true;
-        if (nearbyObjects.Count > 1)
-        {
-            target = nearbyObjects[1];
-        } else
-        {
-            target = this;
-        }
-        gettingTarget = false;
-        GetAction();
-    }
-
-    virtual protected void GetAction()
-    {
-        GetAvailableActions(target == this ? selfActions : target.receiveActions);
-        //add AI ability to choose correct action
-        if (target == this)
-        {
-            if (health <= maxHealth && selfActions.Contains("Heal"))
-                GetActionInput("Heal");
-            else
-            GetActionInput("Wait");
-        }
-        else
-        {
-            if (target.receiveActions.Contains("Attack"))
-                GetActionInput("Attack");
-            else if (target.receiveActions.Contains("Talk"))
-                GetActionInput("Talk");
-            else
-                GetActionInput("Wait");
-        }
-    }
-
-    protected void GetAvailableActions(SortedSet<String> actions)
-    {
-        if (target.health < target.maxHealth && inventory.ContainsKey("Medicine") && !actions.Contains("Heal"))
-            actions.Add("Heal");
-        else if (actions.Contains("Heal"))
-            actions.Remove("Heal");
-    }
-
-    virtual protected void GetActionInput(string action)
-    {
-        currentObjective = new Objective(new Vector2(0, 0), action);
-        Act();
-    }
-
-    virtual protected void Act()
-    {
-        switch(currentObjective.action)
-        {
-            case "Attack":
-                Attack(target);
-                break;
-            case "Talk":
-                TalkTo(target);
-                break;
-            case "Heal":
-                SelectItem("Medicine");
-                return;
-            case "Wait":
-                break;
-            default:
-                break;
-        }
-        EndTurn();
-    }
-
-    protected void GetNearbyObjects()
-    {
-        nearbyObjects.Clear();
-        nearbyObjects.Add(this);
-        boxCollider.enabled = false;
-
-        Vector2 next = (Vector2)transform.position + new Vector2(1, 0);
-        RaycastHit2D hit = Physics2D.Linecast(transform.position, next, Collisions);
-        InteractableObject hitObject;
-        if (hit.transform != null)
-        {
-            hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null && hitObject.receiveActions.Count > 0)
-            {
-                nearbyObjects.Add(hitObject);
-            }
-        }
-
-        next = (Vector2)transform.position + new Vector2(-1, 0);
-        hit = Physics2D.Linecast(transform.position, next, Collisions);
-        if (hit.collider != null)
-        {
-            hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null && hitObject.receiveActions.Count > 0)
-            {
-                nearbyObjects.Add(hitObject);
-            }
-        }
-
-        next = (Vector2)transform.position + new Vector2(0, 1);
-        hit = Physics2D.Linecast(transform.position, next, Collisions);
-        if (hit.collider != null)
-        {
-            hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null && hitObject.receiveActions.Count > 0)
-            {
-                nearbyObjects.Add(hitObject);
-            }
-        }
-
-        next = (Vector2)transform.position + new Vector2(0, -1);
-        hit = Physics2D.Linecast(transform.position, next, Collisions);
-        if (hit.collider != null)
-        {
-            hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null && hitObject.receiveActions.Count > 0)
-            {
-                nearbyObjects.Add(hitObject);
-            }
-        }
-
-        boxCollider.enabled = true;
-    }
-
-    virtual protected void SelectItem(String type)
-    {
-        List<HoldableObject> items;
-        inventory.TryGetValue(type, out items);
-
-        ChooseItem(items[0]);
-    }
-
-    virtual public void ChooseItem(HoldableObject item)
-    {
-        currentItem = item;
-        if (currentItem.type == "Medicine")
-            Heal(target);
-    }
-
-    protected void EndTurn()
-    {
-        isTurn = false;
-        StartCoroutine(GameManager.instance.nextTurn());
     }
 
     protected IEnumerator SmoothMovement(Vector3 end)
@@ -334,6 +196,142 @@ public class Character : InteractableObject
             sqrRemainingDistance = (transform.position - end).sqrMagnitude;
             yield return null;
         }
+    }
+
+    virtual protected void GetAvailableTargets()
+    {
+        GetAttackRange();
+        attackableObjects.Clear();
+        HashSet<Vector2> visited = new HashSet<Vector2>();
+        if (inventory.ContainsKey("Weapon"))
+        {
+            GetObjectsToActOn(attackableObjects, "Attack", transform.position, visited, attackRange);
+            attackableObjects.Remove(this);
+        }
+
+        healableObjects.Clear();
+        visited.Clear();
+        if (inventory.ContainsKey("Medicine"))
+            GetObjectsToActOn(healableObjects, "Heal", transform.position, visited, 1);
+
+        talkableObjects.Clear();
+        visited.Clear();
+        GetObjectsToActOn(talkableObjects, "Talk", transform.position, visited, 1);
+        talkableObjects.Remove(this);
+    }
+
+    protected void GetAttackRange()
+    {
+        attackRange = 1;
+        if (inventory.ContainsKey("Weapon"))
+        {
+            List<HoldableObject> weapons;
+            inventory.TryGetValue("Weapon", out weapons);
+            foreach (HoldableObject weapon in weapons)
+            {
+                if (weapon.range > attackRange)
+                    attackRange = weapon.range;
+            }
+        }
+    }
+
+    protected void GetObjectsToActOn(List<InteractableObject> objects, String action, Vector2 toCheck, HashSet<Vector2> visited, int range)
+    {
+        if (visited.Contains(toCheck))
+            return;
+        visited.Add(toCheck);
+
+        boxCollider.enabled = false;
+        RaycastHit2D hit = Physics2D.Linecast(transform.position, toCheck, Collisions);
+        if (hit.collider != null)
+        {
+            InteractableObject hitObject = hit.transform.GetComponent<InteractableObject>();
+            if (hitObject != null && hitObject.GetActions().Contains(action))
+            {
+                objects.Add(hitObject);
+            }
+        }
+        boxCollider.enabled = true;
+
+        if (range > 0)
+        {
+            GetObjectsToActOn(objects, action, toCheck + new Vector2(1, 0), visited, range - 1);
+            GetObjectsToActOn(objects, action, toCheck + new Vector2(-1, 0), visited, range - 1);
+            GetObjectsToActOn(objects, action, toCheck + new Vector2(0, 1), visited, range - 1);
+            GetObjectsToActOn(objects, action, toCheck + new Vector2(0, -1), visited, range - 1);
+        }
+    }
+
+    virtual protected void GetAvailableActions()
+    {
+        actions.Clear();
+
+        if (attackableObjects.Count > 0)
+            actions.Add("Attack");
+
+        if (healableObjects.Count > 0)
+            actions.Add("Heal");
+
+        if (talkableObjects.Count > 0)
+            actions.Add("Talk");
+
+        actions.Add("Wait");
+    }
+
+    virtual protected void Act()
+    {
+        switch (currentObjective.action)
+        {
+            case "Attack":
+                if (attackableObjects.Contains(currentObjective.target))
+                    SelectItem("Weapon");
+                break;
+            case "Heal":
+                if (healableObjects.Contains(currentObjective.target))
+                    SelectItem("Medicine");
+                break;
+            case "Talk":
+                if (talkableObjects.Contains(currentObjective.target))
+                    TalkTo(currentObjective.target);
+                StartCoroutine(EndTurn());
+                break;
+            case "Wait":
+                StartCoroutine(EndTurn());
+                break;
+            default:
+                StartCoroutine(EndTurn());
+                break;
+        }
+    }
+
+    protected virtual void SelectItem(String type)
+    {
+        List<HoldableObject> items;
+        inventory.TryGetValue(type, out items);
+
+        ChooseItem(items[0]);
+    }
+
+    public virtual void ChooseItem(HoldableObject item)
+    {
+        switch (item.type)
+        {
+            case "Weapon":
+                Attack(currentObjective.target, item);
+                break;
+            case "Medicine":
+                Heal(currentObjective.target, item);
+                break;
+            default:
+                break;
+        }
+    }
+
+    protected IEnumerator EndTurn()
+    {
+        yield return new WaitForSeconds(actionDelay);
+        isTurn = false;
+        StartCoroutine(GameManager.instance.nextTurn());
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
@@ -360,15 +358,6 @@ public class Character : InteractableObject
         toPickup.gameObject.SetActive(false);
     }
 
-    virtual protected void Heal(InteractableObject toHeal)
-    {
-        toHeal.Heal(currentItem.amount);
-
-        Remove(currentItem);
-
-        EndTurn(); //TEMPORARY???
-    }
-
     protected void Remove(HoldableObject item)
     {
         List<HoldableObject> items;
@@ -378,22 +367,40 @@ public class Character : InteractableObject
             inventory.Remove(item.type);
     }
 
-    protected void Attack (InteractableObject toAttack)
+    protected void Attack (InteractableObject toAttack, HoldableObject weapon)
     {
-        toAttack.TakeDamage(strength * (rationale / 50));
+        toAttack.TakeDamage((weapon.range == 1 ? strength : 1) * (rationale / 50) * weapon.amount);
+        weapon.uses--;
+        if (weapon.uses == 0)
+            Remove(weapon);
 
         animator.SetTrigger("enemyAttack");
 
-        if (toAttack.health <= 0)
+        if (toAttack.GetHealth() <= 0)
         {
-            rationale -= (toAttack.reputation * 0.1);
-            //rationaleText.text = "Rationale: " + rationale;
+            rationale -= (toAttack.GetReputation() * 0.1);
         }
     }
 
-    protected void TalkTo (InteractableObject toTalkTo)
+    protected virtual void Heal(InteractableObject toHeal, HoldableObject medicine)
+    {
+        toHeal.Heal(medicine.amount);
+
+        Remove(medicine);
+    }
+
+    protected void TalkTo(InteractableObject toTalkTo)
     {
 
+    }
+
+    public override SortedSet<String> GetActions()
+    {
+        receiveActions = base.GetActions();
+        if (talkable)
+            receiveActions.Add("Talk");
+
+        return receiveActions;
     }
 
     protected IEnumerator postActionDelay()

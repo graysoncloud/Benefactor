@@ -32,7 +32,7 @@ public class BoardManager : MonoBehaviour
     public GameObject exit;
     public GameObject[] floorTiles;
     public GameObject[] wallTiles;
-    public GameObject[] foodTiles;
+    public GameObject[] itemTiles;
     public GameObject[] enemyTiles;
     public GameObject[] outerWallTiles;
     public GameObject[] houseWallTiles;
@@ -147,7 +147,7 @@ public class BoardManager : MonoBehaviour
         InitializeList();
         LayoutHouses();
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
-        LayoutObjectAtRandom(foodTiles, foodCount.minimum, foodCount.maximum);
+        LayoutObjectAtRandom(itemTiles, foodCount.minimum, foodCount.maximum);
         int enemyCount = (int)Mathf.Log(level, 2f) + 1; //added 1
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
         Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);

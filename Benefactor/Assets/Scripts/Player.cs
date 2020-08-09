@@ -13,6 +13,8 @@ public class Player : Character
     public InventorySlot[] slots;
     public Text rationaleText;
     public Text healthText;
+    public bool gettingMove;
+    public bool gettingTarget;
 
     public GameObject tileIndicator;
     public List<GameObject> indicators;
@@ -26,6 +28,8 @@ public class Player : Character
         
         maxHealth = 10;
         health = maxHealth;
+        gettingMove = false;
+        gettingTarget = false;
         rationaleText = GameObject.Find("RationaleText").GetComponent<Text>();
         rationaleText.text = "Rationale: " + rationale;
         healthText = GameObject.Find("HealthText").GetComponent<Text>();
@@ -53,7 +57,7 @@ public class Player : Character
             gettingMove = GetMoveInput();
             if (!gettingMove)
             {
-                StartCoroutine(FollowPath());
+                StartCoroutine(SelectedPath());
             }
         }
         if (gettingTarget)
@@ -61,14 +65,40 @@ public class Player : Character
             gettingTarget = GetTargetInput();
             if (!gettingTarget)
             {
-                GetAction();
+                Act();
             }
         }
     }
 
-    protected override void GetMove()
+    public override IEnumerator StartTurn()
+    {
+        isTurn = true;
+        UpdateObjectives();
+        GetPaths();
+        yield return new WaitForSeconds(moveTime);
+        SelectPath();
+        yield return null;
+    }
+
+    protected IEnumerator SelectedPath()
+    {
+        yield return StartCoroutine(FollowPath());
+        GetAvailableTargets();
+        GetAvailableActions();
+        SelectAction();
+        yield return null;
+    }
+
+    protected override void UpdateObjectives()
+    {
+        base.UpdateObjectives();
+        currentObjective = new Objective(null, null);
+    }
+
+    protected override void SelectPath()
     {
         ShowPaths();
+        gettingMove = true;
         Debug.Log("Player waiting for move input");
     }
 
@@ -96,25 +126,49 @@ public class Player : Character
         }
         else
         {
-            UnhighlightPath();
+            UnhighlightPaths();
         }
 
         return true;
     }
 
-    protected override void GetTarget()
+    protected void SelectAction()
     {
-        GetNearbyObjects();
-        if (nearbyObjects.Count == 1)
-        {
-            target = this;
-            GetAction();
-        }
+        if (actions.Count > 1)
+            SetupActionMenu();
         else
+            GetActionInput(actions.ElementAt(0));
+    }
+
+    protected void GetActionInput(string action)
+    {
+        HideActionMenu();
+        currentObjective.action = action;
+        if (currentObjective.action != "Wait")
+            SelectTarget();
+        else
+            Act();
+    }
+
+    protected void SelectTarget()
+    {
+        ShowObjects(GetObjects());
+        gettingTarget = true;
+        Debug.Log("Player waiting for target input");
+    }
+
+    private List<InteractableObject> GetObjects()
+    {
+        switch (currentObjective.action)
         {
-            gettingTarget = true;
-            ShowNearbyObjects();
-            Debug.Log("Player waiting for target input");
+            case "Attack":
+                return attackableObjects;
+            case "Heal":
+                return healableObjects;
+            case "Talk":
+                return talkableObjects;
+            default:
+                throw new Exception("Unknown objective");
         }
     }
 
@@ -125,60 +179,86 @@ public class Player : Character
         int x = (int)((Input.mousePosition.x - Screen.width / 2 - tileWidth / 2) / tileWidth + camera.x + 1);
         int y = (int)((Input.mousePosition.y - Screen.height / 2 - tileWidth / 2) / tileWidth + camera.y + 1);
         Vector2 coords = new Vector2(x, y);
-        Dictionary<Vector2, InteractableObject> targets = new Dictionary<Vector2, InteractableObject>();
-        foreach (InteractableObject nearbyObject in nearbyObjects)
+        
+        List<InteractableObject> objects = GetObjects();
+        foreach (InteractableObject o in objects)
         {
-            targets.Add(nearbyObject.transform.position, nearbyObject);
-        }
-        if (targets.ContainsKey(coords))
-        {
-            HighlightPath(new Vector2[]{ coords });
-
-            if (Input.GetMouseButtonDown(0))
+            if ((Vector2)o.transform.position == coords)
             {
-                Debug.Log(camera);
-                targets.TryGetValue(coords, out target);
-                HideIndicators();
-                return false;
+                HighlightPath(new Vector2[] { coords });
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    currentObjective.target = o;
+                    HideIndicators();
+                    return false;
+                }
             }
-        }
-        else
-        {
-            UnhighlightPath();
+            else
+                UnhighlightPath(new Vector2[] { o.transform.position });
         }
 
         return true;
     }
 
-    protected override void GetAction()
+    protected override void SelectItem(String type)
     {
-        GetAvailableActions(target == this ? selfActions : target.receiveActions);
-        if (target == this)
+        ShowInventory(type);
+        inventoryUI.SetActive(true);
+    }
+
+    public override void ChooseItem(HoldableObject item)
+    {
+        HideInventory();
+        base.ChooseItem(item);
+        StartCoroutine(EndTurn());
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Exit")
         {
-            if (selfActions.Count > 1)
-                SetupActionMenu(true);
-            else
-                GetActionInput(selfActions.ElementAt(0));
+            rationale += 3;
+            Invoke("Restart", 1f);
+            enabled = false;
         }
-        else if (target.receiveActions.Count > 1)
-            SetupActionMenu(false);
-        else
-            GetActionInput(target.receiveActions.ElementAt(0));
+
+        base.OnTriggerEnter2D(other);
     }
 
-    protected override void GetActionInput(string action)
+    private void Restart()
     {
-        HideActionMenu();
-        base.GetActionInput(action);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void SetupActionMenu(bool self)
+    private void CheckIfGameOver()
     {
-        SortedSet<String> actions = self ? selfActions : target.receiveActions;
+        if (health <= 0)
+        {
+            GameManager.instance.GameOver();
+        }
+    }
+
+    public override void TakeDamage (double loss)
+    {
+        base.TakeDamage(loss);
+        healthText.text = "Health: " + health;
+        animator.SetTrigger("playerHit");
+        CheckIfGameOver();
+    }
+
+    public override void Heal (int amount)
+    {
+        base.Heal(amount);
+        healthText.text = "Health: " + health;
+    }
+
+    private void SetupActionMenu()
+    {
         int index = 0,
             buttonHeight = 30,
             buttonWidth = 160,
-            height = (buttonHeight+10) * actions.Count;
+            height = (buttonHeight + 10) * actions.Count;
         RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
         panelRectTransform.sizeDelta = new Vector2(buttonWidth + 10, height);
         foreach (string action in actions)
@@ -186,7 +266,7 @@ public class Player : Character
             GameObject button;
             actionButtons.TryGetValue(action, out button);
             button.SetActive(true);
-            button.transform.position = new Vector2(Screen.width / 2, Screen.height / 2 + height/2 - 5 - (buttonHeight+10)*index - buttonHeight/2);
+            button.transform.position = new Vector2(Screen.width / 2, Screen.height / 2 + height / 2 - 5 - (buttonHeight + 10) * index - buttonHeight / 2);
             index++;
         }
 
@@ -205,84 +285,6 @@ public class Player : Character
         }
     }
 
-    protected override void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "Exit")
-        {
-            rationale += 3;
-            Invoke("Restart", 1f);
-            enabled = false;
-        }
-
-        base.OnTriggerEnter2D(other);
-    }
-
-    protected override void Pickup (HoldableObject toPickup)
-    {
-        base.Pickup(toPickup);
-        UpdateInventory(toPickup.type);
-    }
-
-    private void UpdateInventory(String type)
-    {
-        List<HoldableObject> items;
-        inventory.TryGetValue(type, out items);
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (items != null && i < items.Count)
-            {
-                slots[i].AddItem(items[i]);
-            }
-            else
-            {
-                slots[i].ClearSlot();
-            }
-        }
-    }
-    protected override void SelectItem(String type)
-    {
-        UpdateInventory(type);
-        inventoryUI.SetActive(true);
-    }
-
-    override public void ChooseItem(HoldableObject item)
-    {
-        HideInventory();
-        base.ChooseItem(item);
-    }
-
-    private void HideInventory()
-    {
-        inventoryUI.SetActive(false);
-    }
-
-    private void Restart()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public override void TakeDamage (double loss)
-    {
-        base.TakeDamage(loss);
-        healthText.text = "Health: " + health;
-        animator.SetTrigger("playerHit");
-        CheckIfGameOver();
-    }
-
-    public override void Heal (int amount)
-    {
-        base.Heal(amount);
-        healthText.text = "Health: " + health;
-    }
-
-    private void CheckIfGameOver ()
-    {
-        if (health <= 0)
-        {
-            GameManager.instance.GameOver();
-        }
-    }
-
     private void ShowPaths()
     {
         HideIndicators();
@@ -294,13 +296,13 @@ public class Player : Character
         }
     }
 
-    public void ShowNearbyObjects()
+    public void ShowObjects(List<InteractableObject> objects)
     {
         HideIndicators();
 
-        foreach (InteractableObject nearbyObject in nearbyObjects)
+        foreach (InteractableObject o in objects)
         {
-            indicators.Add(Instantiate(tileIndicator, nearbyObject.transform.position, Quaternion.identity));
+            indicators.Add(Instantiate(tileIndicator, o.transform.position, Quaternion.identity));
             indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
         }
     }
@@ -330,12 +332,46 @@ public class Player : Character
         }
     }
 
-    private void UnhighlightPath()
+    private void UnhighlightPath(Vector2[] path)
+    {
+        foreach (GameObject indicator in indicators)
+        {
+            if (indicator == null) { break; }
+            if (path.Contains((Vector2)indicator.transform.position))
+            {
+                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+            }
+        }
+    }
+
+    private void UnhighlightPaths()
     {
         foreach (GameObject indicator in indicators)
         {
             if (indicator == null) { break; }
             indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
         }
+    }
+
+    private void ShowInventory(String type)
+    {
+        List<HoldableObject> items;
+        inventory.TryGetValue(type, out items);
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (items != null && i < items.Count)
+            {
+                slots[i].AddItem(items[i]);
+            }
+            else
+            {
+                slots[i].ClearSlot();
+            }
+        }
+    }
+
+    private void HideInventory()
+    {
+        inventoryUI.SetActive(false);
     }
 }

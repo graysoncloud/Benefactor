@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
         activeCharacter = characters[activeCharacterIndex];
         Debug.Log("Active Character Index: " + activeCharacterIndex);
         yield return new WaitForSeconds(turnDelay);
-        activeCharacter.StartTurn();
+        StartCoroutine(activeCharacter.StartTurn());
     }
 
     public void nextRound()
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < characters.Count; i++)
         {
-            if (characters[i].health <= 0)
+            if (characters[i].GetHealth() <= 0)
                 characters.RemoveAt(i);
         }
     }

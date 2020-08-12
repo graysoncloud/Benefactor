@@ -84,7 +84,6 @@ public class Player : Character
         GetAvailableTargets();
         GetAvailableActions();
         SelectAction();
-        yield return null;
     }
 
     protected override void UpdateObjectives()
@@ -102,11 +101,7 @@ public class Player : Character
 
     private bool GetMoveInput()
     {
-        int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
-        Vector2 camera = Camera.main.transform.position;
-        int x = (int)((Input.mousePosition.x - Screen.width / 2 - tileWidth / 2) / tileWidth + camera.x + 1);
-        int y = (int)((Input.mousePosition.y - Screen.height / 2 - tileWidth / 2) / tileWidth + camera.y + 1);
-        Vector2 coords = new Vector2(x, y);
+        Vector2 coords = GetMousePosition();
 
         if (paths.ContainsKey(coords))
         {
@@ -116,7 +111,6 @@ public class Player : Character
 
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log(camera);
                 toMove = coords;
                 HideIndicators();
                 return false;
@@ -172,11 +166,7 @@ public class Player : Character
 
     private bool GetTargetInput()
     {
-        int tileWidth = 56; //Don't know actual tile size yet! This is what I guessed
-        Vector2 camera = Camera.main.transform.position;
-        int x = (int)((Input.mousePosition.x - Screen.width / 2 - tileWidth / 2) / tileWidth + camera.x + 1);
-        int y = (int)((Input.mousePosition.y - Screen.height / 2 - tileWidth / 2) / tileWidth + camera.y + 1);
-        Vector2 coords = new Vector2(x, y);
+        Vector2 coords = GetMousePosition();
         
         List<InteractableObject> objects = GetObjects();
         foreach (InteractableObject o in objects)
@@ -199,10 +189,19 @@ public class Player : Character
         return true;
     }
 
+    private Vector2 GetMousePosition()
+    {
+        Vector2 mouseScreenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
+        Vector2 coords = new Vector2((int)(mouseWorldPosition.x + 0.5), (int)(mouseWorldPosition.y + 0.5));
+        return coords;
+    }
+
     protected override void SelectItem(String type)
     {
         ShowInventory(type, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
         inventoryUI.SetActive(true);
+        Debug.Log("Player waiting for item input");
     }
 
     public override void ChooseItem(HoldableObject item)
@@ -355,16 +354,19 @@ public class Player : Character
     {
         List<HoldableObject> items;
         inventory.TryGetValue(type, out items);
-        for (int i = 0; i < slots.Length; i++)
+        int j = 0;
+        for (int i = 0; i < items.Count; i++)
         {
-            if (items != null && i < items.Count && (range == 0 || items[i].range >= range))
+            if (items != null && (range == 0 || items[i].range >= range))
             {
-                slots[i].AddItem(items[i]);
+                slots[j].AddItem(items[i]);
+                j++;
             }
-            else
-            {
-                slots[i].ClearSlot();
-            }
+        }
+        while (j < slots.Length)
+        {
+            slots[j].ClearSlot();
+            j++;
         }
     }
 

@@ -41,6 +41,8 @@ public class Character : InteractableObject
     protected SortedSet<String> actions;
     protected Dictionary<String, List<HoldableObject>> inventory;
     protected int attackRange;
+    protected List<InteractableObject> allies;
+    protected bool destructive; //will destroy objects in path
 
     // Start is called before the first frame update
     protected override void Start()
@@ -53,6 +55,7 @@ public class Character : InteractableObject
 
         isTurn = false;
         isMoving = false;
+        destructive = false;
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
@@ -103,7 +106,7 @@ public class Character : InteractableObject
         GetPaths(transform.position, new Vector2[0], moves);
     }
 
-    protected void GetPaths(Vector2 next, Vector2[] path, int remainingMoves)
+    protected void GetPaths(Vector2 next, Vector2[] path, int remainingMoves) //update with better alg/queue?
     {
         if (Array.Exists(path, element => element == next)) { return; }
         Vector2 previous = ((path.Length == 0) ? (Vector2) transform.position : path[path.Length - 1]);
@@ -167,23 +170,15 @@ public class Character : InteractableObject
 
     protected IEnumerator FollowPath()
     {
-        if (toMove != (Vector2)transform.position)
+        isMoving = true;
+        Vector2 end = toMove;
+        Vector2[] path;
+        paths.TryGetValue(end, out path);
+        foreach (Vector2 coords in path)
         {
-            isMoving = true;
-            Vector2 end = toMove;
-            Vector2[] path;
-            paths.TryGetValue(end, out path);
-            foreach (Vector2 coords in path)
-            {
-                //movesUsed++;
-                StartCoroutine(SmoothMovement(coords));
-                yield return new WaitForSeconds(moveTime);
-            }
-            isMoving = false;
-        } else
-        {
-            yield return new WaitForSeconds(moveTime);
+            yield return StartCoroutine(SmoothMovement(coords));
         }
+        isMoving = false;
     }
 
     protected IEnumerator SmoothMovement(Vector3 end)
@@ -201,23 +196,17 @@ public class Character : InteractableObject
     virtual protected void GetAvailableTargets()
     {
         GetAttackRange();
-        attackableObjects.Clear();
-        HashSet<Vector2> visited = new HashSet<Vector2>();
         if (inventory.ContainsKey("Weapon"))
-            GetObjectsToActOn(attackableObjects, "Attack", transform.position, visited, attackRange);
+            GetObjectsToActOn(attackableObjects, "Attack", attackRange);
 
-        healableObjects.Clear();
-        visited.Clear();
         if (inventory.ContainsKey("Medicine"))
         {
-            GetObjectsToActOn(healableObjects, "Heal", transform.position, visited, 1);
+            GetObjectsToActOn(healableObjects, "Heal", 1);
             if (IsDamaged())
                 healableObjects.Add(this);
         }
 
-        talkableObjects.Clear();
-        visited.Clear();
-        GetObjectsToActOn(talkableObjects, "Talk", transform.position, visited, 1);
+        GetObjectsToActOn(talkableObjects, "Talk", 1);
     }
 
     protected void GetAttackRange()
@@ -235,30 +224,17 @@ public class Character : InteractableObject
         }
     }
 
-    protected void GetObjectsToActOn(List<InteractableObject> objects, String action, Vector2 toCheck, HashSet<Vector2> visited, int range)
+    protected void GetObjectsToActOn(List<InteractableObject> objects, String action, int range)
     {
-        if (visited.Contains(toCheck))
-            return;
-        visited.Add(toCheck);
-
+        objects.Clear();
         boxCollider.enabled = false;
-        RaycastHit2D hit = Physics2D.Linecast(transform.position, toCheck, Collisions);
-        if (hit.collider != null)
-        {
-            InteractableObject hitObject = hit.transform.GetComponent<InteractableObject>();
-            if (hitObject != null && hitObject.GetActions().Contains(action))
-            {
-                objects.Add(hitObject);
-            }
-        }
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, range);
         boxCollider.enabled = true;
-
-        if (range > 0)
+        foreach (var hitCollider in hitColliders)
         {
-            GetObjectsToActOn(objects, action, toCheck + new Vector2(1, 0), visited, range - 1);
-            GetObjectsToActOn(objects, action, toCheck + new Vector2(-1, 0), visited, range - 1);
-            GetObjectsToActOn(objects, action, toCheck + new Vector2(0, 1), visited, range - 1);
-            GetObjectsToActOn(objects, action, toCheck + new Vector2(0, -1), visited, range - 1);
+            InteractableObject hitObject = hitCollider.GetComponent<InteractableObject>();
+            if (hitObject != null && GetDistance(hitObject) <= range && hitObject.GetActions().Contains(action))
+                objects.Add(hitObject);
         }
     }
 

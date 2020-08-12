@@ -111,7 +111,7 @@ public class InteractableObject : MonoBehaviour
 
     protected virtual void UpdatePosition()
     {
-        GameManager.instance.UpdateNode(transform.position, damageable, (int)health);
+        GameManager.instance.UpdateNode(transform.position, damageable, (float)health);
     }
 
     // Update is called once per frame

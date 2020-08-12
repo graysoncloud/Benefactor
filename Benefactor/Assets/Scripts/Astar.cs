@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿//CREDIT TO https://github.com/davecusatis/A-Star-Sharp upon which we have modified/customized
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace AStarSharp

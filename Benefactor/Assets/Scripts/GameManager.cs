@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpdateNode(Vector2 position, bool damageable, int health)
+    public void UpdateNode(Vector2 position, bool damageable, float health)
     {
         Grid[(int)position.x][(int)position.y] = new Node(position, damageable, health + 1);
     }

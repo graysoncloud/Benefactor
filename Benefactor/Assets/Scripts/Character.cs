@@ -156,7 +156,8 @@ public class Character : InteractableObject
     {
         Astar astar = new Astar(GameManager.instance.Grid);
         Stack<Node> path = astar.FindPath(transform.position, currentObjective.target.transform.position, destructive);
-        pathToObjective = new Vector2[Math.Min(moves, path.Count - 1)]; //-1 temporarily until adjust for targets you can stand on
+        int space = 1; //temporarily until adjust for targets you can stand on (interactable  vs holdable)
+        pathToObjective = new Vector2[Math.Min(moves, path.Count - space)];
         int i = 0;
         foreach (Node node in path)
         {

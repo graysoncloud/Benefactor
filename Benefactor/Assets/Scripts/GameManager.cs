@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using AStarSharp;
 
 public class GameManager : MonoBehaviour
 {
+    public List<List<Node>> Grid;
+
     public int level = 0;
     public float levelStartDelay = 2f;
     public float turnDelay;
@@ -69,7 +72,7 @@ public class GameManager : MonoBehaviour
         Invoke("HideLevelImage", levelStartDelay);
 
         characters.Clear();
-        boardScript.SetupScene(level);
+        Grid = boardScript.SetupScene(level);
         round = 0;
         activeCharacterIndex = -1;
     }
@@ -133,4 +136,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void UpdateNode(Vector2 position, bool damageable, int health)
+    {
+        Grid[(int)position.x][(int)position.y] = new Node(position, damageable, health + 1);
+    }
 }

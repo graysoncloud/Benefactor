@@ -55,7 +55,12 @@ public class InteractableObject : MonoBehaviour
         {
             gameObject.SetActive(false);
             GameManager.instance.RemoveDeadCharacters();
+            ErasePosition();
             // For some reason, this didn't work, so instead, GameManager just doesn't move characters at <= 0 health
+        }
+        else
+        {
+            UpdatePosition();
         }
     }
 
@@ -63,6 +68,7 @@ public class InteractableObject : MonoBehaviour
     {
         if (!damageable) return;
         health = Math.Min(health + amount, maxHealth);
+        UpdatePosition();
     }
 
     public virtual double GetHealth()
@@ -98,10 +104,15 @@ public class InteractableObject : MonoBehaviour
         return (int)Math.Abs(o.transform.position.x - transform.position.x) + (int)Math.Abs(o.transform.position.y - transform.position.y);
     }
 
-    //public virtual int GetDistance(Transform t)
-    //{
-    //    return (int)Math.Abs(t.position.x - transform.position.x) + (int)Math.Abs(t.position.y - transform.position.y);
-    //}
+    protected virtual void ErasePosition()
+    {
+        GameManager.instance.UpdateNode(transform.position, true, 0);
+    }
+
+    protected virtual void UpdatePosition()
+    {
+        GameManager.instance.UpdateNode(transform.position, damageable, (int)health);
+    }
 
     // Update is called once per frame
     void Update()

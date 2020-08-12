@@ -75,7 +75,7 @@ public class Player : Character
         UpdateObjectives();
         GetPaths();
         yield return new WaitForSeconds(moveTime);
-        SelectPath();
+        FindPath();
     }
 
     protected IEnumerator SelectedPath()
@@ -88,11 +88,10 @@ public class Player : Character
 
     protected override void UpdateObjectives()
     {
-        base.UpdateObjectives();
         currentObjective = new Objective(null, null);
     }
 
-    protected override void SelectPath()
+    protected override void FindPath()
     {
         ShowPaths();
         gettingMove = true;
@@ -105,13 +104,11 @@ public class Player : Character
 
         if (paths.ContainsKey(coords))
         {
-            Vector2[] path;
-            paths.TryGetValue(coords, out path);
-            HighlightPath(path);
+            paths.TryGetValue(coords, out pathToObjective);
+            HighlightPath(pathToObjective);
 
             if (Input.GetMouseButtonDown(0))
             {
-                toMove = coords;
                 HideIndicators();
                 return false;
             }

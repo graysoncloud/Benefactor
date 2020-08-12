@@ -1,7 +1,7 @@
-﻿using System;
+﻿using AStarSharp;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class Character : InteractableObject
@@ -32,9 +32,8 @@ public class Character : InteractableObject
     private float inverseMoveTime;
     protected Queue<Objective> objectives;
     protected Objective currentObjective;
-    //protected Vector2[] pathToObjective;
+    protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
-    protected Vector2 toMove;
     protected List<InteractableObject> healableObjects;
     protected List<InteractableObject> talkableObjects;
     protected List<InteractableObject> attackableObjects;
@@ -55,7 +54,7 @@ public class Character : InteractableObject
 
         isTurn = false;
         isMoving = false;
-        destructive = false;
+        destructive = true; //make it start false unless agitated?
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
@@ -80,10 +79,10 @@ public class Character : InteractableObject
     {
         isTurn = true;
         UpdateObjectives();
-        GetPaths();
+        FindPath();
         yield return new WaitForSeconds(moveTime);
-        SelectPath();
-        yield return StartCoroutine(FollowPath());
+        if (pathToObjective.Length > 0)
+            yield return StartCoroutine(FollowPath());
         GetAvailableTargets();
         GetAvailableActions();
         Act();
@@ -153,31 +152,41 @@ public class Character : InteractableObject
         Debug.Log(actions);
     }
 
-    virtual protected void SelectPath()
+    virtual protected void FindPath()
     {
-        //might update to do A* search eventually to find shortest path
-        int minDistance = 999;
-        foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
+        Astar astar = new Astar(GameManager.instance.Grid);
+        Stack<Node> path = astar.FindPath(transform.position, currentObjective.target.transform.position, destructive);
+        pathToObjective = new Vector2[Math.Min(moves, path.Count - 1)]; //-1 temporarily until adjust for targets you can stand on
+        int i = 0;
+        foreach (Node node in path)
         {
-            int distance = (int)(Math.Abs(entry.Key.x - currentObjective.target.transform.position.x) + Math.Abs(entry.Key.y - currentObjective.target.transform.position.y));
-            if (distance < minDistance)
+            if (node.Weight > 1)
             {
-                toMove = entry.Key;
-                minDistance = distance;
+                objectives.Enqueue(new Objective(currentObjective.target, currentObjective.action));
+                boxCollider.enabled = false;
+                Collider2D hitCollider = Physics2D.OverlapCircle(node.Position, 0.5f);
+                boxCollider.enabled = true;
+                currentObjective = new Objective(hitCollider.GetComponent<InteractableObject>(), "Attack");
+                Array.Resize(ref pathToObjective, i);
+                return;
             }
+
+            pathToObjective[i] = node.Position;
+            i++;
+            if (i >= pathToObjective.Length)
+                return;
         }
     }
 
     protected IEnumerator FollowPath()
     {
         isMoving = true;
-        Vector2 end = toMove;
-        Vector2[] path;
-        paths.TryGetValue(end, out path);
-        foreach (Vector2 coords in path)
+        ErasePosition();
+        foreach (Vector2 coords in pathToObjective)
         {
             yield return StartCoroutine(SmoothMovement(coords));
         }
+        UpdatePosition();
         isMoving = false;
     }
 
@@ -361,6 +370,8 @@ public class Character : InteractableObject
         {
             rationale -= (toAttack.GetReputation() * 0.1);
         }
+
+        currentObjective = null; //TEMP
     }
 
     protected virtual void Heal(InteractableObject toHeal, HoldableObject medicine)
@@ -368,6 +379,8 @@ public class Character : InteractableObject
         toHeal.Heal(medicine.amount);
 
         Remove(medicine);
+
+        currentObjective = null; //TEMP
     }
 
     protected void TalkTo(InteractableObject toTalkTo)

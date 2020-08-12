@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Linq;
+using AStarSharp;
 
 public class BoardManager : MonoBehaviour
 {
@@ -20,9 +21,8 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-
-    public int columns = 20;
-    public int rows = 20;
+    public int columns;
+    public int rows;
 
     public Count wallCount = new Count(5, 9);
     public Count foodCount = new Count(1, 5);
@@ -39,6 +39,7 @@ public class BoardManager : MonoBehaviour
 
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
+    private List<List<Node>> Grid;
 
     void InitializeList()
     {
@@ -56,6 +57,15 @@ public class BoardManager : MonoBehaviour
     private void BoardSetup()
     {
         boardHolder = new GameObject("Board").transform;
+        Grid = new List<List<Node>>();
+        for (int i = 0; i < columns; i++)
+        {
+            Grid.Add(new List<Node>());
+            for (int j = 0; j < rows; j++)
+            {
+                Grid[i].Add(null);
+            }
+        }
 
         for (int x = -1; x < columns + 1; x++)
         {
@@ -66,6 +76,8 @@ public class BoardManager : MonoBehaviour
                 {
                     toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
                 }
+                else
+                    Grid[x][y] = new Node(new Vector2(x, y), true, 1);
 
                 GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(boardHolder);
@@ -90,7 +102,11 @@ public class BoardManager : MonoBehaviour
             Vector3 randomPosition = RandomPosition();
             GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
             Instantiate(tileChoice, randomPosition, Quaternion.identity);
-
+            InteractableObject newObject = tileChoice.GetComponent<InteractableObject>();
+            if (newObject != null)
+            {
+                Grid[(int)randomPosition.x][(int)randomPosition.y] = new Node(new Vector2((int)randomPosition.x, (int)randomPosition.y), newObject.damageable, (float)newObject.maxHealth + 1);
+            }
         }
     }
 
@@ -133,6 +149,9 @@ public class BoardManager : MonoBehaviour
                     {
                         GameObject tileChoice = houseWallTiles[Random.Range(0, houseWallTiles.Length)];
                         Instantiate(tileChoice, position, Quaternion.identity);
+                        InteractableObject newObject = tileChoice.GetComponent<InteractableObject>();
+                        if (newObject != null)
+                            Grid[(int)position.x][(int)position.y] = new Node(new Vector2((int)position.x, (int)position.y), newObject.damageable, (float)newObject.maxHealth + 1);
                     }
                 }
             }
@@ -140,8 +159,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-
-    public void SetupScene(int level)
+    public List<List<Node>> SetupScene(int level)
     {
         BoardSetup();
         InitializeList();
@@ -152,5 +170,7 @@ public class BoardManager : MonoBehaviour
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
         Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
         //Instantiate(player, new Vector3(0, 0, 0f), Quaternion.identity);
+
+        return Grid;
     }
 }

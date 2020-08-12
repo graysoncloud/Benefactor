@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3853c53c88e1ca84ea30c24c41c6fb3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 20
+  columns: 25
   rows: 20
   wallCount:
     minimum: 5
@@ -108,7 +108,6 @@ MonoBehaviour:
   level: 0
   levelStartDelay: 2
   turnDelay: 0.2
-  defaultHealth: 2
   defaultRationale: 100
   defaultReputation: 50
   defaultMoves: 3

@@ -173,7 +173,7 @@ MonoBehaviour:
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
   moveTime: 0
-  moves: 0
+  moves: 3
   actionDelay: 0
   strength: 0
   isTurn: 0

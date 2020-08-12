@@ -173,11 +173,11 @@ MonoBehaviour:
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
   moveTime: 0
-  moves: 0
+  moves: 3
   actionDelay: 0
   strength: 0
   isTurn: 0
   isMoving: 0
-  talkable: 0
+  talkable: 1
   startingItems:
   - {fileID: -5498856414594888391, guid: 70791d2237bfa6f4fb33643eaed4084d, type: 3}

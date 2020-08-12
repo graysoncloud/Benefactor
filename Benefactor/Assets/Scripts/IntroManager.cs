@@ -6,6 +6,7 @@ using System.IO;
 using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class IntroManager : MonoBehaviour
 {
@@ -53,8 +54,18 @@ public class IntroManager : MonoBehaviour
     IEnumerator AssignData()
     {
         int assignmentIndex = 0;
+        bool firstCheck = true;
+
         foreach (var item in items)
         {
+            // Allows us to make large skips in assignment index values without having to process every number inbetween.
+            if (firstCheck && Int32.Parse(item.Parent.Attribute("number").Value.ToString()) > assignmentIndex)
+            {
+                assignmentIndex = Int32.Parse(item.Parent.Attribute("number").Value.ToString());
+                firstCheck = false;
+            }
+
+            // Handles creation of each individual XML "page"
             if (item.Parent.Attribute("number").Value.ToString() == assignmentIndex.ToString())
             {
                 string tempType = item.Parent.Element("type").Value.Trim();
@@ -69,6 +80,7 @@ public class IntroManager : MonoBehaviour
                 //Debug.Log(data[assignmentIndex].dialogueText);
                 //Debug.Log(assignmentIndex);
                 assignmentIndex++;
+                firstCheck = true;
             }
         }
         yield return null;
@@ -106,6 +118,13 @@ public class IntroManager : MonoBehaviour
             StartCoroutine("fadeOut");
             // executeNext and currentIndex++ are handled at the end of the fadeIn / fadeOut coroutines
         }
+        else if (data[currentIndex].type == "SoundEffect")
+        {
+            // TO DO
+            // Also make this whole thing a switch statement please
+            currentIndex++;
+            executeNext();
+        }
     }
 
     IEnumerator readDialogue()
@@ -139,8 +158,12 @@ public class IntroManager : MonoBehaviour
 
         typingInProgress = false;
     }
+
+
+
     IEnumerator fadeIn()
     {
+        // TO DO: 
         transitioning = true;
         Image cover = GameObject.Find("Cover").GetComponent<Image>();
 
@@ -183,6 +206,13 @@ public class IntroManager : MonoBehaviour
         transitioning = false;
         currentIndex++;
         executeNext();
+    }
+
+    private void clearFields()
+    {
+        GameObject.Find("SpeakingCharacter").GetComponent<Text>().text = data[currentIndex].characterName;
+        GameObject.Find("Portrait").GetComponent<PortraitManager>().changePortrait(data[currentIndex].portrait);
+        dialogueUI.text = "";
     }
 
 }

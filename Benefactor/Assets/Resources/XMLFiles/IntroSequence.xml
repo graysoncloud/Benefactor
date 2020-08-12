@@ -2,8 +2,16 @@
 
 <IntroSequence>
 	
-	<!--START OF SCENE 0-->
-	<page number = "0">
+	<!--
+		Notes to be wary of:
+		 -Currently, page elements must contain all 6 properties. This would ideally not be the case 
+		 -Page numbers are numbered strangely to make changing them possible without having to change every other page
+			number. The code currently iterates through each page number to access this data, so it does need to be sequential
+		 -Other values I want to add would be <fadeOutTime>, <fadeInTime>, a delay type, and a SFX type
+	-->
+
+	<!--START OF SCENE 1-->
+	<page number = "100">
 		<type>NewScene</type>
 		<backdrop>InterogationOffice</backdrop>
 		<SFX>N/A</SFX>
@@ -12,7 +20,7 @@
 		<dialogue>N/A</dialogue>
 	</page>
 	
-	<page number = "1">
+	<page number = "101">
 		<type>Dialogue</type>
 		<backdrop>N/A</backdrop>
 		<SFX>N/A</SFX>
@@ -21,7 +29,7 @@
 		<dialogue>. . .</dialogue>
 	</page>
 
-	<page number = "2">
+	<page number = "102">
 		<type>FadeOut</type>
 		<backdrop>N/A</backdrop>
 		<SFX>N/A</SFX>
@@ -32,8 +40,8 @@
 	<!--END OF SCENE 0-->
 	
 	
-	<!--START OF SCENE 1-->
-	<page number = "3">
+	<!--START OF SCENE 2-->
+	<page number = "200">
 		<type>NewScene</type>
 		<backdrop>Thoroughfair</backdrop>
 		<SFX>N/A</SFX>
@@ -42,28 +50,126 @@
 		<dialogue>N/A</dialogue>
 	</page>
 
-	<page number = "4">
-		<type>Dialogue</type>
+	<page number = "202">
+		<type>SoundEffect</type>
 		<backdrop>N/A</backdrop>
 		<SFX>Footstops</SFX>
-		<character>Raskolnikov</character>
-		<portrait>RaskolnikovNeutral</portrait>
-		<dialogue>Hey Ivanovna.</dialogue>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
 	</page>
 
-	<page number = "5">
+	<page number = "204">
 		<type>Dialogue</type>
 		<backdrop>N/A</backdrop>
 		<SFX>N/A</SFX>
 		<character>Ivanovna</character>
 		<portrait>IvanovnaNeutral</portrait>
-		<dialogue>I do not care.</dialogue>
+		<dialogue>
+			How are Katerina and Sonya doing, Raskol? Has your bullish obsession been satisfied yet?
+		</dialogue>
 	</page>
 
-	<page number = "6">
-		<type>FadeOut</type>
+	<page number = "206">
+		<type>Dialogue</type>
 		<backdrop>N/A</backdrop>
 		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+			Not in the mood, Ivanovna.
+		</dialogue>
+	</page>
+
+	<page number = "208">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Ivanovna</character>
+		<portrait>IvanovnaNeutral</portrait>
+		<dialogue>
+			You know, I heard grief is a great aphrodisiac. Maybe-
+		</dialogue>
+	</page>
+
+	<page number = "210">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+			Why don't you mind your own business, hag?
+		</dialogue>
+	</page>
+
+	<page number = "212">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Ivanovna</character>
+		<portrait>IvanovnaNeutral</portrait>
+		<dialogue>
+			Oh ho ho, I'm making him throw a tantrum!
+		</dialogue>
+	</page>
+
+	<page number = "214">
+		<type>SoundEffect</type>
+		<backdrop>N/A</backdrop>
+		<SFX>Scream</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<page number = "216">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>???</character>
+		<portrait>BlankPortrait</portrait>
+		<dialogue>
+			Somebody! Help! Please!
+		</dialogue>
+	</page>
+	
+	<!--Copy pasters-->
+	<page number = "204">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Ivanovna</character>
+		<portrait>IvanovnaNeutral</portrait>
+		<dialogue>
+
+		</dialogue>
+	</page>
+
+	<page number = "208">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+
+		</dialogue>
+	</page>
+
+	<page number = "200">
+		<type>NewScene</type>
+		<backdrop>Thoroughfair</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<page number = "202">
+		<type>SoundEffect</type>
+		<backdrop>N/A</backdrop>
+		<SFX>Footstops</SFX>
 		<character>N/A</character>
 		<portrait>N/A</portrait>
 		<dialogue>N/A</dialogue>

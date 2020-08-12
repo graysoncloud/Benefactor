@@ -7,6 +7,7 @@ public class PortraitManager : MonoBehaviour
 {
     Image ImageComponent;
 
+    public Sprite BlankPortrait;
     public Sprite RaskolnikovNeutral;
     public Sprite IvanovnaNeutral;
 
@@ -24,6 +25,9 @@ public class PortraitManager : MonoBehaviour
                 break;
             case "IvanovnaNeutral":
                 ImageComponent.sprite = IvanovnaNeutral;
+                break;
+            case "BlankPortrait":
+                ImageComponent.sprite = BlankPortrait;
                 break;
             default:
                 Debug.LogError("Invalid portrait name: " + newPortraitName);

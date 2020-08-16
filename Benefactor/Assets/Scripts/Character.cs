@@ -252,10 +252,10 @@ public class Character : InteractableObject
     {
         actions.Clear();
 
-        if (attackableObjects.Count > 0)
+        if (attackableObjects.Count > 0 && inventory.ContainsKey("Weapon"))
             actions.Add("Attack");
 
-        if (healableObjects.Count > 0)
+        if (healableObjects.Count > 0 && inventory.ContainsKey("Medicine"))
             actions.Add("Heal");
 
         if (talkableObjects.Count > 0)

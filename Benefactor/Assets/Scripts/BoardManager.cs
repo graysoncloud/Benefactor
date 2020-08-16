@@ -36,6 +36,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] enemyTiles;
     public GameObject[] outerWallTiles;
     public GameObject[] houseWallTiles;
+    public GameObject keyDoor;
 
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
@@ -145,9 +146,13 @@ public class BoardManager : MonoBehaviour
                     Vector3 position = new Vector3(x + (int)randomPosition.x, y + (int)randomPosition.y, 0f);
                     gridPositions.Remove(position);
 
-                    if (x == 0 || x == width || (y == 0 && x != door) || y == length)
+                    if (x == 0 || x == width || y == 0 || y == length)
                     {
-                        GameObject tileChoice = houseWallTiles[Random.Range(0, houseWallTiles.Length)];
+                        GameObject tileChoice;
+                        if (y == 0 && x == door)
+                            tileChoice = keyDoor;
+                        else
+                            tileChoice = houseWallTiles[Random.Range(0, houseWallTiles.Length)];
                         Instantiate(tileChoice, position, Quaternion.identity);
                         InteractableObject newObject = tileChoice.GetComponent<InteractableObject>();
                         if (newObject != null)

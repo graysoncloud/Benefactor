@@ -93,6 +93,7 @@ MonoBehaviour:
   - {fileID: 7991227353612988546, guid: 09a647a8d5f41a54ea0acd103fd5e609, type: 3}
   - {fileID: 7991227353612988546, guid: 2df4a3cc6978edc44a19911f9ebf43be, type: 3}
   - {fileID: 7991227353612988546, guid: a3ca0183fb83a57438e4b22b725b5ad3, type: 3}
+  keyDoor: {fileID: 7991227353612988546, guid: d1f47c6aab1d5f9419dab868d1e0b77b, type: 3}
 --- !u!114 &5498348103610966037
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -39,6 +39,7 @@ public class Player : Character
         actionButtons.Add("Attack", GameObject.Find("AttackButton"));
         actionButtons.Add("Talk", GameObject.Find("TalkButton"));
         actionButtons.Add("Heal", GameObject.Find("HealButton"));
+        actionButtons.Add("Door", GameObject.Find("DoorButton"));
         actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
 
@@ -156,6 +157,8 @@ public class Player : Character
                 return healableObjects;
             case "Talk":
                 return talkableObjects;
+            case "Door":
+                return openableDoors;
             default:
                 throw new Exception("Unknown objective");
         }

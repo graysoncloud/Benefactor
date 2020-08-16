@@ -37,6 +37,7 @@ public class Character : InteractableObject
     protected List<InteractableObject> healableObjects;
     protected List<InteractableObject> talkableObjects;
     protected List<InteractableObject> attackableObjects;
+    protected List<InteractableObject> openableDoors;
     protected SortedSet<String> actions;
     protected Dictionary<String, List<HoldableObject>> inventory;
     protected int attackRange;
@@ -63,6 +64,7 @@ public class Character : InteractableObject
         healableObjects = new List<InteractableObject>();
         talkableObjects = new List<InteractableObject>();
         attackableObjects = new List<InteractableObject>();
+        openableDoors = new List<InteractableObject>();
         actions = new SortedSet<String>();
         inventory = new Dictionary<String, List<HoldableObject>>();
         foreach (HoldableObject item in startingItems)
@@ -217,6 +219,8 @@ public class Character : InteractableObject
         }
 
         GetObjectsToActOn(talkableObjects, "Talk", 1);
+
+        GetObjectsToActOn(openableDoors, "Door", 1);
     }
 
     protected void GetAttackRange()
@@ -261,6 +265,9 @@ public class Character : InteractableObject
         if (talkableObjects.Count > 0)
             actions.Add("Talk");
 
+        if (openableDoors.Count > 0)
+            actions.Add("Door");
+
         actions.Add("Wait");
     }
 
@@ -279,6 +286,11 @@ public class Character : InteractableObject
             case "Talk":
                 if (talkableObjects.Contains(currentObjective.target))
                     TalkTo(currentObjective.target);
+                StartCoroutine(EndTurn());
+                break;
+            case "Door":
+                if (openableDoors.Contains(currentObjective.target))
+                    OpenDoor(currentObjective.target);
                 StartCoroutine(EndTurn());
                 break;
             case "Wait":
@@ -315,6 +327,12 @@ public class Character : InteractableObject
             default:
                 break;
         }
+    }
+
+    protected virtual void OpenDoor(InteractableObject doorObject)
+    {
+        Door door = doorObject.gameObject.GetComponent<Door>();
+        door.Toggle(transform.position);
     }
 
     protected IEnumerator EndTurn()

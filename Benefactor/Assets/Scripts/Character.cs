@@ -101,49 +101,6 @@ public class Character : InteractableObject
             currentObjective = objectives.Dequeue();
     }
 
-    protected void GetPaths()
-    {
-        paths.Clear();
-        GetPaths(transform.position, new Vector2[0], moves);
-    }
-
-    protected void GetPaths(Vector2 next, Vector2[] path, int remainingMoves) //update with better alg/queue?
-    {
-        if (Array.Exists(path, element => element == next)) { return; }
-        Vector2 previous = ((path.Length == 0) ? (Vector2) transform.position : path[path.Length - 1]);
-        boxCollider.enabled = false;
-        RaycastHit2D hit = Physics2D.Linecast(previous, next, Collisions);
-        boxCollider.enabled = true;
-        if (hit.transform != null) { return; }
-
-        Vector2[] newPath = new Vector2[path.Length + 1];
-        Array.Copy(path, newPath, path.Length);
-        newPath[newPath.Length - 1] = next;
-        if (!paths.ContainsKey(next)) { paths.Add(next, newPath);  }
-        else
-        {
-            paths.TryGetValue(next, out path);
-            if (newPath.Length < path.Length)
-            {
-                paths.Remove(next);
-                paths.Add(next, newPath);
-            }
-            else
-            {
-                return;
-            }
-        }
-
-        remainingMoves--;
-        if (remainingMoves >= 0)
-        {
-            GetPaths(next + new Vector2(1, 0), newPath, remainingMoves);
-            GetPaths(next + new Vector2(-1, 0), newPath, remainingMoves);
-            GetPaths(next + new Vector2(0, 1), newPath, remainingMoves);
-            GetPaths(next + new Vector2(0, -1), newPath, remainingMoves);
-        }
-    }
-
     protected void LogPaths()
     {
         String actions = "Available Moves (" + paths.Count + "): ";
@@ -247,7 +204,7 @@ public class Character : InteractableObject
         foreach (var hitCollider in hitColliders)
         {
             InteractableObject hitObject = hitCollider.GetComponent<InteractableObject>();
-            if (hitObject != null && GetDistance(hitObject) <= range && hitObject.GetActions().Contains(action))
+            if (hitObject != null && GetDistance(hitObject) <= range && GetDistance(hitObject) > 0 && hitObject.GetActions().Contains(action))
                 objects.Add(hitObject);
         }
     }
@@ -332,7 +289,7 @@ public class Character : InteractableObject
     protected virtual void OpenDoor(InteractableObject doorObject)
     {
         Door door = doorObject.gameObject.GetComponent<Door>();
-        door.Toggle(transform.position);
+        door.Toggle();
     }
 
     protected IEnumerator EndTurn()

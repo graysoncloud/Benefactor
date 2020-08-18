@@ -79,6 +79,54 @@ public class Player : Character
         FindPath();
     }
 
+    protected void GetPaths()
+    {
+        paths.Clear();
+        GetPaths(transform.position, new Vector2[0], moves);
+    }
+
+    protected void GetPaths(Vector2 next, Vector2[] path, int remainingMoves) //update with better alg/queue?
+    {
+        if (Array.Exists(path, element => element == next)) { return; }
+        Vector2 previous = ((path.Length == 0) ? (Vector2)transform.position : path[path.Length - 1]);
+        boxCollider.enabled = false;
+        RaycastHit2D hit = Physics2D.Linecast(previous, next, Collisions);
+        boxCollider.enabled = true;
+        if (hit.transform != null)
+        {
+            Door door = hit.collider.GetComponent<Door>();
+            if (door == null || !door.IsOpen())
+                return;
+        }
+
+        Vector2[] newPath = new Vector2[path.Length + 1];
+        Array.Copy(path, newPath, path.Length);
+        newPath[newPath.Length - 1] = next;
+        if (!paths.ContainsKey(next)) { paths.Add(next, newPath); }
+        else
+        {
+            paths.TryGetValue(next, out path);
+            if (newPath.Length < path.Length)
+            {
+                paths.Remove(next);
+                paths.Add(next, newPath);
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        remainingMoves--;
+        if (remainingMoves >= 0)
+        {
+            GetPaths(next + new Vector2(1, 0), newPath, remainingMoves);
+            GetPaths(next + new Vector2(-1, 0), newPath, remainingMoves);
+            GetPaths(next + new Vector2(0, 1), newPath, remainingMoves);
+            GetPaths(next + new Vector2(0, -1), newPath, remainingMoves);
+        }
+    }
+
     protected IEnumerator SelectedPath()
     {
         yield return StartCoroutine(FollowPath());

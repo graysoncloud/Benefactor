@@ -13,6 +13,7 @@ public class Door : InteractableObject
     protected bool open;
     protected InteractableObject trigger;
 
+    private Vector2 initialPos;
     private Vector3 curAngle;
     private float startAngle;
     private float targetAngle;
@@ -22,14 +23,19 @@ public class Door : InteractableObject
     {
         base.Start();
         curAngle = transform.eulerAngles;
-        startAngle = curAngle.y; // save the startAngle
+        startAngle = curAngle.z; // save the startAngle
         targetAngle = startAngle;
+        initialPos = transform.position;
     }
 
     void Update()
     { // rotate gradually door to targetAngle, if different of curAngle:
-        curAngle.y = Mathf.MoveTowards(curAngle.y, targetAngle, speed * Time.deltaTime);
+        curAngle.z = Mathf.MoveTowards(curAngle.z, targetAngle, speed * Time.deltaTime);
         transform.eulerAngles = curAngle;
+        float xDisplacement = (float)Math.Cos(curAngle.z * Math.PI / 180)/2;
+        float yDisplacement = (float)Math.Sin(curAngle.z * Math.PI / 180)/2;
+        Vector2 newPosition = new Vector2(initialPos.x + xDisplacement - 0.5f, initialPos.y + yDisplacement);
+        rb2D.MovePosition(newPosition);
     }
 
     void Open(Vector3 playerPos) //thanks to https://answers.unity.com/questions/239912/rotate-door-object-away-from-player.html

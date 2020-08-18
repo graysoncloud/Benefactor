@@ -90,13 +90,16 @@ public class Player : Character
         if (Array.Exists(path, element => element == next)) { return; }
         Vector2 previous = ((path.Length == 0) ? (Vector2)transform.position : path[path.Length - 1]);
         boxCollider.enabled = false;
-        RaycastHit2D hit = Physics2D.Linecast(previous, next, Collisions);
+        RaycastHit2D[] hits = Physics2D.LinecastAll(previous, next, Collisions);
         boxCollider.enabled = true;
-        if (hit.transform != null)
+        foreach (RaycastHit2D hit in hits)
         {
-            Door door = hit.collider.GetComponent<Door>();
-            if (door == null || !door.IsOpen())
-                return;
+            if (hit.transform != null)
+            {
+                Door door = hit.collider.GetComponent<Door>();
+                if (door == null || !door.IsOpen())
+                    return;
+            }
         }
 
         Vector2[] newPath = new Vector2[path.Length + 1];

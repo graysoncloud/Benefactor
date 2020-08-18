@@ -20,10 +20,10 @@ public class Door : InteractableObject
         doorSprite = Instantiate(doorSprite, transform.position, Quaternion.identity);
     }
 
-    void Open() //thanks to https://answers.unity.com/questions/239912/rotate-door-object-away-from-player.html
+    void Open()
     {
         if (open == false)
-        { // only open a closed door!
+        {
             open = true;
             ErasePosition();
             doorSprite.Open();

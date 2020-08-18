@@ -14,6 +14,7 @@ public class DoorSprite : MonoBehaviour
     private float targetAngle;
     private Rigidbody2D rb2D;
     private SpriteRenderer spriteRenderer;
+    public Sprite unlockedSprite;
 
     // Start is called before the first frame update
     protected void Start()
@@ -41,5 +42,10 @@ public class DoorSprite : MonoBehaviour
     public void Close()
     {
         targetAngle = startAngle;
+    }
+
+    public void Unlock()
+    {
+        spriteRenderer.sprite = unlockedSprite;
     }
 }

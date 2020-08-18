@@ -10,7 +10,6 @@ public class Door : InteractableObject
     public DoorSprite doorSprite;
 
     protected bool open;
-    protected InteractableObject trigger;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -45,6 +44,12 @@ public class Door : InteractableObject
             Open();
     }
 
+    public void Unlock()
+    {
+        locked = false;
+        doorSprite.Unlock();
+    }
+
     public bool IsOpen()
     {
         return open;
@@ -55,6 +60,8 @@ public class Door : InteractableObject
         receiveActions = base.GetActions();
         if (!locked)
             receiveActions.Add("Door");
+        else if (takesKey)
+            receiveActions.Add("Unlock");
 
         return receiveActions;
     }

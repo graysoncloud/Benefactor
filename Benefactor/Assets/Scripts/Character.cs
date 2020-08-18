@@ -38,6 +38,7 @@ public class Character : InteractableObject
     protected List<InteractableObject> talkableObjects;
     protected List<InteractableObject> attackableObjects;
     protected List<InteractableObject> openableDoors;
+    protected List<InteractableObject> unlockableDoors;
     protected SortedSet<String> actions;
     protected Dictionary<String, List<HoldableObject>> inventory;
     protected int attackRange;
@@ -65,6 +66,7 @@ public class Character : InteractableObject
         talkableObjects = new List<InteractableObject>();
         attackableObjects = new List<InteractableObject>();
         openableDoors = new List<InteractableObject>();
+        unlockableDoors = new List<InteractableObject>();
         actions = new SortedSet<String>();
         inventory = new Dictionary<String, List<HoldableObject>>();
         foreach (HoldableObject item in startingItems)
@@ -88,7 +90,6 @@ public class Character : InteractableObject
         GetAvailableTargets();
         GetAvailableActions();
         Act();
-        StartCoroutine(EndTurn());
     }
 
     protected virtual void UpdateObjectives()
@@ -178,6 +179,8 @@ public class Character : InteractableObject
         GetObjectsToActOn(talkableObjects, "Talk", 1);
 
         GetObjectsToActOn(openableDoors, "Door", 1);
+
+        GetObjectsToActOn(unlockableDoors, "Unlock", 1);
     }
 
     protected void GetAttackRange()
@@ -225,6 +228,9 @@ public class Character : InteractableObject
         if (openableDoors.Count > 0)
             actions.Add("Door");
 
+        if (unlockableDoors.Count > 0 && inventory.ContainsKey("Key"))
+            actions.Add("Unlock");
+
         actions.Add("Wait");
     }
 
@@ -235,10 +241,14 @@ public class Character : InteractableObject
             case "Attack":
                 if (attackableObjects.Contains(currentObjective.target))
                     SelectItem("Weapon");
+                else
+                    StartCoroutine(EndTurn());
                 break;
             case "Heal":
                 if (healableObjects.Contains(currentObjective.target))
                     SelectItem("Medicine");
+                else
+                    StartCoroutine(EndTurn());
                 break;
             case "Talk":
                 if (talkableObjects.Contains(currentObjective.target))
@@ -247,15 +257,20 @@ public class Character : InteractableObject
                 break;
             case "Door":
                 if (openableDoors.Contains(currentObjective.target))
-                    OpenDoor(currentObjective.target);
+                    Open(currentObjective.target);
                 StartCoroutine(EndTurn());
+                break;
+            case "Unlock":
+                if (unlockableDoors.Contains(currentObjective.target))
+                    SelectItem("Key");
+                else
+                    StartCoroutine(EndTurn());
                 break;
             case "Wait":
                 StartCoroutine(EndTurn());
                 break;
             default:
-                StartCoroutine(EndTurn());
-                break;
+                throw new Exception("Unknown action");
         }
     }
 
@@ -281,15 +296,28 @@ public class Character : InteractableObject
             case "Medicine":
                 Heal(currentObjective.target, item);
                 break;
+            case "Key":
+                Unlock(currentObjective.target, item);
+                break;
             default:
                 break;
         }
+
+        StartCoroutine(EndTurn()); //TEMP?
     }
 
-    protected virtual void OpenDoor(InteractableObject doorObject)
+    protected virtual void Open(InteractableObject toOpen)
     {
-        Door door = doorObject.gameObject.GetComponent<Door>();
+        Door door = toOpen.gameObject.GetComponent<Door>();
         door.Toggle();
+    }
+
+    protected virtual void Unlock(InteractableObject toUnlock, HoldableObject key)
+    {
+        Door door = toUnlock.gameObject.GetComponent<Door>();
+        door.Unlock();
+
+        Remove(key);
     }
 
     protected IEnumerator EndTurn()

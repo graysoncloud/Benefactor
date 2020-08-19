@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using System.Linq;
 using AStarSharp;
 
 public class BoardManager : MonoBehaviour
@@ -36,7 +35,9 @@ public class BoardManager : MonoBehaviour
     public GameObject[] enemyTiles;
     public GameObject[] outerWallTiles;
     public GameObject[] houseWallTiles;
+    public GameObject basicDoor;
     public GameObject keyDoor;
+    public GameObject triggerDoor;
 
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
@@ -103,11 +104,11 @@ public class BoardManager : MonoBehaviour
             Vector3 randomPosition = RandomPosition();
             GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
             Instantiate(tileChoice, randomPosition, Quaternion.identity);
-            InteractableObject newObject = tileChoice.GetComponent<InteractableObject>();
-            if (newObject != null)
-            {
-                Grid[(int)randomPosition.x][(int)randomPosition.y] = new Node(new Vector2((int)randomPosition.x, (int)randomPosition.y), newObject.damageable, (float)newObject.maxHealth + 1);
-            }
+            //InteractableObject newObject = tileChoice.GetComponent<InteractableObject>();
+            //if (newObject != null)
+            //{
+            //    Grid[(int)randomPosition.x][(int)randomPosition.y] = new Node(new Vector2((int)randomPosition.x, (int)randomPosition.y), newObject.damageable, (float)newObject.maxHealth + 1);
+            //}
         }
     }
 
@@ -150,13 +151,27 @@ public class BoardManager : MonoBehaviour
                     {
                         GameObject tileChoice;
                         if (y == 0 && x == door)
-                            tileChoice = keyDoor;
+                        {
+                            if (Random.Range(0, 5) == 0)
+                            {
+                                tileChoice = triggerDoor;
+                                GameObject instance = Instantiate(tileChoice, position, Quaternion.identity) as GameObject;
+                                Vector2 randomPos = RandomPosition();
+                                while (randomPos.x >= (int)randomPosition.x && randomPos.x <= (int)randomPosition.x + width && randomPos.y >= (int)randomPosition.y && randomPos.y <= (int)randomPosition.y + length) //ensure lever not in building
+                                    randomPos = RandomPosition();
+                                instance.GetComponent<Door>().SetupTrigger(randomPos);
+                                continue;
+                            }
+                            else
+                                tileChoice = Random.Range(0, 3) == 0 ? keyDoor : basicDoor;
+                        }
                         else
                             tileChoice = houseWallTiles[Random.Range(0, houseWallTiles.Length)];
                         Instantiate(tileChoice, position, Quaternion.identity);
-                        InteractableObject newObject = tileChoice.GetComponent<InteractableObject>();
-                        if (newObject != null)
-                            Grid[(int)position.x][(int)position.y] = new Node(new Vector2((int)position.x, (int)position.y), newObject.damageable, (float)newObject.maxHealth + 1);
+
+                        //InteractableObject newObject = tileChoice.GetComponent<InteractableObject>();
+                        //if (newObject != null)
+                        //    Grid[(int)position.x][(int)position.y] = new Node(new Vector2((int)position.x, (int)position.y), newObject.damageable, (float)newObject.maxHealth + 1);
                     }
                 }
             }

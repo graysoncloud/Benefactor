@@ -41,6 +41,7 @@ public class Player : Character
         actionButtons.Add("Heal", GameObject.Find("HealButton"));
         actionButtons.Add("Door", GameObject.Find("DoorButton"));
         actionButtons.Add("Unlock", GameObject.Find("UnlockButton"));
+        actionButtons.Add("Lever", GameObject.Find("LeverButton"));
         actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
 
@@ -201,21 +202,9 @@ public class Player : Character
 
     private List<InteractableObject> GetObjects()
     {
-        switch (currentObjective.action)
-        {
-            case "Attack":
-                return attackableObjects;
-            case "Heal":
-                return healableObjects;
-            case "Talk":
-                return talkableObjects;
-            case "Door":
-                return openableDoors;
-            case "Unlock":
-                return unlockableDoors;
-            default:
-                throw new Exception("Unknown objective");
-        }
+        List<InteractableObject> objects;
+        actableObjects.TryGetValue(currentObjective.action, out objects);
+        return objects;
     }
 
     private bool GetTargetInput()

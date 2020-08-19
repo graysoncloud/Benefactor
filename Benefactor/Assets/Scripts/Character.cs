@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Character : InteractableObject
 {
@@ -34,11 +35,7 @@ public class Character : InteractableObject
     protected Objective currentObjective;
     protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
-    protected List<InteractableObject> healableObjects;
-    protected List<InteractableObject> talkableObjects;
-    protected List<InteractableObject> attackableObjects;
-    protected List<InteractableObject> openableDoors;
-    protected List<InteractableObject> unlockableDoors;
+    protected Dictionary<String, List<InteractableObject>> actableObjects;
     protected SortedSet<String> actions;
     protected Dictionary<String, List<HoldableObject>> inventory;
     protected int attackRange;
@@ -62,11 +59,7 @@ public class Character : InteractableObject
         inverseMoveTime = 1 / moveTime;
         objectives = new Queue<Objective>();
         paths = new Dictionary<Vector2, Vector2[]>();
-        healableObjects = new List<InteractableObject>();
-        talkableObjects = new List<InteractableObject>();
-        attackableObjects = new List<InteractableObject>();
-        openableDoors = new List<InteractableObject>();
-        unlockableDoors = new List<InteractableObject>();
+        actableObjects = new Dictionary<String, List<InteractableObject>>();
         actions = new SortedSet<String>();
         inventory = new Dictionary<String, List<HoldableObject>>();
         foreach (HoldableObject item in startingItems)
@@ -165,22 +158,31 @@ public class Character : InteractableObject
 
     virtual protected void GetAvailableTargets()
     {
+        actableObjects.Clear();
+
         GetAttackRange();
         if (inventory.ContainsKey("Weapon"))
-            GetObjectsToActOn(attackableObjects, "Attack", attackRange);
+            GetObjectsToActOn("Attack", attackRange);
 
         if (inventory.ContainsKey("Medicine"))
         {
-            GetObjectsToActOn(healableObjects, "Heal", 1);
+            GetObjectsToActOn("Heal", 1);
             if (IsDamaged())
-                healableObjects.Add(this);
+            {
+                List<InteractableObject> objects;
+                if (actableObjects.TryGetValue("Heal", out objects) == false)
+                    actableObjects.Add("Heal", objects);
+                objects.Add(this);
+            }
         }
 
-        GetObjectsToActOn(talkableObjects, "Talk", 1);
+        GetObjectsToActOn("Talk", 1);
 
-        GetObjectsToActOn(openableDoors, "Door", 1);
+        GetObjectsToActOn("Door", 1);
 
-        GetObjectsToActOn(unlockableDoors, "Unlock", 1);
+        GetObjectsToActOn("Unlock", 1);
+
+        GetObjectsToActOn("Lever", 1);
     }
 
     protected void GetAttackRange()
@@ -198,9 +200,10 @@ public class Character : InteractableObject
         }
     }
 
-    protected void GetObjectsToActOn(List<InteractableObject> objects, String action, int range)
+    protected void GetObjectsToActOn(String action, int range)
     {
-        objects.Clear();
+        List<InteractableObject>  objects = new List<InteractableObject>();
+
         boxCollider.enabled = false;
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, range);
         boxCollider.enabled = true;
@@ -210,61 +213,75 @@ public class Character : InteractableObject
             if (hitObject != null && GetDistance(hitObject) <= range && GetDistance(hitObject) > 0 && hitObject.GetActions().Contains(action))
                 objects.Add(hitObject);
         }
+
+        if (objects.Count > 0)
+            actableObjects.Add(action, objects);
     }
 
     virtual protected void GetAvailableActions()
     {
         actions.Clear();
 
-        if (attackableObjects.Count > 0 && inventory.ContainsKey("Weapon"))
+        if (actableObjects.ContainsKey("Attack") && inventory.ContainsKey("Weapon"))
             actions.Add("Attack");
 
-        if (healableObjects.Count > 0 && inventory.ContainsKey("Medicine"))
+        if (actableObjects.ContainsKey("Heal") && inventory.ContainsKey("Medicine"))
             actions.Add("Heal");
 
-        if (talkableObjects.Count > 0)
+        if (actableObjects.ContainsKey("Talk"))
             actions.Add("Talk");
 
-        if (openableDoors.Count > 0)
+        if (actableObjects.ContainsKey("Door"))
             actions.Add("Door");
 
-        if (unlockableDoors.Count > 0 && inventory.ContainsKey("Key"))
+        if (actableObjects.ContainsKey("Unlock") && inventory.ContainsKey("Key"))
             actions.Add("Unlock");
+
+        if (actableObjects.ContainsKey("Lever"))
+            actions.Add("Lever");
 
         actions.Add("Wait");
     }
 
     virtual protected void Act()
     {
+        List<InteractableObject> objects;
+        actableObjects.TryGetValue(currentObjective.action, out objects);
+
         switch (currentObjective.action)
         {
             case "Attack":
-                if (attackableObjects.Contains(currentObjective.target))
+                if (objects != null && objects.Contains(currentObjective.target))
                     SelectItem("Weapon");
                 else
                     StartCoroutine(EndTurn());
                 break;
             case "Heal":
-                if (healableObjects.Contains(currentObjective.target))
+                if (objects != null && objects.Contains(currentObjective.target))
                     SelectItem("Medicine");
                 else
                     StartCoroutine(EndTurn());
                 break;
             case "Talk":
-                if (talkableObjects.Contains(currentObjective.target))
+                if (objects != null && objects.Contains(currentObjective.target))
                     TalkTo(currentObjective.target);
                 StartCoroutine(EndTurn());
                 break;
             case "Door":
-                if (openableDoors.Contains(currentObjective.target))
-                    Open(currentObjective.target);
+                if (objects != null && objects.Contains(currentObjective.target))
+                    Toggle(currentObjective.target);
                 StartCoroutine(EndTurn());
                 break;
             case "Unlock":
-                if (unlockableDoors.Contains(currentObjective.target))
+                if (objects != null && objects.Contains(currentObjective.target))
                     SelectItem("Key");
                 else
                     StartCoroutine(EndTurn());
+                break;
+            case "Lever":
+                if (objects != null && objects.Contains(currentObjective.target))
+                    Toggle(currentObjective.target);
+                StartCoroutine(EndTurn());
                 break;
             case "Wait":
                 StartCoroutine(EndTurn());
@@ -306,10 +323,16 @@ public class Character : InteractableObject
         StartCoroutine(EndTurn()); //TEMP?
     }
 
-    protected virtual void Open(InteractableObject toOpen)
+    protected virtual void Toggle(InteractableObject toToggle)
     {
-        Door door = toOpen.gameObject.GetComponent<Door>();
-        door.Toggle();
+        Door door = toToggle.gameObject.GetComponent<Door>();
+        if (door != null)
+            door.Toggle();
+        else
+        {
+            Lever lever = toToggle.gameObject.GetComponent<Lever>();
+            lever.Toggle();
+        }
     }
 
     protected virtual void Unlock(InteractableObject toUnlock, HoldableObject key)

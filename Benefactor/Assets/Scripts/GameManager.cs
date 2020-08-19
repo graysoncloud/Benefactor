@@ -111,6 +111,9 @@ public class GameManager : MonoBehaviour
         }
         activeCharacter = characters[activeCharacterIndex];
         Debug.Log("Active Character Index: " + activeCharacterIndex);
+
+        Camera.main.GetComponent<FollowPlayer>().Target(activeCharacter.gameObject);
+
         yield return new WaitForSeconds(turnDelay);
         StartCoroutine(activeCharacter.StartTurn());
     }

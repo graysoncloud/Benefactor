@@ -8,6 +8,7 @@ public class Door : InteractableObject
     public bool locked;
     public bool takesKey;
     public DoorSprite doorSprite;
+    public Lever trigger;
 
     protected bool open;
 
@@ -17,6 +18,14 @@ public class Door : InteractableObject
         base.Start();
 
         doorSprite = Instantiate(doorSprite, transform.position, Quaternion.identity);
+    }
+
+    public void Toggle()
+    {
+        if (open)
+            Close();
+        else
+            Open();
     }
 
     void Open()
@@ -34,14 +43,6 @@ public class Door : InteractableObject
         open = false;
         UpdatePosition();
         doorSprite.Close();
-    }
-
-    public void Toggle()
-    {
-        if (open)
-            Close();
-        else
-            Open();
     }
 
     public void Unlock()
@@ -64,5 +65,16 @@ public class Door : InteractableObject
             receiveActions.Add("Unlock");
 
         return receiveActions;
+    }
+
+    public void SetupTrigger(Vector2 position)
+    {
+        trigger = Instantiate(trigger, position, Quaternion.identity);
+        trigger.SetTarget(this);
+    }
+
+    public Lever GetTrigger()
+    {
+        return trigger;
     }
 }

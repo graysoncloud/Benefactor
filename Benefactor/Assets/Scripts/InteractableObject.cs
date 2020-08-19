@@ -12,8 +12,8 @@ public class InteractableObject : MonoBehaviour
     public bool leavesCorpse; // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
     public Sprite damagedSprite;
     public Sprite corpseSprite;
-    private SpriteRenderer spriteRenderer;
 
+    protected SpriteRenderer spriteRenderer;
     protected double health;
     protected bool isCorpse;
     protected int reputation;
@@ -32,6 +32,8 @@ public class InteractableObject : MonoBehaviour
         //leavesCorpse = false;
         isCorpse = false;
         receiveActions = new SortedSet<String>();
+
+        UpdatePosition();
     }
 
     /**
@@ -112,11 +114,5 @@ public class InteractableObject : MonoBehaviour
     protected virtual void UpdatePosition()
     {
         GameManager.instance.UpdateNode(transform.position, damageable, (float)health);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

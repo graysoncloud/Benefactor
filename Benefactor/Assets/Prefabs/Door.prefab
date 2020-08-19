@@ -154,5 +154,6 @@ MonoBehaviour:
   corpseSprite: {fileID: 0}
   locked: 0
   takesKey: 0
-  doorSprite: {fileID: 8945055773003432077, guid: 9eae87f0965f2ed41b16f213cfc33349,
+  doorSprite: {fileID: 8945055773003432077, guid: a054ffb98cd5e3647b9a434cf0ec9166,
     type: 3}
+  trigger: {fileID: 0}

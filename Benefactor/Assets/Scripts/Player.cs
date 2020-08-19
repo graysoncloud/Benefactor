@@ -46,6 +46,7 @@ public class Player : Character
         HideActionMenu();
 
         inventoryUI = GameObject.Find("InventoryParent");
+        inventoryUI.transform.position = new Vector2(Screen.width / 2, Screen.height / 4);
         itemsParent = GameObject.Find("Inventory").GetComponent<Transform>();
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();
         HideInventory();
@@ -296,18 +297,20 @@ public class Player : Character
 
     private void SetupActionMenu()
     {
+        Vector2 position = new Vector2(Screen.width / 2, Screen.height / 3);
         int index = 0,
             buttonHeight = 30,
             buttonWidth = 160,
             height = (buttonHeight + 10) * actions.Count;
         RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
         panelRectTransform.sizeDelta = new Vector2(buttonWidth + 10, height);
+        panelRectTransform.transform.position = position;
         foreach (string action in actions)
         {
             GameObject button;
             actionButtons.TryGetValue(action, out button);
             button.SetActive(true);
-            button.transform.position = new Vector2(Screen.width / 2, Screen.height / 2 + height / 2 - 5 - (buttonHeight + 10) * index - buttonHeight / 2);
+            button.transform.position = new Vector2(position.x, position.y + height / 2 - 5 - (buttonHeight + 10) * index - buttonHeight / 2);
             index++;
         }
 

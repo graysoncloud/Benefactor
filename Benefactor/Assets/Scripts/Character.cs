@@ -171,7 +171,10 @@ public class Character : InteractableObject
             {
                 List<InteractableObject> objects;
                 if (actableObjects.TryGetValue("Heal", out objects) == false)
+                {
+                    objects = new List<InteractableObject>();
                     actableObjects.Add("Heal", objects);
+                }
                 objects.Add(this);
             }
         }

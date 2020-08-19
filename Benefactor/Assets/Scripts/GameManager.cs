@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
         activeCharacter = characters[activeCharacterIndex];
         Debug.Log("Active Character Index: " + activeCharacterIndex);
 
-        Camera.main.GetComponent<FollowPlayer>().Target(activeCharacter.gameObject);
+        CameraTarget(activeCharacter.gameObject);
 
         yield return new WaitForSeconds(turnDelay);
         StartCoroutine(activeCharacter.StartTurn());
@@ -142,5 +142,10 @@ public class GameManager : MonoBehaviour
     public void UpdateNode(Vector2 position, bool damageable, float health)
     {
         Grid[(int)position.x][(int)position.y] = new Node(position, damageable, health + 1);
+    }
+
+    public void CameraTarget(GameObject toTarget)
+    {
+        Camera.main.GetComponent<FollowPlayer>().Target(toTarget);
     }
 }

@@ -221,6 +221,7 @@ public class Player : Character
                 if (Input.GetMouseButtonDown(0))
                 {
                     currentObjective.target = o;
+                    GameManager.instance.CameraTarget(o.gameObject);
                     HideIndicators();
                     return false;
                 }

@@ -26,6 +26,8 @@ public class Lever : InteractableObject
 
     public void Toggle()
     {
+        GameManager.instance.CameraTarget(target.gameObject);
+
         target.Toggle();
         on = !on;
         UpdateSprite();

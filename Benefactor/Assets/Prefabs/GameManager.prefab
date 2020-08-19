@@ -119,7 +119,7 @@ MonoBehaviour:
   defaultMoves: 3
   defaultStrength: 1
   defaultMoveTime: 0.2
-  defaultActionDelay: 0.5
+  defaultActionDelay: 0.7
   characters: []
   activeCharacterIndex: 0
   activeCharacter: {fileID: 0}

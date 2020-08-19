@@ -325,6 +325,8 @@ public class Character : InteractableObject
 
     protected virtual void Toggle(InteractableObject toToggle)
     {
+        GameManager.instance.CameraTarget(toToggle.gameObject);
+
         Door door = toToggle.gameObject.GetComponent<Door>();
         if (door != null)
             door.Toggle();
@@ -337,6 +339,8 @@ public class Character : InteractableObject
 
     protected virtual void Unlock(InteractableObject toUnlock, HoldableObject key)
     {
+        GameManager.instance.CameraTarget(toUnlock.gameObject);
+
         Door door = toUnlock.gameObject.GetComponent<Door>();
         door.Unlock();
 
@@ -360,7 +364,6 @@ public class Character : InteractableObject
 
     protected virtual void Pickup (HoldableObject toPickup, Boolean start = false)
     {
-        Debug.Log(toPickup);
         if (inventory.ContainsKey(toPickup.type))
         {
             List<HoldableObject> toPickupList;
@@ -386,6 +389,8 @@ public class Character : InteractableObject
 
     protected void Attack (InteractableObject toAttack, HoldableObject weapon)
     {
+        GameManager.instance.CameraTarget(toAttack.gameObject);
+
         toAttack.TakeDamage((weapon.range == 1 ? strength : 1) * (rationale / 50) * weapon.amount);
         weapon.uses--;
         if (weapon.uses == 0)
@@ -403,6 +408,8 @@ public class Character : InteractableObject
 
     protected virtual void Heal(InteractableObject toHeal, HoldableObject medicine)
     {
+        GameManager.instance.CameraTarget(toHeal.gameObject);
+
         toHeal.Heal(medicine.amount);
 
         Remove(medicine);
@@ -412,7 +419,7 @@ public class Character : InteractableObject
 
     protected void TalkTo(InteractableObject toTalkTo)
     {
-
+        GameManager.instance.CameraTarget(toTalkTo.gameObject);
     }
 
     public override SortedSet<String> GetActions()

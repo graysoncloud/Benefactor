@@ -16,11 +16,13 @@ public class Player : Character
     public Text healthText;
     public bool gettingMove;
     public bool gettingTarget;
+    public bool looting;
 
     public GameObject tileIndicator;
     public List<GameObject> indicators;
     private CanvasGroup actionMenu;
     private Dictionary<String, GameObject> actionButtons;
+    private GameObject backButton;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -28,6 +30,7 @@ public class Player : Character
         base.Start();
         gettingMove = false;
         gettingTarget = false;
+        looting = false;
 
         rationaleText = GameObject.Find("RationaleText").GetComponent<Text>();
         rationaleText.text = "Rationale: " + rationale;
@@ -42,6 +45,7 @@ public class Player : Character
         actionButtons.Add("Door", GameObject.Find("DoorButton"));
         actionButtons.Add("Unlock", GameObject.Find("UnlockButton"));
         actionButtons.Add("Lever", GameObject.Find("LeverButton"));
+        actionButtons.Add("Loot", GameObject.Find("LootButton"));
         actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
 
@@ -50,6 +54,10 @@ public class Player : Character
         itemsParent = GameObject.Find("Inventory").GetComponent<Transform>();
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();
         HideInventory();
+
+        backButton = GameObject.Find("BackButton");
+        backButton.transform.position = new Vector2(Screen.width*0.7f, Screen.height*0.1f);
+        HideBackButton();
     }
 
     // Update is called once per frame
@@ -139,6 +147,7 @@ public class Player : Character
         GetAvailableTargets();
         GetAvailableActions();
         SelectAction();
+        //ShowBackButton();
     }
 
     protected override void UpdateObjectives()
@@ -245,15 +254,33 @@ public class Player : Character
     protected override void SelectItem(String type)
     {
         ShowInventory(type, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
-        inventoryUI.SetActive(true);
         Debug.Log("Player waiting for item input");
     }
 
     public override void ChooseItem(HoldableObject item)
     {
+        if (looting)
+        {
+            Pickup(item);
+            Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
+            storage.Remove(item);
+            ShowInventory("", 0, storage.items);
+            return;
+        }
+
         HideInventory();
         base.ChooseItem(item);
         StartCoroutine(EndTurn());
+    }
+
+    protected override void Loot(InteractableObject toLoot)
+    {
+        looting = true;
+        GameManager.instance.CameraTarget(toLoot.gameObject);
+        Storage storage = toLoot.gameObject.GetComponent<Storage>();
+        storage.Open();
+        ShowInventory("", 0, storage.items);
+        ShowBackButton();
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)
@@ -397,10 +424,10 @@ public class Player : Character
         }
     }
 
-    private void ShowInventory(String type, int range = 0)
+    private void ShowInventory(String type, int range = 0, List<HoldableObject> items = null)
     {
-        List<HoldableObject> items;
-        inventory.TryGetValue(type, out items);
+        if (items == null)
+            inventory.TryGetValue(type, out items);
         int j = 0;
         for (int i = 0; i < items.Count; i++)
         {
@@ -415,10 +442,36 @@ public class Player : Character
             slots[j].ClearSlot();
             j++;
         }
+
+        inventoryUI.SetActive(true);
     }
 
     private void HideInventory()
     {
         inventoryUI.SetActive(false);
+    }
+
+    public void Back()
+    {
+        if (looting)
+        {
+            looting = false;
+            Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
+            storage.Close();
+            HideInventory();
+            HideBackButton();
+            StartCoroutine(EndTurn());
+            return;
+        }
+    }
+
+    private void ShowBackButton()
+    {
+        backButton.SetActive(true);
+    }
+
+    private void HideBackButton()
+    {
+        backButton.SetActive(false);
     }
 }

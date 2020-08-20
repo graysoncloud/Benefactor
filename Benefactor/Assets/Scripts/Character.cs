@@ -183,9 +183,12 @@ public class Character : InteractableObject
 
         GetObjectsToActOn("Door", 1);
 
-        GetObjectsToActOn("Unlock", 1);
+        if (inventory.ContainsKey("Key"))
+            GetObjectsToActOn("Unlock", 1);
 
         GetObjectsToActOn("Lever", 1);
+
+        GetObjectsToActOn("Loot", 1);
     }
 
     protected void GetAttackRange()
@@ -225,23 +228,8 @@ public class Character : InteractableObject
     {
         actions.Clear();
 
-        if (actableObjects.ContainsKey("Attack") && inventory.ContainsKey("Weapon"))
-            actions.Add("Attack");
-
-        if (actableObjects.ContainsKey("Heal") && inventory.ContainsKey("Medicine"))
-            actions.Add("Heal");
-
-        if (actableObjects.ContainsKey("Talk"))
-            actions.Add("Talk");
-
-        if (actableObjects.ContainsKey("Door"))
-            actions.Add("Door");
-
-        if (actableObjects.ContainsKey("Unlock") && inventory.ContainsKey("Key"))
-            actions.Add("Unlock");
-
-        if (actableObjects.ContainsKey("Lever"))
-            actions.Add("Lever");
+        foreach (String action in actableObjects.Keys)
+            actions.Add(action);
 
         actions.Add("Wait");
     }
@@ -285,6 +273,10 @@ public class Character : InteractableObject
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
                 StartCoroutine(EndTurn());
+                break;
+            case "Loot":
+                if (objects != null && objects.Contains(currentObjective.target))
+                    Loot(currentObjective.target);
                 break;
             case "Wait":
                 StartCoroutine(EndTurn());
@@ -345,12 +337,36 @@ public class Character : InteractableObject
         GameManager.instance.CameraTarget(toUnlock.gameObject);
 
         Door door = toUnlock.gameObject.GetComponent<Door>();
-        door.Unlock();
+        if (door != null)
+            door.Unlock();
+        else
+        {
+            Storage storage = toUnlock.gameObject.GetComponent<Storage>();
+            storage.Unlock();
+        }
 
         Remove(key);
     }
 
-    protected IEnumerator EndTurn()
+    protected virtual void Loot(InteractableObject toLoot)
+    {
+        GameManager.instance.CameraTarget(toLoot.gameObject);
+
+        Storage storage = toLoot.gameObject.GetComponent<Storage>();
+        storage.Open();
+
+        foreach (HoldableObject item in storage.items)
+        {
+            Pickup(item);
+            storage.Remove(item);
+        }
+
+        storage.Close();
+
+        StartCoroutine(EndTurn());
+    }
+
+        protected IEnumerator EndTurn()
     {
         yield return new WaitForSeconds(actionDelay);
         isTurn = false;

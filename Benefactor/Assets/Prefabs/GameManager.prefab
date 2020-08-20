@@ -99,6 +99,9 @@ MonoBehaviour:
   keyDoor: {fileID: 7991227353612988546, guid: d1f47c6aab1d5f9419dab868d1e0b77b, type: 3}
   triggerDoor: {fileID: 7991227353612988546, guid: 7f3f9ab40edc8364da09717ca3c48d18,
     type: 3}
+  storage:
+  - {fileID: 7991227353612988546, guid: c9f9bf2a8236fba4cbd82a0c0cf9610a, type: 3}
+  - {fileID: 7991227353612988546, guid: 7a99bdff91c8cf04fbda6a59f2a23abe, type: 3}
 --- !u!114 &5498348103610966037
 MonoBehaviour:
   m_ObjectHideFlags: 0

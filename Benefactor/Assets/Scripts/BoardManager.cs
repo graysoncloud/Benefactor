@@ -38,6 +38,7 @@ public class BoardManager : MonoBehaviour
     public GameObject basicDoor;
     public GameObject keyDoor;
     public GameObject triggerDoor;
+    public GameObject[] storage;
 
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
@@ -104,11 +105,6 @@ public class BoardManager : MonoBehaviour
             Vector3 randomPosition = RandomPosition();
             GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
             Instantiate(tileChoice, randomPosition, Quaternion.identity);
-            //InteractableObject newObject = tileChoice.GetComponent<InteractableObject>();
-            //if (newObject != null)
-            //{
-            //    Grid[(int)randomPosition.x][(int)randomPosition.y] = new Node(new Vector2((int)randomPosition.x, (int)randomPosition.y), newObject.damageable, (float)newObject.maxHealth + 1);
-            //}
         }
     }
 
@@ -147,9 +143,9 @@ public class BoardManager : MonoBehaviour
                     Vector3 position = new Vector3(x + (int)randomPosition.x, y + (int)randomPosition.y, 0f);
                     gridPositions.Remove(position);
 
+                    GameObject tileChoice;
                     if (x == 0 || x == width || y == 0 || y == length)
                     {
-                        GameObject tileChoice;
                         if (y == 0 && x == door)
                         {
                             if (Random.Range(0, 5) == 0)
@@ -168,10 +164,11 @@ public class BoardManager : MonoBehaviour
                         else
                             tileChoice = houseWallTiles[Random.Range(0, houseWallTiles.Length)];
                         Instantiate(tileChoice, position, Quaternion.identity);
-
-                        //InteractableObject newObject = tileChoice.GetComponent<InteractableObject>();
-                        //if (newObject != null)
-                        //    Grid[(int)position.x][(int)position.y] = new Node(new Vector2((int)position.x, (int)position.y), newObject.damageable, (float)newObject.maxHealth + 1);
+                    }
+                    else if (Random.Range(1, (width-1)*(length-1)) == 1 && ((y != 1 && (x == 1 || x == width - 1)) || (y == 1 && x != door) || y == length - 1))
+                    {
+                        tileChoice = storage[Random.Range(0, storage.Length)];
+                        Instantiate(tileChoice, position, Quaternion.identity);
                     }
                 }
             }

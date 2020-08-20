@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6156389141310141637
+--- !u!1 &7991227353612988546
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,24 +8,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5825892001369049002}
-  - component: {fileID: 47434802031549853}
-  - component: {fileID: 1627213246511906828}
-  - component: {fileID: 2648351601887277121}
-  m_Layer: 0
-  m_Name: Soda
-  m_TagString: Soda
+  - component: {fileID: 7732909630141236205}
+  - component: {fileID: 4260946265005922778}
+  - component: {fileID: 3250592248702125131}
+  - component: {fileID: 6590007514430339704}
+  m_Layer: 8
+  m_Name: Dresser_Locked
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &5825892001369049002
+  m_IsActive: 1
+--- !u!4 &7732909630141236205
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6156389141310141637}
+  m_GameObject: {fileID: 7991227353612988546}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.31883878, y: -0.058476243, z: -10.339555}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -33,13 +33,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &47434802031549853
+--- !u!212 &4260946265005922778
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6156389141310141637}
+  m_GameObject: {fileID: 7991227353612988546}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -72,7 +72,8 @@ SpriteRenderer:
   m_SortingLayerID: 1183741245
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300036, guid: fbe1e7b94bb1a4a099d5bcb15a00141c, type: 3}
+  m_Sprite: {fileID: 3225609990979796967, guid: 870d6de28cdd37f4ab616a9bbaebdd3a,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -83,17 +84,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &1627213246511906828
+--- !u!61 &3250592248702125131
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6156389141310141637}
+  m_GameObject: {fileID: 7991227353612988546}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -109,23 +110,34 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &2648351601887277121
+--- !u!114 &6590007514430339704
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6156389141310141637}
+  m_GameObject: {fileID: 7991227353612988546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fbb2adf646450e469834e1ab731ee8e, type: 3}
+  m_Script: {fileID: 11500000, guid: 2970312397af6a849b12db0cac210ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300036, guid: fbe1e7b94bb1a4a099d5bcb15a00141c, type: 3}
-  type: Medicine
-  name: Soda
-  uses: 1
-  amount: 1
-  range: 0
-  blastRadius: 0
-  copies: 1
+  Collisions:
+    serializedVersion: 2
+    m_Bits: 0
+  maxHealth: 1
+  damageable: 0
+  repairable: 0
+  leavesCorpse: 0
+  damagedSprite: {fileID: 0}
+  corpseSprite: {fileID: 0}
+  locked: 1
+  takesKey: 1
+  items:
+  - {fileID: -5498856414594888391, guid: b67a25e2dbb90a64ba4959583c7d4227, type: 3}
+  - {fileID: 2648351601887277121, guid: d7223e9ce65c5ff40a98ff9432da0fcf, type: 3}
+  - {fileID: -5498856414594888391, guid: ae876cd8e3a9f8c4c9af44a00acef1e0, type: 3}
+  openSprite: {fileID: -1181550467939379832, guid: 870d6de28cdd37f4ab616a9bbaebdd3a,
+    type: 3}
+  closedSprite: {fileID: 8383790795072261988, guid: 870d6de28cdd37f4ab616a9bbaebdd3a,
+    type: 3}

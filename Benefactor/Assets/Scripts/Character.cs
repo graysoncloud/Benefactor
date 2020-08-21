@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,18 +21,19 @@ public class Character : InteractableObject
     }
 
     public float moveTime;
-    public int moves;
+    public int totalMoves;
+    public int totalActions;
     public float actionDelay;
     public double strength; //multiplier for range 1 weapon
+    public double rationale;
     public bool isTurn;
     public bool isMoving;
     public bool talkable;
     public HoldableObject[] startingItems;
 
-    protected double rationale;
     protected Animator animator;
     private float inverseMoveTime;
-    protected Queue<Objective> objectives;
+    protected List<Objective> objectives;
     protected Objective currentObjective;
     protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
@@ -41,23 +43,19 @@ public class Character : InteractableObject
     protected int attackRange;
     protected List<InteractableObject> allies;
     protected bool destructive; //will destroy objects in path
+    protected int movesLeft;
+    protected int actionsLeft;
 
     // Start is called before the first frame update
     protected override void Start()
     {
-        rationale = GameManager.instance.defaultRationale;
-        moves = GameManager.instance.defaultMoves;
-        strength = GameManager.instance.defaultStrength;
-        moveTime = GameManager.instance.defaultMoveTime;
-        actionDelay = GameManager.instance.defaultActionDelay;
-
         isTurn = false;
         isMoving = false;
         destructive = true; //make it start false unless agitated?
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
-        objectives = new Queue<Objective>();
+        objectives = new List<Objective>();
         paths = new Dictionary<Vector2, Vector2[]>();
         actableObjects = new Dictionary<String, List<InteractableObject>>();
         actions = new SortedSet<String>();
@@ -72,27 +70,51 @@ public class Character : InteractableObject
         base.Start();
     }
 
-    public virtual IEnumerator StartTurn()
+    public virtual void StartTurn()
     {
         isTurn = true;
-        UpdateObjectives();
-        FindPath();
-        yield return new WaitForSeconds(moveTime);
-        if (pathToObjective.Length > 0)
-            yield return StartCoroutine(FollowPath());
-        GetAvailableTargets();
-        GetAvailableActions();
-        Act();
+        movesLeft = totalMoves;
+        actionsLeft = totalActions;
+        StartCoroutine(NextStep());
+    }
+
+    protected virtual IEnumerator NextStep()
+    {
+        yield return new WaitForSeconds(actionDelay);
+        GameManager.instance.CameraTarget(this.gameObject);
+        //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
+        if (actionsLeft <= 0 && movesLeft <= 0)
+            StartCoroutine(EndTurn());
+        else
+        {
+            UpdateObjectives();
+            FindPath();
+            yield return new WaitForSeconds(moveTime);
+            if (pathToObjective.Length > 1)
+            {
+                yield return StartCoroutine(FollowPath());
+                StartCoroutine(NextStep());
+            }
+            else
+            {
+                GetAvailableTargets();
+                GetAvailableActions();
+                Act();
+            }
+        }
     }
 
     protected virtual void UpdateObjectives()
     {
         if (IsDamaged() && inventory.ContainsKey("Medicine") && !objectives.Contains(new Objective(this, "Heal")))
-            objectives.Enqueue(new Objective(this, "Heal"));
+            objectives.Prepend(new Objective(this, "Heal"));
         else if (!objectives.Contains(new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack")))
-            objectives.Enqueue(new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack"));
+            objectives.Add(new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack"));
         if (currentObjective == null)
-            currentObjective = objectives.Dequeue();
+        {
+            currentObjective = objectives[0];
+            objectives.Remove(currentObjective);
+        }
     }
 
     protected void LogPaths()
@@ -110,13 +132,13 @@ public class Character : InteractableObject
         Astar astar = new Astar(GameManager.instance.Grid);
         Stack<Node> path = astar.FindPath(transform.position, currentObjective.target.transform.position, destructive);
         int space = 1; //temporarily until adjust for targets you can stand on (interactable  vs holdable)
-        pathToObjective = new Vector2[Math.Min(moves, path.Count - space)];
+        pathToObjective = new Vector2[Math.Min(movesLeft, path.Count - space)];
         int i = 0;
         foreach (Node node in path)
         {
             if (node.Weight > 1)
             {
-                objectives.Enqueue(new Objective(currentObjective.target, currentObjective.action));
+                objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
                 boxCollider.enabled = false;
                 Collider2D hitCollider = Physics2D.OverlapCircle(node.Position, 0.5f);
                 boxCollider.enabled = true;
@@ -141,6 +163,7 @@ public class Character : InteractableObject
             yield return StartCoroutine(SmoothMovement(coords));
         }
         UpdatePosition();
+        movesLeft -= pathToObjective.Length - 1;
         isMoving = false;
     }
 
@@ -159,6 +182,9 @@ public class Character : InteractableObject
     virtual protected void GetAvailableTargets()
     {
         actableObjects.Clear();
+
+        if (actionsLeft <= 0)
+            return;
 
         GetAttackRange();
         if (inventory.ContainsKey("Weapon"))
@@ -238,6 +264,7 @@ public class Character : InteractableObject
     {
         List<InteractableObject> objects;
         actableObjects.TryGetValue(currentObjective.action, out objects);
+        actionsLeft--;
 
         switch (currentObjective.action)
         {
@@ -256,12 +283,12 @@ public class Character : InteractableObject
             case "Talk":
                 if (objects != null && objects.Contains(currentObjective.target))
                     TalkTo(currentObjective.target);
-                StartCoroutine(EndTurn());
+                StartCoroutine(NextStep());
                 break;
             case "Door":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
-                StartCoroutine(EndTurn());
+                StartCoroutine(NextStep());
                 break;
             case "Unlock":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -272,7 +299,7 @@ public class Character : InteractableObject
             case "Lever":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
-                StartCoroutine(EndTurn());
+                StartCoroutine(NextStep());
                 break;
             case "Loot":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -304,9 +331,11 @@ public class Character : InteractableObject
         {
             case "Weapon":
                 Attack(currentObjective.target, item);
+                StartCoroutine(NextStep());
                 break;
             case "Medicine":
                 Heal(currentObjective.target, item);
+                StartCoroutine(NextStep());
                 break;
             case "Key":
                 Unlock(currentObjective.target, item);
@@ -314,8 +343,6 @@ public class Character : InteractableObject
             default:
                 break;
         }
-
-        StartCoroutine(EndTurn()); //TEMP?
     }
 
     protected virtual void Toggle(InteractableObject toToggle)
@@ -338,11 +365,15 @@ public class Character : InteractableObject
 
         Door door = toUnlock.gameObject.GetComponent<Door>();
         if (door != null)
+        {
             door.Unlock();
+            StartCoroutine(NextStep());
+        }
         else
         {
             Storage storage = toUnlock.gameObject.GetComponent<Storage>();
             storage.Unlock();
+            Loot(toUnlock);
         }
 
         Remove(key);
@@ -363,12 +394,13 @@ public class Character : InteractableObject
 
         storage.Close();
 
-        StartCoroutine(EndTurn());
+        StartCoroutine(NextStep());
     }
 
-        protected IEnumerator EndTurn()
+    protected IEnumerator EndTurn()
     {
-        yield return new WaitForSeconds(actionDelay);
+        //yield return new WaitForSeconds(actionDelay);
+        yield return new WaitForSeconds(0f);
         isTurn = false;
         StartCoroutine(GameManager.instance.nextTurn());
     }
@@ -410,7 +442,7 @@ public class Character : InteractableObject
     {
         GameManager.instance.CameraTarget(toAttack.gameObject);
 
-        toAttack.TakeDamage((weapon.range == 1 ? strength : 1) * (rationale / 50) * weapon.amount);
+        toAttack.TakeDamage(weapon.amount * (weapon.range == 1 ? strength : 1) * (rationale / 50));
         weapon.uses--;
         if (weapon.uses == 0)
             Remove(weapon);
@@ -429,7 +461,7 @@ public class Character : InteractableObject
     {
         GameManager.instance.CameraTarget(toHeal.gameObject);
 
-        toHeal.Heal(medicine.amount);
+        toHeal.Heal(medicine.amount * (rationale / 50));
 
         Remove(medicine);
 

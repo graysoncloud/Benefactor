@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3250592248702125131}
   - component: {fileID: -4912204553916616799}
   m_Layer: 8
-  m_Name: TriggerDoor
+  m_Name: Door_Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,6 +152,7 @@ MonoBehaviour:
   leavesCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
+  reputation: 50
   locked: 1
   takesKey: 0
   doorSprite: {fileID: 8945055773003432077, guid: 22315ecd8cf44c949bef46957bbc3ebf,

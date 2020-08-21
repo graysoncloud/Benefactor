@@ -132,3 +132,4 @@ MonoBehaviour:
   damagedSprite: {fileID: -3553346069815653258, guid: c1ec50cdeb4614d43a656cfe494016c5,
     type: 3}
   corpseSprite: {fileID: 0}
+  reputation: 50

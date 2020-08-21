@@ -152,6 +152,7 @@ MonoBehaviour:
   leavesCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
+  reputation: 50
   locked: 0
   takesKey: 0
   doorSprite: {fileID: 8945055773003432077, guid: a054ffb98cd5e3647b9a434cf0ec9166,

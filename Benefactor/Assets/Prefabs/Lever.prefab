@@ -131,6 +131,7 @@ MonoBehaviour:
   leavesCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
+  reputation: 50
   onSprite: {fileID: -4454914845596493489, guid: 1a1f3c8fad2b61749a8c2013a316d684,
     type: 3}
   offSprite: {fileID: 1694985531360637023, guid: 1a1f3c8fad2b61749a8c2013a316d684,

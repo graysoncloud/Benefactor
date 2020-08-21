@@ -172,10 +172,13 @@ MonoBehaviour:
   leavesCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
-  moveTime: 0
-  moves: 3
-  actionDelay: 0
-  strength: 0
+  reputation: 50
+  moveTime: 0.2
+  totalMoves: 2
+  totalActions: 1
+  actionDelay: 0.5
+  strength: 1
+  rationale: 100
   isTurn: 0
   isMoving: 0
   talkable: 1

@@ -131,6 +131,7 @@ MonoBehaviour:
   leavesCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
+  reputation: 50
   locked: 1
   takesKey: 1
   items:

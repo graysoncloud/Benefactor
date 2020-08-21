@@ -81,19 +81,31 @@ public class Player : Character
         }
     }
 
-    public override IEnumerator StartTurn()
+    protected override IEnumerator NextStep()
     {
-        isTurn = true;
-        UpdateObjectives();
-        GetPaths();
-        yield return new WaitForSeconds(moveTime);
-        FindPath();
+        yield return new WaitForSeconds(actionDelay);
+        GameManager.instance.CameraTarget(this.gameObject);
+        //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
+        if (actionsLeft <= 0 && movesLeft <= 0)
+            StartCoroutine(EndTurn());
+        else
+        {
+            UpdateObjectives();
+            GetPaths();
+            yield return new WaitForSeconds(moveTime);
+            FindPath();
+        }
+    }
+
+    protected override void UpdateObjectives()
+    {
+        currentObjective = new Objective(null, null);
     }
 
     protected void GetPaths()
     {
         paths.Clear();
-        GetPaths(transform.position, new Vector2[0], moves);
+        GetPaths(transform.position, new Vector2[0], movesLeft);
     }
 
     protected void GetPaths(Vector2 next, Vector2[] path, int remainingMoves) //update with better alg/queue?
@@ -141,25 +153,19 @@ public class Player : Character
         }
     }
 
-    protected IEnumerator SelectedPath()
-    {
-        yield return StartCoroutine(FollowPath());
-        GetAvailableTargets();
-        GetAvailableActions();
-        SelectAction();
-        //ShowBackButton();
-    }
-
-    protected override void UpdateObjectives()
-    {
-        currentObjective = new Objective(null, null);
-    }
-
     protected override void FindPath()
     {
-        ShowPaths();
-        gettingMove = true;
-        Debug.Log("Player waiting for move input");
+        if (paths.Count == 1)
+        {
+            paths.TryGetValue(transform.position, out pathToObjective);
+            StartCoroutine(SelectedPath());
+        }
+        else
+        {
+            ShowPaths();
+            gettingMove = true;
+            Debug.Log("Player waiting for move input");
+        }
     }
 
     private bool GetMoveInput()
@@ -183,6 +189,22 @@ public class Player : Character
         }
 
         return true;
+    }
+
+    protected IEnumerator SelectedPath()
+    {
+        if (pathToObjective.Length > 1)
+        {
+            yield return StartCoroutine(FollowPath());
+            StartCoroutine(NextStep());
+        }
+        else
+        {
+            GetAvailableTargets();
+            GetAvailableActions();
+            SelectAction();
+            //ShowBackButton();
+        }
     }
 
     protected void SelectAction()
@@ -270,7 +292,6 @@ public class Player : Character
 
         HideInventory();
         base.ChooseItem(item);
-        StartCoroutine(EndTurn());
     }
 
     protected override void Loot(InteractableObject toLoot)
@@ -316,7 +337,7 @@ public class Player : Character
         CheckIfGameOver();
     }
 
-    public override void Heal (int amount)
+    public override void Heal (double amount)
     {
         base.Heal(amount);
         healthText.text = "Health: " + health;
@@ -460,7 +481,7 @@ public class Player : Character
             storage.Close();
             HideInventory();
             HideBackButton();
-            StartCoroutine(EndTurn());
+            StartCoroutine(NextStep());
             return;
         }
     }

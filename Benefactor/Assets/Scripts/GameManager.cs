@@ -14,13 +14,6 @@ public class GameManager : MonoBehaviour
     public float turnDelay;
     public static GameManager instance = null;
 
-    public double defaultRationale;
-    public int defaultReputation;
-    public int defaultMoves;
-    public int defaultStrength;
-    public float defaultMoveTime;
-    public float defaultActionDelay;
-
     private Text levelText;
     private GameObject levelImage;
     private BoardManager boardScript;
@@ -115,7 +108,7 @@ public class GameManager : MonoBehaviour
         CameraTarget(activeCharacter.gameObject);
 
         yield return new WaitForSeconds(turnDelay);
-        StartCoroutine(activeCharacter.StartTurn());
+        activeCharacter.StartTurn();
     }
 
     public void nextRound()

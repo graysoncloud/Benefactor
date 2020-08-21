@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9080466321961566256
 Transform:
   m_ObjectHideFlags: 0
@@ -99,9 +99,9 @@ BoxCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 0, y: 0.09375, z: 0, w: 0.125}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.6875, y: 0.40625}
+    oldSize: {x: 0.6875, y: 0.625}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   icon: {fileID: -8510937033474131500, guid: 67da5321f3ad3144a9b90e2c8caa047f, type: 3}
   type: Weapon
   name: Handgun
-  uses: 14
+  uses: 13
   amount: 1
   range: 3
   blastRadius: 0

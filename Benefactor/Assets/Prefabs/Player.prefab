@@ -166,16 +166,19 @@ MonoBehaviour:
   Collisions:
     serializedVersion: 2
     m_Bits: 256
-  maxHealth: 10
+  maxHealth: 5
   damageable: 1
   repairable: 1
   leavesCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
-  moveTime: 0
-  moves: 3
-  actionDelay: 0
-  strength: 0
+  reputation: 50
+  moveTime: 0.2
+  totalMoves: 3
+  totalActions: 1
+  actionDelay: 0.5
+  strength: 1
+  rationale: 100
   isTurn: 0
   isMoving: 0
   talkable: 0
@@ -188,6 +191,7 @@ MonoBehaviour:
   healthText: {fileID: 0}
   gettingMove: 0
   gettingTarget: 0
+  looting: 0
   tileIndicator: {fileID: 6793900256970249569, guid: 73dc820bc82c3724ab6d3f763aac8d46,
     type: 3}
   indicators: []

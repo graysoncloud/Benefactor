@@ -12,11 +12,11 @@ public class InteractableObject : MonoBehaviour
     public bool leavesCorpse; // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
     public Sprite damagedSprite;
     public Sprite corpseSprite;
-    private SpriteRenderer spriteRenderer;
+    public int reputation;
 
+    protected SpriteRenderer spriteRenderer;
     protected double health;
     protected bool isCorpse;
-    protected int reputation;
     protected SortedSet<String> receiveActions;
     protected BoxCollider2D boxCollider;
     protected Rigidbody2D rb2D;
@@ -27,11 +27,12 @@ public class InteractableObject : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
-        reputation = GameManager.instance.defaultReputation;
         health = maxHealth;
         //leavesCorpse = false;
         isCorpse = false;
         receiveActions = new SortedSet<String>();
+
+        UpdatePosition();
     }
 
     /**
@@ -62,9 +63,11 @@ public class InteractableObject : MonoBehaviour
         {
             UpdatePosition();
         }
+
+        Debug.Log(this + " took " + damage + " damage");
     }
 
-    public virtual void Heal(int amount)
+    public virtual void Heal(double amount)
     {
         if (!damageable) return;
         health = Math.Min(health + amount, maxHealth);
@@ -112,11 +115,5 @@ public class InteractableObject : MonoBehaviour
     protected virtual void UpdatePosition()
     {
         GameManager.instance.UpdateNode(transform.position, damageable, (float)health);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

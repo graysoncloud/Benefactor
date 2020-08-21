@@ -14,13 +14,6 @@ public class GameManager : MonoBehaviour
     public float turnDelay;
     public static GameManager instance = null;
 
-    public double defaultRationale;
-    public int defaultReputation;
-    public int defaultMoves;
-    public int defaultStrength;
-    public float defaultMoveTime;
-    public float defaultActionDelay;
-
     private Text levelText;
     private GameObject levelImage;
     private BoardManager boardScript;
@@ -111,8 +104,11 @@ public class GameManager : MonoBehaviour
         }
         activeCharacter = characters[activeCharacterIndex];
         Debug.Log("Active Character Index: " + activeCharacterIndex);
+
+        CameraTarget(activeCharacter.gameObject);
+
         yield return new WaitForSeconds(turnDelay);
-        StartCoroutine(activeCharacter.StartTurn());
+        activeCharacter.StartTurn();
     }
 
     public void nextRound()
@@ -139,5 +135,10 @@ public class GameManager : MonoBehaviour
     public void UpdateNode(Vector2 position, bool damageable, float health)
     {
         Grid[(int)position.x][(int)position.y] = new Node(position, damageable, health + 1);
+    }
+
+    public void CameraTarget(GameObject toTarget)
+    {
+        Camera.main.GetComponent<FollowPlayer>().Target(toTarget);
     }
 }

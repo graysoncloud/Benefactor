@@ -82,6 +82,7 @@ MonoBehaviour:
   - {fileID: 8913211509250880351, guid: ae876cd8e3a9f8c4c9af44a00acef1e0, type: 3}
   - {fileID: 8913211509250880351, guid: b67a25e2dbb90a64ba4959583c7d4227, type: 3}
   - {fileID: 6156389141310141637, guid: d7223e9ce65c5ff40a98ff9432da0fcf, type: 3}
+  - {fileID: 6156389141310141637, guid: 3c8bc909cfcf86140a11ded9170ebd02, type: 3}
   enemyTiles:
   - {fileID: 5495209542717074604, guid: 95434a6419c3c8540b8a58911e28f596, type: 3}
   - {fileID: 8178759162555290993, guid: 70d91124e870e344f89f261e24c1ac92, type: 3}
@@ -93,6 +94,14 @@ MonoBehaviour:
   - {fileID: 7991227353612988546, guid: 09a647a8d5f41a54ea0acd103fd5e609, type: 3}
   - {fileID: 7991227353612988546, guid: 2df4a3cc6978edc44a19911f9ebf43be, type: 3}
   - {fileID: 7991227353612988546, guid: a3ca0183fb83a57438e4b22b725b5ad3, type: 3}
+  basicDoor: {fileID: 7991227353612988546, guid: edb7eb91ba0d2e842b1982ee35ffd0ae,
+    type: 3}
+  keyDoor: {fileID: 7991227353612988546, guid: d1f47c6aab1d5f9419dab868d1e0b77b, type: 3}
+  triggerDoor: {fileID: 7991227353612988546, guid: 7f3f9ab40edc8364da09717ca3c48d18,
+    type: 3}
+  storage:
+  - {fileID: 7991227353612988546, guid: c9f9bf2a8236fba4cbd82a0c0cf9610a, type: 3}
+  - {fileID: 7991227353612988546, guid: 7a99bdff91c8cf04fbda6a59f2a23abe, type: 3}
 --- !u!114 &5498348103610966037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,7 +122,7 @@ MonoBehaviour:
   defaultMoves: 3
   defaultStrength: 1
   defaultMoveTime: 0.2
-  defaultActionDelay: 0.5
+  defaultActionDelay: 0.7
   characters: []
   activeCharacterIndex: 0
   activeCharacter: {fileID: 0}

@@ -16,11 +16,13 @@ public class Player : Character
     public Text healthText;
     public bool gettingMove;
     public bool gettingTarget;
+    public bool looting;
 
     public GameObject tileIndicator;
     public List<GameObject> indicators;
     private CanvasGroup actionMenu;
     private Dictionary<String, GameObject> actionButtons;
+    private GameObject backButton;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -28,6 +30,7 @@ public class Player : Character
         base.Start();
         gettingMove = false;
         gettingTarget = false;
+        looting = false;
 
         rationaleText = GameObject.Find("RationaleText").GetComponent<Text>();
         rationaleText.text = "Rationale: " + rationale;
@@ -39,13 +42,22 @@ public class Player : Character
         actionButtons.Add("Attack", GameObject.Find("AttackButton"));
         actionButtons.Add("Talk", GameObject.Find("TalkButton"));
         actionButtons.Add("Heal", GameObject.Find("HealButton"));
+        actionButtons.Add("Door", GameObject.Find("DoorButton"));
+        actionButtons.Add("Unlock", GameObject.Find("UnlockButton"));
+        actionButtons.Add("Lever", GameObject.Find("LeverButton"));
+        actionButtons.Add("Loot", GameObject.Find("LootButton"));
         actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
 
         inventoryUI = GameObject.Find("InventoryParent");
+        inventoryUI.transform.position = new Vector2(Screen.width / 2, Screen.height / 4);
         itemsParent = GameObject.Find("Inventory").GetComponent<Transform>();
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();
         HideInventory();
+
+        backButton = GameObject.Find("BackButton");
+        backButton.transform.position = new Vector2(Screen.width*0.7f, Screen.height*0.1f);
+        HideBackButton();
     }
 
     // Update is called once per frame
@@ -69,21 +81,20 @@ public class Player : Character
         }
     }
 
-    public override IEnumerator StartTurn()
+    protected override IEnumerator NextStep()
     {
-        isTurn = true;
-        UpdateObjectives();
-        GetPaths();
-        yield return new WaitForSeconds(moveTime);
-        FindPath();
-    }
-
-    protected IEnumerator SelectedPath()
-    {
-        yield return StartCoroutine(FollowPath());
-        GetAvailableTargets();
-        GetAvailableActions();
-        SelectAction();
+        yield return new WaitForSeconds(actionDelay);
+        GameManager.instance.CameraTarget(this.gameObject);
+        //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
+        if (actionsLeft <= 0 && movesLeft <= 0)
+            StartCoroutine(EndTurn());
+        else
+        {
+            UpdateObjectives();
+            GetPaths();
+            yield return new WaitForSeconds(moveTime);
+            FindPath();
+        }
     }
 
     protected override void UpdateObjectives()
@@ -91,11 +102,70 @@ public class Player : Character
         currentObjective = new Objective(null, null);
     }
 
+    protected void GetPaths()
+    {
+        paths.Clear();
+        GetPaths(transform.position, new Vector2[0], movesLeft);
+    }
+
+    protected void GetPaths(Vector2 next, Vector2[] path, int remainingMoves) //update with better alg/queue?
+    {
+        if (Array.Exists(path, element => element == next)) { return; }
+        Vector2 previous = ((path.Length == 0) ? (Vector2)transform.position : path[path.Length - 1]);
+        boxCollider.enabled = false;
+        RaycastHit2D[] hits = Physics2D.LinecastAll(previous, next, Collisions);
+        boxCollider.enabled = true;
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.transform != null)
+            {
+                Door door = hit.collider.GetComponent<Door>();
+                if (door == null || !door.IsOpen())
+                    return;
+            }
+        }
+
+        Vector2[] newPath = new Vector2[path.Length + 1];
+        Array.Copy(path, newPath, path.Length);
+        newPath[newPath.Length - 1] = next;
+        if (!paths.ContainsKey(next)) { paths.Add(next, newPath); }
+        else
+        {
+            paths.TryGetValue(next, out path);
+            if (newPath.Length < path.Length)
+            {
+                paths.Remove(next);
+                paths.Add(next, newPath);
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        remainingMoves--;
+        if (remainingMoves >= 0)
+        {
+            GetPaths(next + new Vector2(1, 0), newPath, remainingMoves);
+            GetPaths(next + new Vector2(-1, 0), newPath, remainingMoves);
+            GetPaths(next + new Vector2(0, 1), newPath, remainingMoves);
+            GetPaths(next + new Vector2(0, -1), newPath, remainingMoves);
+        }
+    }
+
     protected override void FindPath()
     {
-        ShowPaths();
-        gettingMove = true;
-        Debug.Log("Player waiting for move input");
+        if (paths.Count == 1)
+        {
+            paths.TryGetValue(transform.position, out pathToObjective);
+            StartCoroutine(SelectedPath());
+        }
+        else
+        {
+            ShowPaths();
+            gettingMove = true;
+            Debug.Log("Player waiting for move input");
+        }
     }
 
     private bool GetMoveInput()
@@ -119,6 +189,22 @@ public class Player : Character
         }
 
         return true;
+    }
+
+    protected IEnumerator SelectedPath()
+    {
+        if (pathToObjective.Length > 1)
+        {
+            yield return StartCoroutine(FollowPath());
+            StartCoroutine(NextStep());
+        }
+        else
+        {
+            GetAvailableTargets();
+            GetAvailableActions();
+            SelectAction();
+            //ShowBackButton();
+        }
     }
 
     protected void SelectAction()
@@ -148,17 +234,9 @@ public class Player : Character
 
     private List<InteractableObject> GetObjects()
     {
-        switch (currentObjective.action)
-        {
-            case "Attack":
-                return attackableObjects;
-            case "Heal":
-                return healableObjects;
-            case "Talk":
-                return talkableObjects;
-            default:
-                throw new Exception("Unknown objective");
-        }
+        List<InteractableObject> objects;
+        actableObjects.TryGetValue(currentObjective.action, out objects);
+        return objects;
     }
 
     private bool GetTargetInput()
@@ -175,6 +253,7 @@ public class Player : Character
                 if (Input.GetMouseButtonDown(0))
                 {
                     currentObjective.target = o;
+                    GameManager.instance.CameraTarget(o.gameObject);
                     HideIndicators();
                     return false;
                 }
@@ -197,15 +276,32 @@ public class Player : Character
     protected override void SelectItem(String type)
     {
         ShowInventory(type, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
-        inventoryUI.SetActive(true);
         Debug.Log("Player waiting for item input");
     }
 
     public override void ChooseItem(HoldableObject item)
     {
+        if (looting)
+        {
+            Pickup(item);
+            Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
+            storage.Remove(item);
+            ShowInventory("", 0, storage.items);
+            return;
+        }
+
         HideInventory();
         base.ChooseItem(item);
-        StartCoroutine(EndTurn());
+    }
+
+    protected override void Loot(InteractableObject toLoot)
+    {
+        looting = true;
+        GameManager.instance.CameraTarget(toLoot.gameObject);
+        Storage storage = toLoot.gameObject.GetComponent<Storage>();
+        storage.Open();
+        ShowInventory("", 0, storage.items);
+        ShowBackButton();
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)
@@ -241,7 +337,7 @@ public class Player : Character
         CheckIfGameOver();
     }
 
-    public override void Heal (int amount)
+    public override void Heal (double amount)
     {
         base.Heal(amount);
         healthText.text = "Health: " + health;
@@ -249,18 +345,20 @@ public class Player : Character
 
     private void SetupActionMenu()
     {
+        Vector2 position = new Vector2(Screen.width / 2, Screen.height / 3);
         int index = 0,
             buttonHeight = 30,
             buttonWidth = 160,
             height = (buttonHeight + 10) * actions.Count;
         RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
         panelRectTransform.sizeDelta = new Vector2(buttonWidth + 10, height);
+        panelRectTransform.transform.position = position;
         foreach (string action in actions)
         {
             GameObject button;
             actionButtons.TryGetValue(action, out button);
             button.SetActive(true);
-            button.transform.position = new Vector2(Screen.width / 2, Screen.height / 2 + height / 2 - 5 - (buttonHeight + 10) * index - buttonHeight / 2);
+            button.transform.position = new Vector2(position.x, position.y + height / 2 - 5 - (buttonHeight + 10) * index - buttonHeight / 2);
             index++;
         }
 
@@ -347,10 +445,10 @@ public class Player : Character
         }
     }
 
-    private void ShowInventory(String type, int range = 0)
+    private void ShowInventory(String type, int range = 0, List<HoldableObject> items = null)
     {
-        List<HoldableObject> items;
-        inventory.TryGetValue(type, out items);
+        if (items == null)
+            inventory.TryGetValue(type, out items);
         int j = 0;
         for (int i = 0; i < items.Count; i++)
         {
@@ -365,10 +463,36 @@ public class Player : Character
             slots[j].ClearSlot();
             j++;
         }
+
+        inventoryUI.SetActive(true);
     }
 
     private void HideInventory()
     {
         inventoryUI.SetActive(false);
+    }
+
+    public void Back()
+    {
+        if (looting)
+        {
+            looting = false;
+            Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
+            storage.Close();
+            HideInventory();
+            HideBackButton();
+            StartCoroutine(NextStep());
+            return;
+        }
+    }
+
+    private void ShowBackButton()
+    {
+        backButton.SetActive(true);
+    }
+
+    private void HideBackButton()
+    {
+        backButton.SetActive(false);
     }
 }

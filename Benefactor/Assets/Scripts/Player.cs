@@ -471,6 +471,7 @@ public class Player : Character
         }
 
         inventoryUI.SetActive(true);
+        ShowBackButton();
     }
 
     private void HideInventory()

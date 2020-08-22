@@ -15,7 +15,9 @@ public class Player : Character
     public Text rationaleText;
     public Text healthText;
     public bool gettingMove;
+    public bool gettingAction;
     public bool gettingTarget;
+    public bool gettingItem;
     public bool looting;
 
     public GameObject tileIndicator;
@@ -56,7 +58,7 @@ public class Player : Character
         HideInventory();
 
         backButton = GameObject.Find("BackButton");
-        backButton.transform.position = new Vector2(Screen.width*0.7f, Screen.height*0.1f);
+        backButton.transform.position = new Vector2(Screen.width*0.9f, Screen.height*0.1f);
         HideBackButton();
     }
 
@@ -86,15 +88,15 @@ public class Player : Character
         yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
-        if (actionsLeft <= 0 && movesLeft <= 0)
-            StartCoroutine(EndTurn());
+        if (initialMoves == movesLeft && initialActions == actionsLeft && initialPos == (Vector2)transform.position)
+            HideBackButton();
         else
-        {
-            UpdateObjectives();
-            GetPaths();
-            yield return new WaitForSeconds(moveTime);
-            FindPath();
-        }
+            ShowBackButton();
+
+        UpdateObjectives();
+        GetPaths();
+        yield return new WaitForSeconds(moveTime);
+        FindPath();
     }
 
     protected override void UpdateObjectives()
@@ -203,22 +205,25 @@ public class Player : Character
             GetAvailableTargets();
             GetAvailableActions();
             SelectAction();
-            //ShowBackButton();
         }
     }
 
     protected void SelectAction()
     {
-        if (actions.Count > 1)
-            SetupActionMenu();
+        if (actions.Count <= 1 && initialActions == 0 && initialMoves == 0)
+            StartCoroutine(EndTurn());
         else
-            GetActionInput(actions.ElementAt(0));
+        {
+            SetupActionMenu();
+            gettingAction = true;
+        }
     }
 
     protected void GetActionInput(string action)
     {
         HideActionMenu();
         currentObjective.action = action;
+        gettingAction = false;
         if (currentObjective.action != "Wait")
             SelectTarget();
         else
@@ -276,6 +281,7 @@ public class Player : Character
     protected override void SelectItem(String type)
     {
         ShowInventory(type, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
+        gettingItem = true;
         Debug.Log("Player waiting for item input");
     }
 
@@ -289,7 +295,8 @@ public class Player : Character
             ShowInventory("", 0, storage.items);
             return;
         }
-
+        
+        gettingItem = false;
         HideInventory();
         base.ChooseItem(item);
     }
@@ -301,7 +308,6 @@ public class Player : Character
         Storage storage = toLoot.gameObject.GetComponent<Storage>();
         storage.Open();
         ShowInventory("", 0, storage.items);
-        ShowBackButton();
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)
@@ -484,9 +490,39 @@ public class Player : Character
             StartCoroutine(NextStep());
             return;
         }
+        
+        if (gettingMove)
+        {
+            HideIndicators();
+            gettingMove = false;
+        }
+        else if (gettingAction)
+        {
+            HideActionMenu();
+            gettingAction = false;
+        }
+        else if (gettingTarget)
+        {
+            HideIndicators();
+            gettingTarget = false;
+        }
+        else if (gettingItem)
+        {
+            HideInventory();
+            gettingItem = false;
+        }
+
+        transform.position = initialPos;
+        StartTurn(initialMoves, initialActions);
     }
 
-    private void ShowBackButton()
+    protected override IEnumerator EndTurn()
+    {
+        HideBackButton();
+        yield return StartCoroutine(base.EndTurn());
+    }
+
+        private void ShowBackButton()
     {
         backButton.SetActive(true);
     }

@@ -45,6 +45,9 @@ public class Character : InteractableObject
     protected bool destructive; //will destroy objects in path
     protected int movesLeft;
     protected int actionsLeft;
+    protected Vector2 initialPos;
+    protected int initialMoves;
+    protected int initialActions;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -70,11 +73,14 @@ public class Character : InteractableObject
         base.Start();
     }
 
-    public virtual void StartTurn()
+    public virtual void StartTurn(int moves = -1, int actions = -1)
     {
         isTurn = true;
-        movesLeft = totalMoves;
-        actionsLeft = totalActions;
+        initialMoves = (moves == -1) ? totalMoves : moves;
+        initialActions = (actions == -1) ? totalActions : actions;
+        initialPos = (Vector2)transform.position;
+        movesLeft = initialMoves;
+        actionsLeft = initialActions;
         StartCoroutine(NextStep());
     }
 
@@ -83,29 +89,30 @@ public class Character : InteractableObject
         yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
-        if (actionsLeft <= 0 && movesLeft <= 0)
-            StartCoroutine(EndTurn());
+        UpdateObjectives();
+        FindPath();
+        yield return new WaitForSeconds(moveTime);
+        if (pathToObjective.Length > 1)
+        {
+            yield return StartCoroutine(FollowPath());
+            StartCoroutine(NextStep());
+        }
         else
         {
-            UpdateObjectives();
-            FindPath();
-            yield return new WaitForSeconds(moveTime);
-            if (pathToObjective.Length > 1)
-            {
-                yield return StartCoroutine(FollowPath());
-                StartCoroutine(NextStep());
-            }
-            else
-            {
-                GetAvailableTargets();
-                GetAvailableActions();
-                Act();
-            }
-        }
+            GetAvailableTargets();
+            GetAvailableActions();
+            Act();
+         }
     }
 
     protected virtual void UpdateObjectives()
     {
+        if (actionsLeft <= 0 && movesLeft <= 0)
+        {
+            if (currentObjective != null && currentObjective.action != "Wait")
+                objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
+            currentObjective = new Objective(this, "Wait");
+        }
         if (IsDamaged() && inventory.ContainsKey("Medicine") && !objectives.Contains(new Objective(this, "Heal")))
             objectives.Prepend(new Objective(this, "Heal"));
         else if (!objectives.Contains(new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack")))
@@ -283,12 +290,12 @@ public class Character : InteractableObject
             case "Talk":
                 if (objects != null && objects.Contains(currentObjective.target))
                     TalkTo(currentObjective.target);
-                StartCoroutine(NextStep());
+                StartTurn(movesLeft, actionsLeft);
                 break;
             case "Door":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
-                StartCoroutine(NextStep());
+                StartTurn(movesLeft, actionsLeft);
                 break;
             case "Unlock":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -299,7 +306,7 @@ public class Character : InteractableObject
             case "Lever":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
-                StartCoroutine(NextStep());
+                StartTurn(movesLeft, actionsLeft);
                 break;
             case "Loot":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -331,11 +338,11 @@ public class Character : InteractableObject
         {
             case "Weapon":
                 Attack(currentObjective.target, item);
-                StartCoroutine(NextStep());
+                StartTurn(movesLeft, actionsLeft);
                 break;
             case "Medicine":
                 Heal(currentObjective.target, item);
-                StartCoroutine(NextStep());
+                StartTurn(movesLeft, actionsLeft);
                 break;
             case "Key":
                 Unlock(currentObjective.target, item);
@@ -367,7 +374,7 @@ public class Character : InteractableObject
         if (door != null)
         {
             door.Unlock();
-            StartCoroutine(NextStep());
+            StartTurn(movesLeft, actionsLeft);
         }
         else
         {
@@ -394,10 +401,10 @@ public class Character : InteractableObject
 
         storage.Close();
 
-        StartCoroutine(NextStep());
+        StartTurn(movesLeft, actionsLeft);
     }
 
-    protected IEnumerator EndTurn()
+    protected virtual IEnumerator EndTurn()
     {
         //yield return new WaitForSeconds(actionDelay);
         yield return new WaitForSeconds(0f);
@@ -427,6 +434,10 @@ public class Character : InteractableObject
         }
         if (!start)
             toPickup.gameObject.SetActive(false);
+
+        initialPos = (Vector2)transform.position; //TEMP? so you can't grab item then reset turn
+        initialMoves = movesLeft;
+        initialActions = actionsLeft;
     }
 
     protected void Remove(HoldableObject item)

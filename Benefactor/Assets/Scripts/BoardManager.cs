@@ -35,6 +35,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] enemyTiles;
     public GameObject[] outerWallTiles;
     public GameObject[] houseWallTiles;
+    public GameObject[] roofTiles;
     public GameObject basicDoor;
     public GameObject keyDoor;
     public GameObject triggerDoor;
@@ -43,6 +44,7 @@ public class BoardManager : MonoBehaviour
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
     private List<List<Node>> Grid;
+    private List<List<Roof>> Roofs;
 
     void InitializeList()
     {
@@ -86,6 +88,8 @@ public class BoardManager : MonoBehaviour
                 instance.transform.SetParent(boardHolder);
             }
         }
+
+        Roofs = new List<List<Roof>>();
     }
 
     Vector3 RandomPosition()
@@ -135,6 +139,7 @@ public class BoardManager : MonoBehaviour
             int width = Random.Range(houseWallLength.minimum, houseWallLength.maximum);
             int door = Random.Range(1, width - 1);
             Vector3 randomPosition = RandomHousePosition(length, width, door);
+            Roofs.Add(new List<Roof>());
 
             for (int x = 0; x <= width; x++)
             {
@@ -165,10 +170,18 @@ public class BoardManager : MonoBehaviour
                             tileChoice = houseWallTiles[Random.Range(0, houseWallTiles.Length)];
                         Instantiate(tileChoice, position, Quaternion.identity);
                     }
-                    else if (Random.Range(1, (width-1)*(length-1)) == 1 && ((y != 1 && (x == 1 || x == width - 1)) || (y == 1 && x != door) || y == length - 1))
+                    else
                     {
-                        tileChoice = storage[Random.Range(0, storage.Length)];
-                        Instantiate(tileChoice, position, Quaternion.identity);
+                        if (Random.Range(1, (width - 1) * (length - 1)) == 1 && ((y != 1 && (x == 1 || x == width - 1)) || (y == 1 && x != door) || y == length - 1))
+                        {
+                            tileChoice = storage[Random.Range(0, storage.Length)];
+                            Instantiate(tileChoice, position, Quaternion.identity);
+                        }
+                        tileChoice = roofTiles[Random.Range(0, roofTiles.Length)];
+                        GameObject roofObject = Instantiate(tileChoice, position, Quaternion.identity);
+                        Roof roof = roofObject.GetComponent<Roof>();
+                        roof.setRoofIndex(i);
+                        Roofs[i].Add(roof);
                     }
                 }
             }
@@ -189,5 +202,10 @@ public class BoardManager : MonoBehaviour
         //Instantiate(player, new Vector3(0, 0, 0f), Quaternion.identity);
 
         return Grid;
+    }
+
+    public List<List<Roof>> GetRoofs()
+    {
+        return Roofs;
     }
 }

@@ -8,6 +8,7 @@ using AStarSharp;
 public class GameManager : MonoBehaviour
 {
     public List<List<Node>> Grid;
+    public List<List<Roof>> Roofs;
 
     public int level = 0;
     public float levelStartDelay = 2f;
@@ -66,6 +67,7 @@ public class GameManager : MonoBehaviour
 
         characters.Clear();
         Grid = boardScript.SetupScene(level);
+        Roofs = boardScript.GetRoofs();
         round = 0;
         activeCharacterIndex = -1;
     }

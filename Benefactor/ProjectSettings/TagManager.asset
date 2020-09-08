@@ -8,6 +8,7 @@ TagManager:
   - Exit
   - Food
   - Soda
+  - Roof
   layers:
   - Default
   - TransparentFX
@@ -53,4 +54,10 @@ TagManager:
     locked: 0
   - name: Units
     uniqueID: 3104831761
+    locked: 0
+  - name: Roof
+    uniqueID: 2007457449
+    locked: 0
+  - name: UI
+    uniqueID: 1370879151
     locked: 0

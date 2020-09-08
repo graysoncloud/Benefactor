@@ -121,8 +121,9 @@ public class Player : Character
         {
             if (hit.transform != null)
             {
+                Roof roof = hit.collider.GetComponent<Roof>();
                 Door door = hit.collider.GetComponent<Door>();
-                if (door == null || !door.IsOpen())
+                if (roof == null && (door == null || !door.IsOpen()))
                     return;
             }
         }

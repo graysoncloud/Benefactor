@@ -83,6 +83,7 @@ MonoBehaviour:
   - {fileID: 8913211509250880351, guid: b67a25e2dbb90a64ba4959583c7d4227, type: 3}
   - {fileID: 6156389141310141637, guid: d7223e9ce65c5ff40a98ff9432da0fcf, type: 3}
   - {fileID: 6156389141310141637, guid: 3c8bc909cfcf86140a11ded9170ebd02, type: 3}
+  - {fileID: 7991227353612988546, guid: a5fdddaf6ee309f459778da6eb66886f, type: 3}
   enemyTiles:
   - {fileID: 5495209542717074604, guid: 95434a6419c3c8540b8a58911e28f596, type: 3}
   - {fileID: 8178759162555290993, guid: 70d91124e870e344f89f261e24c1ac92, type: 3}

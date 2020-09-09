@@ -10,11 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 7732909630141236205}
   - component: {fileID: 4260946265005922778}
-  - component: {fileID: 3250592248702125131}
-  - component: {fileID: 6590007514430339704}
+  - component: {fileID: 5543379740335496648}
+  - component: {fileID: 5393083452000282008}
+  - component: {fileID: -8898801123736280384}
+  - component: {fileID: 3241137450749891006}
   m_Layer: 8
-  m_Name: Dresser_Locked
-  m_TagString: Object
+  m_Name: Fire
+  m_TagString: Fire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72,8 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 1183741245
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3225609990979796967, guid: 870d6de28cdd37f4ab616a9bbaebdd3a,
-    type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -81,10 +82,10 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &3250592248702125131
+--- !u!61 &5543379740335496648
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,9 +109,28 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
---- !u!114 &6590007514430339704
+--- !u!95 &5393083452000282008
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7991227353612988546}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7110b539e07ee0b41a50039a76b53ad6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-8898801123736280384
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,26 +139,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 7991227353612988546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2970312397af6a849b12db0cac210ad5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c70283dcdef26c459c8e1ad27e3138f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Collisions:
-    serializedVersion: 2
-    m_Bits: 0
-  maxHealth: 1
-  damageable: 0
-  repairable: 0
-  leavesCorpse: 0
-  damagedSprite: {fileID: 0}
-  corpseSprite: {fileID: 0}
-  reputation: 50
-  locked: 1
-  takesKey: 1
-  items:
-  - {fileID: -5498856414594888391, guid: b67a25e2dbb90a64ba4959583c7d4227, type: 3}
-  - {fileID: 2648351601887277121, guid: d7223e9ce65c5ff40a98ff9432da0fcf, type: 3}
-  - {fileID: -5498856414594888391, guid: ae876cd8e3a9f8c4c9af44a00acef1e0, type: 3}
-  openSprite: {fileID: -1181550467939379832, guid: 870d6de28cdd37f4ab616a9bbaebdd3a,
-    type: 3}
-  closedSprite: {fileID: 8383790795072261988, guid: 870d6de28cdd37f4ab616a9bbaebdd3a,
-    type: 3}
+--- !u!50 &3241137450749891006
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7991227353612988546}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

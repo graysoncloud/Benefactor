@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -5498856414594888391}
   m_Layer: 0
   m_Name: Knife
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,9 +99,9 @@ BoxCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 0, y: 0.09375, z: 0, w: 0.1875}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.0625, y: 0.21875}
+    oldSize: {x: 1.0625, y: 0.5}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

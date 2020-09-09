@@ -81,6 +81,7 @@ public class Character : InteractableObject
         initialPos = (Vector2)transform.position;
         movesLeft = initialMoves;
         actionsLeft = initialActions;
+        CheckFire();
         StartCoroutine(NextStep());
     }
 
@@ -168,6 +169,7 @@ public class Character : InteractableObject
         foreach (Vector2 coords in pathToObjective)
         {
             yield return StartCoroutine(SmoothMovement(coords));
+            CheckFire();
         }
         UpdatePosition();
         movesLeft -= pathToObjective.Length - 1;
@@ -491,6 +493,15 @@ public class Character : InteractableObject
             receiveActions.Add("Talk");
 
         return receiveActions;
+    }
+
+    protected void CheckFire()
+    {
+        boxCollider.enabled = false;
+        Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, 0.5f);
+        boxCollider.enabled = true;
+        if (hitCollider != null && hitCollider.gameObject.tag == "Fire")
+            TakeDamage(1);
     }
 
     protected IEnumerator postActionDelay()

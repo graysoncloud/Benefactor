@@ -6,9 +6,14 @@ TagManager:
   tags:
   - Enemy
   - Exit
-  - Food
-  - Soda
   - Roof
+  - Door
+  - Medicine
+  - Object
+  - Fire
+  - Item
+  - Undefined
+  - Weapon
   layers:
   - Default
   - TransparentFX

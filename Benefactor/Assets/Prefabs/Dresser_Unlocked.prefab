@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6590007514430339704}
   m_Layer: 8
   m_Name: Dresser_Unlocked
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3241137450749891006}
   m_Layer: 8
   m_Name: Fire
-  m_TagString: Fire
+  m_TagString: Damaging
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9, y: 0.9}
+  m_Size: {x: 0.1, y: 0.1}
   m_EdgeRadius: 0
 --- !u!95 &5393083452000282008
 Animator:

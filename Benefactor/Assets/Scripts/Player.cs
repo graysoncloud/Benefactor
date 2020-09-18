@@ -87,8 +87,8 @@ public class Player : Character
     {
         yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
-        //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
-        if (initialMoves == movesLeft && initialActions == actionsLeft && initialPos == (Vector2)transform.position)
+        Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
+        if (lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
             HideBackButton();
         else
             ShowBackButton();
@@ -121,7 +121,7 @@ public class Player : Character
         {
             if (hit.transform != null)
             {
-                if (hit.transform.gameObject.tag != "Roof" && hit.transform.gameObject.tag != "Fire" && (hit.transform.gameObject.tag != "Door" || !hit.transform.gameObject.GetComponent<Door>().IsOpen()))
+                if (hit.transform.gameObject.tag != "Roof" && hit.transform.gameObject.tag != "Damaging" && (hit.transform.gameObject.tag != "Door" || !hit.transform.gameObject.GetComponent<Door>().IsOpen()))
                     return;
             }
         }
@@ -196,6 +196,7 @@ public class Player : Character
     {
         if (pathToObjective.Length > 1)
         {
+            pathToObjective = pathToObjective.Skip(1).ToArray();
             yield return StartCoroutine(FollowPath());
             StartCoroutine(NextStep());
         }
@@ -209,7 +210,7 @@ public class Player : Character
 
     protected void SelectAction()
     {
-        if (actions.Count <= 1 && initialActions == 0 && initialMoves == 0)
+        if (actions.Count <= 1 && lastState.actions == 0 && lastState.moves == 0)
             StartCoroutine(EndTurn());
         else
         {
@@ -337,7 +338,7 @@ public class Player : Character
     public override void TakeDamage (double loss)
     {
         base.TakeDamage(loss);
-        healthText.text = "Health: " + health;
+        UpdateHealth();
         animator.SetTrigger("playerHit");
         CheckIfGameOver();
     }
@@ -345,6 +346,11 @@ public class Player : Character
     public override void Heal (double amount)
     {
         base.Heal(amount);
+        UpdateHealth();
+    }
+
+    private void UpdateHealth()
+    {
         healthText.text = "Health: " + health;
     }
 
@@ -512,8 +518,12 @@ public class Player : Character
             gettingItem = false;
         }
 
-        transform.position = initialPos;
-        StartTurn(initialMoves, initialActions);
+        health = lastState.health;
+        UpdateHealth();
+        movesLeft = lastState.moves;
+        actionsLeft = lastState.actions;
+        transform.position = lastState.position;
+        StartCoroutine(NextStep());
     }
 
     protected override IEnumerator EndTurn()

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fire : MonoBehaviour
+public class Damaging : MonoBehaviour
 {
     protected BoxCollider2D boxCollider;
 

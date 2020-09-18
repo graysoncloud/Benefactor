@@ -20,6 +20,22 @@ public class Character : InteractableObject
         }
     }
 
+    public class State
+    {
+        public double health;
+        public int moves;
+        public int actions;
+        public Vector2 position;
+
+        public State(double health, int moves, int actions, Vector2 position)
+        {
+            this.health = health;
+            this.moves = moves;
+            this.actions = actions;
+            this.position = position;
+        }
+    }
+
     public float moveTime;
     public int totalMoves;
     public int totalActions;
@@ -45,9 +61,7 @@ public class Character : InteractableObject
     protected bool destructive; //will destroy objects in path
     protected int movesLeft;
     protected int actionsLeft;
-    protected Vector2 initialPos;
-    protected int initialMoves;
-    protected int initialActions;
+    protected State lastState;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -73,15 +87,13 @@ public class Character : InteractableObject
         base.Start();
     }
 
-    public virtual void StartTurn(int moves = -1, int actions = -1)
+    public virtual void StartTurn()
     {
         isTurn = true;
-        initialMoves = (moves == -1) ? totalMoves : moves;
-        initialActions = (actions == -1) ? totalActions : actions;
-        initialPos = (Vector2)transform.position;
-        movesLeft = initialMoves;
-        actionsLeft = initialActions;
-        CheckFire();
+        movesLeft = totalMoves;
+        actionsLeft = totalActions;
+        CheckDamage();
+        UpdateState();
         StartCoroutine(NextStep());
     }
 
@@ -89,7 +101,7 @@ public class Character : InteractableObject
     {
         yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
-        //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
+        Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
         UpdateObjectives();
         FindPath();
         yield return new WaitForSeconds(moveTime);
@@ -141,6 +153,7 @@ public class Character : InteractableObject
         Stack<Node> path = astar.FindPath(transform.position, currentObjective.target.transform.position, destructive);
         int space = 1; //temporarily until adjust for targets you can stand on (interactable  vs holdable)
         pathToObjective = new Vector2[Math.Min(movesLeft, path.Count - space)];
+        if (pathToObjective.Length == 0) { return;  }
         int i = 0;
         foreach (Node node in path)
         {
@@ -169,10 +182,10 @@ public class Character : InteractableObject
         foreach (Vector2 coords in pathToObjective)
         {
             yield return StartCoroutine(SmoothMovement(coords));
-            CheckFire();
+            CheckDamage();
         }
         UpdatePosition();
-        movesLeft -= pathToObjective.Length - 1;
+        movesLeft -= pathToObjective.Length; //no "- 1" at end
         isMoving = false;
     }
 
@@ -271,9 +284,10 @@ public class Character : InteractableObject
 
     virtual protected void Act()
     {
+        actionsLeft--;
+        UpdateState();
         List<InteractableObject> objects;
         actableObjects.TryGetValue(currentObjective.action, out objects);
-        actionsLeft--;
 
         switch (currentObjective.action)
         {
@@ -292,12 +306,12 @@ public class Character : InteractableObject
             case "Talk":
                 if (objects != null && objects.Contains(currentObjective.target))
                     TalkTo(currentObjective.target);
-                StartTurn(movesLeft, actionsLeft);
+                StartCoroutine(NextStep());
                 break;
             case "Door":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
-                StartTurn(movesLeft, actionsLeft);
+                StartCoroutine(NextStep());
                 break;
             case "Unlock":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -308,7 +322,7 @@ public class Character : InteractableObject
             case "Lever":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
-                StartTurn(movesLeft, actionsLeft);
+                StartCoroutine(NextStep());
                 break;
             case "Loot":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -340,11 +354,11 @@ public class Character : InteractableObject
         {
             case "Weapon":
                 Attack(currentObjective.target, item);
-                StartTurn(movesLeft, actionsLeft);
+                StartCoroutine(NextStep());
                 break;
             case "Medicine":
                 Heal(currentObjective.target, item);
-                StartTurn(movesLeft, actionsLeft);
+                StartCoroutine(NextStep());
                 break;
             case "Key":
                 Unlock(currentObjective.target, item);
@@ -376,7 +390,7 @@ public class Character : InteractableObject
         if (door != null)
         {
             door.Unlock();
-            StartTurn(movesLeft, actionsLeft);
+            StartCoroutine(NextStep());
         }
         else
         {
@@ -403,7 +417,7 @@ public class Character : InteractableObject
 
         storage.Close();
 
-        StartTurn(movesLeft, actionsLeft);
+        StartCoroutine(NextStep());
     }
 
     protected virtual IEnumerator EndTurn()
@@ -437,9 +451,7 @@ public class Character : InteractableObject
         if (!start)
             toPickup.gameObject.SetActive(false);
 
-        initialPos = (Vector2)transform.position; //TEMP? so you can't grab item then reset turn
-        initialMoves = movesLeft;
-        initialActions = actionsLeft;
+        UpdateState();
     }
 
     protected void Remove(HoldableObject item)
@@ -495,13 +507,18 @@ public class Character : InteractableObject
         return receiveActions;
     }
 
-    protected void CheckFire()
+    protected void CheckDamage()
     {
         boxCollider.enabled = false;
-        Collider2D hitCollider = Physics2D.OverlapCircle(transform.position, 0.5f);
+        Collider2D hitCollider = Physics2D.OverlapCircle((Vector2)transform.position, 0.1f);
         boxCollider.enabled = true;
-        if (hitCollider != null && hitCollider.gameObject.tag == "Fire")
+        if (hitCollider != null && hitCollider.gameObject.tag == "Damaging")
             TakeDamage(1);
+    }
+
+    protected void UpdateState()
+    {
+        lastState = new State(health, movesLeft, actionsLeft, (Vector2)transform.position);
     }
 
     protected IEnumerator postActionDelay()

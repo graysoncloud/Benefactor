@@ -87,7 +87,7 @@ public class Player : Character
     {
         yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
-        Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
+        //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
         if (lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
             HideBackButton();
         else

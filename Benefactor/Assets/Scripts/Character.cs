@@ -63,6 +63,9 @@ public class Character : InteractableObject
     protected int actionsLeft;
     protected State lastState;
 
+    private Objective attackPlayer;
+    private Objective healSelf;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -77,6 +80,9 @@ public class Character : InteractableObject
         actableObjects = new Dictionary<String, List<InteractableObject>>();
         actions = new SortedSet<String>();
         inventory = new Dictionary<String, List<HoldableObject>>();
+        attackPlayer = new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack");
+        healSelf = new Objective(this, "Heal");
+
         foreach (HoldableObject item in startingItems)
         {
             Pickup(Instantiate(item));
@@ -101,8 +107,9 @@ public class Character : InteractableObject
     {
         yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
-        Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
+        //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
         UpdateObjectives();
+        LogObjectives();
         FindPath();
         yield return new WaitForSeconds(moveTime);
         if (pathToObjective.Length > 1)
@@ -118,6 +125,16 @@ public class Character : InteractableObject
          }
     }
 
+    protected void LogObjectives()
+    {
+        String actions = "Objectives: ";
+        foreach (Objective objective in objectives)
+        {
+            actions += objective.target + ": " + objective.action + ", ";
+        }
+        Debug.Log(actions);
+    }
+
     protected virtual void UpdateObjectives()
     {
         if (actionsLeft <= 0 && movesLeft <= 0)
@@ -126,10 +143,12 @@ public class Character : InteractableObject
                 objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
             currentObjective = new Objective(this, "Wait");
         }
-        if (IsDamaged() && inventory.ContainsKey("Medicine") && !objectives.Contains(new Objective(this, "Heal")))
-            objectives.Prepend(new Objective(this, "Heal"));
-        else if (!objectives.Contains(new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack")))
-            objectives.Add(new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack"));
+
+        if (IsDamaged() && inventory.ContainsKey("Medicine") && !objectives.Contains(healSelf))
+            objectives.Prepend(healSelf);
+        else if (destructive && !objectives.Contains(attackPlayer))
+            objectives.Add(attackPlayer);
+
         if (currentObjective == null)
         {
             currentObjective = objectives[0];
@@ -164,6 +183,7 @@ public class Character : InteractableObject
                 Collider2D hitCollider = Physics2D.OverlapCircle(node.Position, 0.5f);
                 boxCollider.enabled = true;
                 currentObjective = new Objective(hitCollider.GetComponent<InteractableObject>(), "Attack");
+                Debug.Log("Obstacle: " + currentObjective);
                 Array.Resize(ref pathToObjective, i);
                 return;
             }

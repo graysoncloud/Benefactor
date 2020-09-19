@@ -68,13 +68,13 @@ public class DialogueManager : MonoBehaviour
     
     void Update()
     {
-        if (GameManager.instance.dialogueInProgress && conversationType != null)
-            determineInteraction();
+ 
     }
 
-    private void determineInteraction()
+    public void setConversation(string type)
     {
-
+        conversationType = type;
+        Debug.Log(type);
     }
 
     // To be used for non-player instigated dialogue, if need be

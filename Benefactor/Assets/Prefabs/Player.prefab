@@ -174,7 +174,7 @@ MonoBehaviour:
   corpseSprite: {fileID: 0}
   reputation: 50
   moveTime: 0.2
-  totalMoves: 3
+  totalMoves: 10
   totalActions: 1
   actionDelay: 0.5
   strength: 1
@@ -190,7 +190,9 @@ MonoBehaviour:
   rationaleText: {fileID: 0}
   healthText: {fileID: 0}
   gettingMove: 0
+  gettingAction: 0
   gettingTarget: 0
+  gettingItem: 0
   looting: 0
   tileIndicator: {fileID: 6793900256970249569, guid: 73dc820bc82c3724ab6d3f763aac8d46,
     type: 3}

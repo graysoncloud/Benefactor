@@ -112,7 +112,7 @@ public class Character : InteractableObject
         LogObjectives();
         FindPath();
         yield return new WaitForSeconds(moveTime);
-        if (pathToObjective.Length > 1)
+        if (pathToObjective.Length > 0)
         {
             yield return StartCoroutine(FollowPath());
             StartCoroutine(NextStep());
@@ -127,7 +127,8 @@ public class Character : InteractableObject
 
     protected void LogObjectives()
     {
-        String actions = "Objectives: ";
+        Debug.Log("Current Objective: " + currentObjective.target + ": " + currentObjective.action);
+        String actions = "Objectives Queue: ";
         foreach (Objective objective in objectives)
         {
             actions += objective.target + ": " + objective.action + ", ";
@@ -144,9 +145,9 @@ public class Character : InteractableObject
             currentObjective = new Objective(this, "Wait");
         }
 
-        if (IsDamaged() && inventory.ContainsKey("Medicine") && !objectives.Contains(healSelf))
+        if (IsDamaged() && inventory.ContainsKey("Medicine") && currentObjective != healSelf && !objectives.Contains(healSelf))
             objectives.Prepend(healSelf);
-        else if (destructive && !objectives.Contains(attackPlayer))
+        else if (destructive && currentObjective != attackPlayer && !objectives.Contains(attackPlayer))
             objectives.Add(attackPlayer);
 
         if (currentObjective == null)
@@ -172,18 +173,19 @@ public class Character : InteractableObject
         Stack<Node> path = astar.FindPath(transform.position, currentObjective.target.transform.position, destructive);
         int space = 1; //temporarily until adjust for targets you can stand on (interactable  vs holdable)
         pathToObjective = new Vector2[Math.Min(movesLeft, path.Count - space)];
-        if (pathToObjective.Length == 0) { return;  }
+        if (pathToObjective.Length == 0) { return; }
         int i = 0;
         foreach (Node node in path)
         {
-            if (node.Weight > 1)
+            if (node.Weight > 1 || node.Weight == -1) //node.Weight == -1 signifies door
             {
                 objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
                 boxCollider.enabled = false;
                 Collider2D hitCollider = Physics2D.OverlapCircle(node.Position, 0.5f);
                 boxCollider.enabled = true;
-                currentObjective = new Objective(hitCollider.GetComponent<InteractableObject>(), "Attack");
-                Debug.Log("Obstacle: " + currentObjective);
+                InteractableObject newTarget = hitCollider.GetComponent<InteractableObject>();
+                currentObjective = new Objective(newTarget, newTarget.tag == "Door" ? "Door" : "Attack");
+                Debug.Log("Obstacle: " + currentObjective.target + ": " + currentObjective.action);
                 Array.Resize(ref pathToObjective, i);
                 return;
             }
@@ -327,11 +329,13 @@ public class Character : InteractableObject
                 if (objects != null && objects.Contains(currentObjective.target))
                     TalkTo(currentObjective.target);
                 StartCoroutine(NextStep());
+                currentObjective = null;
                 break;
             case "Door":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
                 StartCoroutine(NextStep());
+                currentObjective = null;
                 break;
             case "Unlock":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -343,6 +347,7 @@ public class Character : InteractableObject
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
                 StartCoroutine(NextStep());
+                currentObjective = null;
                 break;
             case "Loot":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -350,6 +355,7 @@ public class Character : InteractableObject
                 break;
             case "Wait":
                 StartCoroutine(EndTurn());
+                currentObjective = null;
                 break;
             default:
                 throw new Exception("Unknown action");
@@ -386,6 +392,7 @@ public class Character : InteractableObject
             default:
                 break;
         }
+        currentObjective = null;
     }
 
     protected virtual void Toggle(InteractableObject toToggle)
@@ -438,6 +445,7 @@ public class Character : InteractableObject
         storage.Close();
 
         StartCoroutine(NextStep());
+        currentObjective = null;
     }
 
     protected virtual IEnumerator EndTurn()

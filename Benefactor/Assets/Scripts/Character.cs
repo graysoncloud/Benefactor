@@ -5,6 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Xml;
+using System.Xml.Serialization;
+using System.IO;
+using System.Xml.Linq;
 
 public class Character : InteractableObject
 {
@@ -22,6 +26,7 @@ public class Character : InteractableObject
 
     public float moveTime;
     public int totalMoves;
+    public int talkingRange;
     public int totalActions;
     public float actionDelay;
     public double strength; //multiplier for range 1 weapon
@@ -214,7 +219,7 @@ public class Character : InteractableObject
             }
         }
 
-        GetObjectsToActOn("Talk", 1);
+        GetObjectsToActOn("Talk", talkingRange);
 
         GetObjectsToActOn("Door", 1);
 
@@ -409,7 +414,13 @@ public class Character : InteractableObject
     protected virtual IEnumerator EndTurn()
     {
         //yield return new WaitForSeconds(actionDelay);
-        yield return new WaitForSeconds(0f);
+
+        // Conditionally doesn't end your turn if there is still dialogue in progress
+        if (GameManager.instance.dialogueInProgress)
+            yield return new WaitUntil(() => GameManager.instance.dialogueInProgress == false);
+        else
+            yield return new WaitForSeconds(0f);
+
         isTurn = false;
         StartCoroutine(GameManager.instance.nextTurn());
     }
@@ -483,7 +494,7 @@ public class Character : InteractableObject
 
     protected void TalkTo(InteractableObject toTalkTo)
     {
-        GameManager.instance.CameraTarget(toTalkTo.gameObject);
+        GameObject.Find("DialogueManager").GetComponent<DialogueManager>().initiateDialogue(this.gameObject, toTalkTo.gameObject);
     }
 
     public override SortedSet<String> GetActions()

@@ -65,6 +65,9 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.instance.dialogueInProgress)
+            return;
+
         if (gettingMove)
         {
             gettingMove = GetMoveInput();
@@ -85,6 +88,10 @@ public class Player : Character
 
     protected override IEnumerator NextStep()
     {
+        // Prevents the rest of the players turn from happening until dialogue is resolved (hopefully)
+        if (GameManager.instance.dialogueInProgress)
+            yield return new WaitUntil(() => GameManager.instance.dialogueInProgress == false);
+
         yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);

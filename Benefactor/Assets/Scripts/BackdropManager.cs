@@ -29,6 +29,7 @@ public class BackdropManager : MonoBehaviour
                 Debug.LogError("Invalid portrait name: " + newBackdropName);
                 break;
         }
+
     }
 
 }

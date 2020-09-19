@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9080466321961566256
 Transform:
   m_ObjectHideFlags: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   icon: {fileID: -8510937033474131500, guid: 67da5321f3ad3144a9b90e2c8caa047f, type: 3}
   type: Weapon
   name: Handgun
-  uses: 13
+  uses: 11
   amount: 1
   range: 3
   blastRadius: 0

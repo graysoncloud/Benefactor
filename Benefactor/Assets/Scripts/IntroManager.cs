@@ -28,7 +28,7 @@ public class IntroManager : MonoBehaviour
     private float postTransitionDelay = .5f;
 
     public bool typingInProgress;
-    private bool fastForwardText;
+    private bool fastForward;
     private bool transitioning;
 
     void Start()
@@ -39,7 +39,7 @@ public class IntroManager : MonoBehaviour
         LoadXML();
         StartCoroutine("AssignData");
         typingInProgress = false;
-        fastForwardText = false;
+        fastForward = false;
 
         GameObject.Find("Cover").GetComponent<Image>().color += new Color(0, 0, 0, 1);
         executeNext();
@@ -88,14 +88,13 @@ public class IntroManager : MonoBehaviour
 
     private void Update()
     {
-        if (transitioning) return;
 
-        if (Input.GetMouseButtonDown(0) && !typingInProgress) 
+        if (Input.GetMouseButtonDown(0) && !typingInProgress && !transitioning) 
         {
             executeNext();
         } else if (Input.GetMouseButtonDown(0))
         {
-            fastForwardText = true;
+            fastForward = true;
         }
     }
 
@@ -145,10 +144,10 @@ public class IntroManager : MonoBehaviour
             if (letter == '.' || letter == '?' || letter == '!')
                 specialCharacterDelay = punctuationDelay;
 
-            if (fastForwardText)
+            if (fastForward)
             {
                 dialogueUI.text = currentDialogue;
-                fastForwardText = false;
+                fastForward = false;
                 typingInProgress = false;
                 yield break;
             }
@@ -163,7 +162,6 @@ public class IntroManager : MonoBehaviour
 
     IEnumerator fadeIn()
     {
-        // TO DO: 
         transitioning = true;
         Image cover = GameObject.Find("Cover").GetComponent<Image>();
 
@@ -175,6 +173,11 @@ public class IntroManager : MonoBehaviour
         while (cover.color.a >= 0)
         {
             cover.color -= new Color(0, 0, 0, alphaIncrementAmount);
+            if (fastForward)
+            {
+                cover.color -= new Color(0, 0, 0, cover.color.a);
+                fastForward = false;
+            }
             yield return new WaitForSeconds(alphaIncrementRate);
         }
 
@@ -198,6 +201,11 @@ public class IntroManager : MonoBehaviour
         while (cover.color.a <= 1)
         {
             cover.color += new Color (0, 0, 0, alphaIncrementAmount);
+            if (fastForward)
+            {
+                cover.color += new Color(0, 0, 0, (1 - cover.color.a));
+                fastForward = false;
+            }
             yield return new WaitForSeconds(alphaIncrementRate);
         }
 

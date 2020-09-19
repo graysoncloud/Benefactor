@@ -11,7 +11,7 @@ public class PortraitManager : MonoBehaviour
     public Sprite RaskolnikovNeutral;
     public Sprite IvanovnaNeutral;
 
-    public void Start()
+    public void Awake()
     {
         ImageComponent = GetComponent<Image>();
     }

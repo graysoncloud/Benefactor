@@ -901,6 +901,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451082f349da19f43a1c1ea08dbe6605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlankPortrait: {fileID: 0}
+  BlankPortrait: {fileID: 21300000, guid: 6c80f7305b9cac444b9bfea080baee29, type: 3}
   RaskolnikovNeutral: {fileID: 21300000, guid: 8304cdde25968a641986bd752e7b1a0c, type: 3}
   IvanovnaNeutral: {fileID: 21300000, guid: 0f86657dc08519e42a0bf7a7df2e597a, type: 3}

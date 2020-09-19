@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     public int activeCharacterIndex;
     public Character activeCharacter;
+    public bool dialogueInProgress;
     public int round;
 
     // Start is called before the first frame update
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         characters = new List<Character>();
         boardScript = GetComponent<BoardManager>();
+        dialogueInProgress = false;
 
     }
 

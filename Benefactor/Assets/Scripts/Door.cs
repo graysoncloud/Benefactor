@@ -30,12 +30,9 @@ public class Door : InteractableObject
 
     void Open()
     {
-        if (open == false)
-        {
-            open = true;
-            ErasePosition();
-            doorSprite.Open();
-        }
+        open = true;
+        ErasePosition();
+        doorSprite.Open();
     }
 
     void Close()
@@ -65,6 +62,11 @@ public class Door : InteractableObject
             receiveActions.Add("Unlock");
 
         return receiveActions;
+    }
+
+    protected override void UpdatePosition()
+    {
+        GameManager.instance.UpdateNode(transform.position, !locked || damageable, -2);
     }
 
     public void SetupTrigger(Vector2 position)

@@ -104,7 +104,7 @@ namespace AStarSharp
                         {
                             n.Parent = current;
                             n.DistanceToTarget = Math.Abs(n.Position.x - end.Position.x) + Math.Abs(n.Position.y - end.Position.y);
-                            n.Cost = n.Weight + n.Parent.Cost;
+                            n.Cost = (n.Weight == -1 ? 2 : n.Weight) + n.Parent.Cost; //-1 signifies a door
                             OpenList.Add(n);
                             OpenList = OpenList.OrderBy(node => node.F).ToList<Node>();
                         }

@@ -10,10 +10,9 @@ TagManager:
   - Door
   - Medicine
   - Object
-  - Fire
-  - Item
-  - Undefined
   - Weapon
+  - Damaging
+  - Key
   layers:
   - Default
   - TransparentFX

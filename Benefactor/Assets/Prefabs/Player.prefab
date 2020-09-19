@@ -174,7 +174,7 @@ MonoBehaviour:
   corpseSprite: {fileID: 0}
   reputation: 50
   moveTime: 0.2
-  totalMoves: 10
+  totalMoves: 3
   totalActions: 1
   actionDelay: 0.5
   strength: 1

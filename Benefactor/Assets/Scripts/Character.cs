@@ -58,13 +58,11 @@ public class Character : InteractableObject
     protected Dictionary<String, List<HoldableObject>> inventory;
     protected int attackRange;
     protected List<InteractableObject> allies;
+    protected List<InteractableObject> enemies;
     protected bool destructive; //will destroy objects in path
     protected int movesLeft;
     protected int actionsLeft;
     protected State lastState;
-
-    private Objective attackPlayer;
-    private Objective healSelf;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -80,8 +78,10 @@ public class Character : InteractableObject
         actableObjects = new Dictionary<String, List<InteractableObject>>();
         actions = new SortedSet<String>();
         inventory = new Dictionary<String, List<HoldableObject>>();
-        attackPlayer = new Objective(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>(), "Attack");
-        healSelf = new Objective(this, "Heal");
+        allies = new List<InteractableObject>();
+        allies.Add(this);
+        enemies = new List<InteractableObject>();
+        enemies.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>()); //temporarily adds Player to enemies as default
 
         foreach (HoldableObject item in startingItems)
         {
@@ -98,7 +98,7 @@ public class Character : InteractableObject
         isTurn = true;
         movesLeft = totalMoves;
         actionsLeft = totalActions;
-        CheckDamage();
+        CheckSpace();
         UpdateState();
         StartCoroutine(NextStep());
     }
@@ -138,17 +138,20 @@ public class Character : InteractableObject
 
     protected virtual void UpdateObjectives()
     {
-        if (actionsLeft <= 0 && movesLeft <= 0)
+        Objective healClosest = new Objective(GetClosest(allies), "Heal");
+        if (healClosest != null && IsDamaged() && inventory.ContainsKey("Medicine") && !HasObjective(healClosest))
+            objectives.Prepend(healClosest);
+
+        Objective attackClosest = new Objective(GetClosest(enemies), "Attack");
+        if (attackClosest != null && destructive && !HasObjective(attackClosest))
+            objectives.Add(attackClosest);
+
+        if ((currentObjective == null && objectives.Count == 0) || (actionsLeft <= 0 && movesLeft <= 0))
         {
             if (currentObjective != null && currentObjective.action != "Wait")
                 objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
             currentObjective = new Objective(this, "Wait");
         }
-
-        if (IsDamaged() && inventory.ContainsKey("Medicine") && currentObjective != healSelf && !objectives.Contains(healSelf))
-            objectives.Prepend(healSelf);
-        else if (destructive && currentObjective != attackPlayer && !objectives.Contains(attackPlayer))
-            objectives.Add(attackPlayer);
 
         if (currentObjective == null)
         {
@@ -157,13 +160,38 @@ public class Character : InteractableObject
         }
     }
 
+    protected virtual bool HasObjective(Objective toCheck)
+    {
+        if (currentObjective != null && currentObjective.target == toCheck.target && currentObjective.action == toCheck.action) { return true; }
+        foreach (Objective objective in objectives)
+            if (objective.target == toCheck.target && objective.action == toCheck.action) { return true; }
+
+        return false;
+    }
+
+    protected virtual InteractableObject GetClosest(List<InteractableObject> objects)
+    {
+        float minDistance = 99999;
+        InteractableObject closest = null;
+
+        foreach (InteractableObject o in objects)
+        {
+            float distance = GetDistance(o);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closest = o;
+            }
+        }
+
+        return closest;
+    }
+
     protected void LogPaths()
     {
         String actions = "Available Moves (" + paths.Count + "): ";
         foreach(KeyValuePair<Vector2, Vector2[]> entry in paths)
-        {
             actions += entry.Key + ", ";
-        }
         Debug.Log(actions);
     }
 
@@ -204,7 +232,7 @@ public class Character : InteractableObject
         foreach (Vector2 coords in pathToObjective)
         {
             yield return StartCoroutine(SmoothMovement(coords));
-            CheckDamage();
+            CheckSpace();
         }
         UpdatePosition();
         movesLeft -= pathToObjective.Length; //no "- 1" at end
@@ -287,7 +315,21 @@ public class Character : InteractableObject
         {
             InteractableObject hitObject = hitCollider.GetComponent<InteractableObject>();
             if (hitObject != null && GetDistance(hitObject) <= range && GetDistance(hitObject) > 0 && hitObject.GetActions().Contains(action))
-                objects.Add(hitObject);
+            {
+                bool safe = true;
+                if (hitObject.tag == "Door") //check if door is empty
+                {
+                    foreach(var hitCollider2 in hitColliders)
+                    {
+                        if (hitCollider != hitCollider2 && (Vector2)hitCollider.transform.position == (Vector2)hitCollider2.transform.position) {
+                            safe = false;
+                            break;
+                        }
+                    }
+                }
+                if (safe)
+                    objects.Add(hitObject);
+            }
         }
 
         if (objects.Count > 0)
@@ -535,7 +577,7 @@ public class Character : InteractableObject
         return receiveActions;
     }
 
-    protected void CheckDamage()
+    protected void CheckSpace()
     {
         boxCollider.enabled = false;
         Collider2D hitCollider = Physics2D.OverlapCircle((Vector2)transform.position, 0.1f);

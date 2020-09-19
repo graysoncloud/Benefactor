@@ -104,7 +104,7 @@ public class InteractableObject : MonoBehaviour
 
     public virtual int GetDistance(InteractableObject o)
     {
-        return (int)Math.Abs(o.transform.position.x - transform.position.x) + (int)Math.Abs(o.transform.position.y - transform.position.y);
+        return (int)(Math.Abs(o.transform.position.x - transform.position.x) + Math.Abs(o.transform.position.y - transform.position.y));
     }
 
     protected virtual void ErasePosition()

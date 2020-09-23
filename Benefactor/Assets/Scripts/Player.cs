@@ -364,19 +364,24 @@ public class Player : Character
     private void SetupActionMenu()
     {
         Vector2 position = new Vector2(Screen.width / 2, Screen.height / 3);
-        int index = 0,
-            buttonHeight = 30,
-            buttonWidth = 160,
-            height = (buttonHeight + 10) * actions.Count;
+        GameObject buttonForScale;
+        actionButtons.TryGetValue("Attack", out buttonForScale);
+        float buttonHeight = buttonForScale.GetComponent<RectTransform>().rect.height,
+            buttonWidth = buttonForScale.GetComponent<RectTransform>().rect.width,
+            spacing = buttonHeight*0.3f,
+            width  = buttonWidth + spacing * 2,
+            height = (buttonHeight + spacing) * actions.Count + spacing;
         RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
-        panelRectTransform.sizeDelta = new Vector2(buttonWidth + 10, height);
+        panelRectTransform.sizeDelta = new Vector2(width, height);
         panelRectTransform.transform.position = position;
+        int index = 0;
         foreach (string action in actions)
         {
             GameObject button;
             actionButtons.TryGetValue(action, out button);
             button.SetActive(true);
-            button.transform.position = new Vector2(position.x, position.y + height / 2 - 5 - (buttonHeight + 10) * index - buttonHeight / 2);
+            button.transform.position = new Vector2(position.x, position.y + height/2 - spacing - buttonHeight/2 - (buttonHeight + spacing) * index);
+            Debug.Log(button.transform.position);
             index++;
         }
 

@@ -93,10 +93,7 @@ namespace AStarSharp
  
                 foreach(Node n in adjacencies)
                 {
-                    if (n.Position != start.Position && n.Position != end.Position && n.Walkable && n.Weight > 1 && !destruction)
-                    {
-                        n.Walkable = false;
-                    }
+                    n.Walkable = (n.Position != start.Position && n.Position != end.Position && n.Walkable && (n.Weight > 1 || n.Weight == -1) && !destruction) ? false : true;
 
                     if (!ClosedList.Contains(n) && n.Walkable)
                     {

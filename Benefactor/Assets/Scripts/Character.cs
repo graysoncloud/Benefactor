@@ -217,7 +217,8 @@ public class Character : InteractableObject
                 Collider2D hitCollider = Physics2D.OverlapCircle(node.Position, 0.5f);
                 boxCollider.enabled = true;
                 InteractableObject newTarget = hitCollider.GetComponent<InteractableObject>();
-                currentObjective = new Objective(newTarget, newTarget.tag == "Door" ? "Door" : "Attack");
+                if (newTarget != null)
+                    currentObjective = new Objective(newTarget, newTarget.tag == "Door" ? "Door" : "Attack");
                 Debug.Log("Obstacle: " + currentObjective.target + ": " + currentObjective.action);
                 Array.Resize(ref pathToObjective, i);
                 return;
@@ -311,7 +312,7 @@ public class Character : InteractableObject
 
     protected void GetObjectsToActOn(String action, int range)
     {
-        List<InteractableObject>  objects = new List<InteractableObject>();
+        List<InteractableObject> objects = new List<InteractableObject>();
 
         boxCollider.enabled = false;
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, range);
@@ -324,7 +325,7 @@ public class Character : InteractableObject
                 bool safe = true;
                 if (hitObject.tag == "Door") //check if door is empty
                 {
-                    foreach(var hitCollider2 in hitColliders)
+                    foreach (var hitCollider2 in hitColliders)
                     {
                         if (hitCollider != hitCollider2 && (Vector2)hitCollider.transform.position == (Vector2)hitCollider2.transform.position) {
                             safe = false;
@@ -332,6 +333,14 @@ public class Character : InteractableObject
                         }
                     }
                 }
+                if (tag != "Player" && (hitObject.tag == "Enemy" || hitObject.tag == "Player"))
+                {
+                    if (action == "Heal")
+                        safe = allies.Contains(hitObject); //only heal allies
+                    if (action == "Attack")
+                        safe = enemies.Contains(hitObject); //only attack enemies
+                }
+
                 if (safe)
                     objects.Add(hitObject);
             }
@@ -600,6 +609,11 @@ public class Character : InteractableObject
     protected void UpdateState()
     {
         lastState = new State(health, movesLeft, actionsLeft, (Vector2)transform.position);
+    }
+
+    protected override void UpdatePosition()
+    {
+        GameManager.instance.UpdateNode(transform.position, false, (float)health); //"false" prevents A* from pathfinding through non-target characters
     }
 
     protected IEnumerator postActionDelay()

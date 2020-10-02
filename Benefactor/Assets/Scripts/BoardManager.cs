@@ -146,7 +146,6 @@ public class BoardManager : MonoBehaviour
                 for (int y = 0; y <= length; y++)
                 {
                     Vector3 position = new Vector3(x + (int)randomPosition.x, y + (int)randomPosition.y, 0f);
-                    gridPositions.Remove(position);
 
                     GameObject tileChoice;
                     if (x == 0 || x == width || y == 0 || y == length)
@@ -185,7 +184,14 @@ public class BoardManager : MonoBehaviour
                     }
                 }
             }
-
+            for (int x = -1; x <= width + 1; x++)
+            {
+                for (int y = -1; y <= length + 1; y++)
+                {
+                    Vector3 position = new Vector3(x + (int)randomPosition.x, y + (int)randomPosition.y, 0f);
+                    gridPositions.Remove(position);
+                }
+            }
         }
     }
 

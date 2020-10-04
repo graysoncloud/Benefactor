@@ -40,6 +40,8 @@ public class Character : InteractableObject
         }
     }
 
+    public Sprite portrait;
+    public string name;
     public float moveTime;
     public int totalMoves;
     public int talkingRange;
@@ -60,7 +62,7 @@ public class Character : InteractableObject
     protected Dictionary<Vector2, Vector2[]> paths;
     protected Dictionary<String, List<InteractableObject>> actableObjects;
     protected SortedSet<String> actions;
-    protected Dictionary<String, List<HoldableObject>> inventory;
+    public Dictionary<String, List<HoldableObject>> inventory;
     protected int attackRange;
     protected List<InteractableObject> allies;
     protected List<InteractableObject> enemies;

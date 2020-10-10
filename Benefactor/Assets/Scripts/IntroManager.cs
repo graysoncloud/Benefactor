@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.Rendering;
 
 public class IntroManager : MonoBehaviour
 {
@@ -101,29 +102,60 @@ public class IntroManager : MonoBehaviour
     private void executeNext()
     {
         Debug.Log("executing page: " + currentIndex);
-        if (data[currentIndex].type == "Dialogue")
+
+        switch (data[currentIndex].type)
         {
-            StartCoroutine("readDialogue");
-            currentIndex++;
+            case "Dialogue":
+                StartCoroutine("readDialogue");
+                currentIndex++;
+                break;
+            case "NewScene":
+                GameObject.Find("Backdrop").GetComponent<BackdropManager>().changeBackdrop(data[currentIndex].backdrop);
+                GameObject.FindObjectOfType<AmbienceManager>().GetComponent<AudioSource>().volume = 1;
+                StartCoroutine("fadeIn");
+                break;
+            case "FadeOut":
+                StartCoroutine("fadeOut");
+                StartCoroutine("fadeAmbience");
+                break;
+            case "SoundEffect":
+                GameObject.FindObjectOfType<SFXManager>().PlaySingle(data[currentIndex].SFX);
+                //Debug.Log("Made it");
+                currentIndex++;
+                executeNext();
+                break;
+            case "Ambience":
+                GameObject.FindObjectOfType<AmbienceManager>().PlaySingle(data[currentIndex].SFX);
+                currentIndex++;
+                executeNext();
+                break;
+            default:
+                Debug.Log("Invalid event type: " + data[currentIndex].type);
+                break;
         }
-        else if (data[currentIndex].type == "NewScene")
-        {
-            GameObject.Find("Backdrop").GetComponent<BackdropManager>().changeBackdrop(data[currentIndex].backdrop);
-            StartCoroutine("fadeIn");
-            // executeNext and currentIndex++ are handled at the end of the fadeIn / fadeOut coroutines
-        }
-        else if (data[currentIndex].type == "FadeOut")
-        {
-            StartCoroutine("fadeOut");
-            // executeNext and currentIndex++ are handled at the end of the fadeIn / fadeOut coroutines
-        }
-        else if (data[currentIndex].type == "SoundEffect")
-        {
-            // TO DO
-            // Also make this whole thing a switch statement please
-            currentIndex++;
-            executeNext();
-        }
+
+        //if (data[currentIndex].type == "Dialogue")
+        //{
+        //    StartCoroutine("readDialogue");
+        //    currentIndex++;
+        //}
+        //else if (data[currentIndex].type == "NewScene")
+        //{
+        //    GameObject.Find("Backdrop").GetComponent<BackdropManager>().changeBackdrop(data[currentIndex].backdrop);
+        //    StartCoroutine("fadeIn");
+        //    // executeNext and currentIndex++ are handled at the end of the fadeIn / fadeOut coroutines
+        //}
+        //else if (data[currentIndex].type == "FadeOut")
+        //{
+        //    StartCoroutine("fadeOut");
+        //    // executeNext and currentIndex++ are handled at the end of the fadeIn / fadeOut coroutines
+        //}
+        //else if (data[currentIndex].type == "SoundEffect")
+        //{
+        //    GameObject.FindObjectOfType<SFXManager>().PlaySingle(data[currentIndex].SFX);
+        //    currentIndex++;
+        //    executeNext();
+        //}
     }
 
     IEnumerator readDialogue()
@@ -158,7 +190,22 @@ public class IntroManager : MonoBehaviour
         typingInProgress = false;
     }
 
-
+    IEnumerator fadeAmbience()
+    {
+        AudioSource source = GameObject.FindObjectOfType<AmbienceManager>().GetComponent<AudioSource>();
+        float t = 3;
+        while (t > 0)
+        {
+            yield return null;
+            t -= Time.deltaTime;
+            source.volume = t / 3;
+            if (data[currentIndex].type != "FadeOut")
+                break;
+        }
+        if (data[currentIndex].type == "FadeOut")
+            source.Stop();
+        yield break;
+    }
 
     IEnumerator fadeIn()
     {

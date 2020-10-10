@@ -8,6 +8,7 @@
 		 -Page numbers are numbered strangely to make changing them possible without having to change every other page
 			number. The code currently iterates through each page number to access this data, so it does need to be sequential
 		 -Other values I want to add would be <fadeOutTime>, <fadeInTime>, a delay type, and a SFX type
+		 -Need to implement SFX System
 	-->
 
 	<!--START OF SCENE 1-->
@@ -41,19 +42,29 @@
 	
 	
 	<!--START OF SCENE 2-->
+
 	<page number = "200">
-		<type>NewScene</type>
-		<backdrop>Thoroughfair</backdrop>
-		<SFX>N/A</SFX>
+		<type>SoundEffect</type>
+		<backdrop>N/A</backdrop>
+		<SFX>FootstepsApproaching</SFX>
 		<character>N/A</character>
 		<portrait>N/A</portrait>
 		<dialogue>N/A</dialogue>
 	</page>
 
-	<page number = "202">
-		<type>SoundEffect</type>
+	<page number = "201">
+		<type>Ambience</type>
 		<backdrop>N/A</backdrop>
-		<SFX>Footstops</SFX>
+		<SFX>Town</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+	
+	<page number = "202">
+		<type>NewScene</type>
+		<backdrop>Thoroughfair</backdrop>
+		<SFX>N/A</SFX>
 		<character>N/A</character>
 		<portrait>N/A</portrait>
 		<dialogue>N/A</dialogue>
@@ -66,7 +77,7 @@
 		<character>Ivanovna</character>
 		<portrait>IvanovnaNeutral</portrait>
 		<dialogue>
-			How are Katerina and Sonya doing, Raskol? Has your bullish obsession been satisfied yet?
+			Off to the bar, Raskolnikov?
 		</dialogue>
 	</page>
 
@@ -77,7 +88,7 @@
 		<character>Raskolnikov</character>
 		<portrait>RaskolnikovNeutral</portrait>
 		<dialogue>
-			Not in the mood, Ivanovna.
+			...
 		</dialogue>
 	</page>
 
@@ -88,7 +99,7 @@
 		<character>Ivanovna</character>
 		<portrait>IvanovnaNeutral</portrait>
 		<dialogue>
-			You know, I heard grief is a great aphrodisiac. Maybe-
+			Drinking isn't very attractive you know. What does Sofya think?
 		</dialogue>
 	</page>
 
@@ -99,7 +110,7 @@
 		<character>Raskolnikov</character>
 		<portrait>RaskolnikovNeutral</portrait>
 		<dialogue>
-			Why don't you mind your own business, hag?
+			Enough Ivanovna, I'm not in the mood.
 		</dialogue>
 	</page>
 
@@ -110,48 +121,99 @@
 		<character>Ivanovna</character>
 		<portrait>IvanovnaNeutral</portrait>
 		<dialogue>
-			Oh ho ho, I'm making him throw a tantrum!
+			Perhaps if you made enough money to repay your loans you would be in the mood.
 		</dialogue>
 	</page>
 
 	<page number = "214">
-		<type>SoundEffect</type>
+		<type>Dialogue</type>
 		<backdrop>N/A</backdrop>
-		<SFX>Scream</SFX>
-		<character>N/A</character>
-		<portrait>N/A</portrait>
-		<dialogue>N/A</dialogue>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+			You'll get the money later.
+		</dialogue>
 	</page>
 
 	<page number = "216">
 		<type>Dialogue</type>
 		<backdrop>N/A</backdrop>
 		<SFX>N/A</SFX>
-		<character>???</character>
-		<portrait>BlankPortrait</portrait>
-		<dialogue>
-			Somebody! Help! Please!
-		</dialogue>
-	</page>
-	
-	<!--Copy pasters-->
-	<page number = "204">
-		<type>Dialogue</type>
-		<backdrop>N/A</backdrop>
-		<SFX>N/A</SFX>
 		<character>Ivanovna</character>
 		<portrait>IvanovnaNeutral</portrait>
 		<dialogue>
-
+			Hmph.
 		</dialogue>
 	</page>
 
-	<page number = "208">
+	<page number = "218">
+		<type>FadeOut</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<!--START OF SCENE 3-->
+
+	<page number = "300">
+		<type>Ambience</type>
+		<backdrop>N/A</backdrop>
+		<SFX>Bar</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<page number = "301">
+		<type>NewScene</type>
+		<backdrop>Bar</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<page number = "302">
+		<type>SoundEffect</type>
+		<backdrop>N/A</backdrop>
+		<SFX>DoorOpening</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<page number = "302">
 		<type>Dialogue</type>
 		<backdrop>N/A</backdrop>
 		<SFX>N/A</SFX>
 		<character>Raskolnikov</character>
 		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+
+		</dialogue>
+	</page>
+	
+	<!--Copy pasters-->
+	<page number = "308">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+
+		</dialogue>
+	</page>
+
+	<page number = "304">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Ivanovna</character>
+		<portrait>IvanovnaNeutral</portrait>
 		<dialogue>
 
 		</dialogue>

@@ -9,6 +9,7 @@ public class BackdropManager : MonoBehaviour
 
     public Sprite Thoroughfair;
     public Sprite InterogationOffice;
+    public Sprite Bar;
 
     public void Start()
     {
@@ -24,6 +25,9 @@ public class BackdropManager : MonoBehaviour
                 break;
             case "InterogationOffice":
                 ImageComponent.sprite = InterogationOffice;
+                break;
+            case "Bar":
+                ImageComponent.sprite = Bar;
                 break;
             default:
                 Debug.LogError("Invalid portrait name: " + newBackdropName);

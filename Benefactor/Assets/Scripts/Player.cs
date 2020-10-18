@@ -361,6 +361,12 @@ public class Player : Character
         healthText.text = "Health: " + health;
     }
 
+    protected override void TalkTo(InteractableObject toTalkTo)
+    {
+        HideBackButton();
+        base.TalkTo(toTalkTo);
+    }
+
     private void SetupActionMenu()
     {
         Vector2 position = new Vector2(Screen.width / 2, Screen.height / 3);

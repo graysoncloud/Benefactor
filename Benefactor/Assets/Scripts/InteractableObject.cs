@@ -12,6 +12,7 @@ public class InteractableObject : MonoBehaviour
     public bool leavesCorpse; // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
     public Sprite damagedSprite;
     public Sprite corpseSprite;
+    public GameObject fire;
     public int reputation;
 
     protected SpriteRenderer spriteRenderer;
@@ -48,16 +49,23 @@ public class InteractableObject : MonoBehaviour
         spriteRenderer.sprite = damagedSprite;
         health = Math.Max(health - damage, 0);
 
-        if (health <= 0 && leavesCorpse)
+        if (health <= 0)
         {
-            spriteRenderer.sprite = corpseSprite;
-            isCorpse = true;
-        } else if (health <= 0)
-        {
-            gameObject.SetActive(false);
-            GameManager.instance.RemoveDeadCharacters();
-            ErasePosition();
-            // For some reason, this didn't work, so instead, GameManager just doesn't move characters at <= 0 health
+            if (leavesCorpse)
+            {
+                spriteRenderer.sprite = corpseSprite;
+                isCorpse = true;
+            }
+            else
+            {
+                gameObject.SetActive(false);
+                GameManager.instance.RemoveDeadCharacters(); // For some reason, this didn't work, so instead, GameManager just doesn't move characters at <= 0 health
+                ErasePosition();
+            }
+            if (fire != null)
+            {
+                Instantiate(fire, transform.position, Quaternion.identity);
+            }
         }
         else
         {

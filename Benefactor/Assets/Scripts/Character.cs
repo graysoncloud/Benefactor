@@ -585,7 +585,7 @@ public class Character : InteractableObject
         currentObjective = null; //TEMP
     }
 
-    protected void TalkTo(InteractableObject toTalkTo)
+    protected virtual void TalkTo(InteractableObject toTalkTo)
     {
         GameObject.Find("DialogueManager").GetComponent<DialogueManager>().initiateDialogue(this.gameObject, toTalkTo.gameObject);
     }

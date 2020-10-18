@@ -48,6 +48,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -130,4 +131,5 @@ MonoBehaviour:
   leavesCorpse: 0
   damagedSprite: {fileID: 21300106, guid: fbe1e7b94bb1a4a099d5bcb15a00141c, type: 3}
   corpseSprite: {fileID: 0}
+  fire: {fileID: 7991227353612988546, guid: a5fdddaf6ee309f459778da6eb66886f, type: 3}
   reputation: 50

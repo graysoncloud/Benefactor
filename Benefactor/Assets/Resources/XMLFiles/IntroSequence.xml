@@ -81,7 +81,7 @@
 		</dialogue>
 	</page>
 
-	<page number = "206">
+	<!--<page number = "206">
 		<type>Dialogue</type>
 		<backdrop>N/A</backdrop>
 		<SFX>N/A</SFX>
@@ -90,7 +90,7 @@
 		<dialogue>
 			...
 		</dialogue>
-	</page>
+	</page>-->
 
 	<page number = "208">
 		<type>Dialogue</type>
@@ -99,7 +99,7 @@
 		<character>Ivanovna</character>
 		<portrait>IvanovnaNeutral</portrait>
 		<dialogue>
-			Drinking isn't very attractive you know. What does Sofya think?
+			Drinking isn't very attractive you know. What would Sofya think?
 		</dialogue>
 	</page>
 
@@ -121,7 +121,7 @@
 		<character>Ivanovna</character>
 		<portrait>IvanovnaNeutral</portrait>
 		<dialogue>
-			Perhaps if you made enough money to repay your loans you would be in the mood.
+			Perhaps you'd be in the mood if you repayed your loans.
 		</dialogue>
 	</page>
 
@@ -132,7 +132,7 @@
 		<character>Raskolnikov</character>
 		<portrait>RaskolnikovNeutral</portrait>
 		<dialogue>
-			You'll get the money later.
+			I'll have the money soon.
 		</dialogue>
 	</page>
 
@@ -168,15 +168,6 @@
 	</page>
 
 	<page number = "301">
-		<type>NewScene</type>
-		<backdrop>Bar</backdrop>
-		<SFX>N/A</SFX>
-		<character>N/A</character>
-		<portrait>N/A</portrait>
-		<dialogue>N/A</dialogue>
-	</page>
-
-	<page number = "302">
 		<type>SoundEffect</type>
 		<backdrop>N/A</backdrop>
 		<SFX>DoorOpening</SFX>
@@ -186,16 +177,313 @@
 	</page>
 
 	<page number = "302">
+		<type>NewScene</type>
+		<backdrop>Bar</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<page number = "305">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			Raskol, good to see you. What philosophical topic shall we breach today?
+		</dialogue>
+	</page>
+
+	<page number = "308">
 		<type>Dialogue</type>
 		<backdrop>N/A</backdrop>
 		<SFX>N/A</SFX>
 		<character>Raskolnikov</character>
 		<portrait>RaskolnikovNeutral</portrait>
 		<dialogue>
-
+			Just a Vodka for now.
 		</dialogue>
 	</page>
-	
+
+	<page number = "311">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			...
+		</dialogue>
+	</page>
+
+	<page number = "312">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			It's not like you to pass up an opportunity for an academic conversation.
+		</dialogue>
+	</page>
+
+	<page number = "313">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			Is Marmelodov still on your mind?
+		</dialogue>
+	</page>
+
+	<page number = "314">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+			I suppose that's part of it.
+		</dialogue>
+	</page>
+
+	<page number = "315">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+			I saw his wife and child today.
+		</dialogue>
+	</page>
+
+
+	<page number = "317">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			Oh? How are they holding up?
+		</dialogue>
+	</page>
+
+	<page number = "320">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+			It was hardly bearable to witness.
+		</dialogue>
+	</page>
+
+	<page number = "323">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+			And now Ivanovna has it in her thick skull that I have my heart set on Sonya. As if the young girl didn't have enough to worry about already.
+		</dialogue>
+	</page>
+
+	<page number = "326">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			There's no need to mind that old hag. Ivanovna has very little beyond her words.
+		</dialogue>
+	</page>
+
+	<page number = "329">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+			True. But she is my debtor. A certain amount of decorum, facetious as it may be, is neccesary.
+		</dialogue>
+	</page>
+
+	<page number = "332">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			Ah, I forget.
+		</dialogue>
+	</page>
+
+	<page number = "335">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Raskolnikov</character>
+		<portrait>RaskolnikovNeutral</portrait>
+		<dialogue>
+			Speaking of, I... have a favor to ask. I'm out of a job, and with the winter coming, I was wondering if you would be willing to take on a new-
+		</dialogue>
+	</page>
+
+	<page number = "338">
+		<type>StopAmbience</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<page number = "341">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>???</character>
+		<portrait>Sergey</portrait>
+		<dialogue>
+			Hey, hands off!
+		</dialogue>
+	</page>
+
+	<page number = "344">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Patron</character>
+		<portrait>Patron</portrait>
+		<dialogue>
+			Give me the money! You're drinking my family to death!
+		</dialogue>
+	</page>
+
+	<page number = "347">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			Gentlemen, lets calm down, please. Your business is not the bar's, so take it outside. 
+		</dialogue>
+	</page>
+
+	<page number = "350">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Patron</character>
+		<portrait>Patron</portrait>
+		<dialogue>
+			Fine. Sergey, get your drunken a-
+		</dialogue>
+	</page>
+
+	<page number = "353">
+		<type>SoundEffect</type>
+		<backdrop>N/A</backdrop>
+		<SFX>Punch</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<page number = "356">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Patron</character>
+		<portrait>Patron</portrait>
+		<dialogue>
+			AH!
+		</dialogue>
+	</page>
+
+	<page number = "359">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			Sergey you oaf! I won't tolerate any fighting here- leave!
+		</dialogue>
+	</page>
+
+	<page number = "362">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Sergey</character>
+		<portrait>Sergey</portrait>
+		<dialogue>
+			You never liked me, Pepov.
+		</dialogue>
+	</page>
+
+	<page number = "365">
+		<type>SoundEffect</type>
+		<backdrop>N/A</backdrop>
+		<SFX>Punch2</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<page number = "368">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			Gaaah-
+		</dialogue>
+	</page>
+
+	<page number = "371">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			Raskol, please- help me...
+		</dialogue>
+	</page>
+
+	<page number = "373">
+		<type>FadeOut</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
+	<page number = "374">
+		<type>StartScene</type>
+		<backdrop>Scenario1</backdrop>
+		<SFX>N/A</SFX>
+		<character>N/A</character>
+		<portrait>N/A</portrait>
+		<dialogue>N/A</dialogue>
+	</page>
+
 	<!--Copy pasters-->
 	<page number = "308">
 		<type>Dialogue</type>
@@ -205,6 +493,17 @@
 		<portrait>RaskolnikovNeutral</portrait>
 		<dialogue>
 
+		</dialogue>
+	</page>
+
+	<page number = "305">
+		<type>Dialogue</type>
+		<backdrop>N/A</backdrop>
+		<SFX>N/A</SFX>
+		<character>Pepov</character>
+		<portrait>Pepov</portrait>
+		<dialogue>
+			Raskol, good to see you. What philosophical topic shall we breach today?
 		</dialogue>
 	</page>
 

@@ -1060,6 +1060,9 @@ MonoBehaviour:
   BlankPortrait: {fileID: 21300000, guid: 6c80f7305b9cac444b9bfea080baee29, type: 3}
   RaskolnikovNeutral: {fileID: 21300000, guid: 8304cdde25968a641986bd752e7b1a0c, type: 3}
   IvanovnaNeutral: {fileID: 21300000, guid: 0f86657dc08519e42a0bf7a7df2e597a, type: 3}
+  Pepov: {fileID: 21300000, guid: 7d36517c882207640ae35dea2b140e8a, type: 3}
+  Patron: {fileID: 21300000, guid: 1a8988abeda13de44875c42d14f9ae46, type: 3}
+  Sergey: {fileID: 21300000, guid: 04aa2472a1f5d3949a46c0ce9f15761a, type: 3}
 --- !u!1 &1981940491
 GameObject:
   m_ObjectHideFlags: 0
@@ -1111,6 +1114,8 @@ MonoBehaviour:
     type: 3}
   FootstepsLeaving: {fileID: 8300000, guid: 5b268f60b2ff00946a95325acb40223d, type: 3}
   DoorOpening: {fileID: 8300000, guid: 874508576c18bb242bb98e2c035ae259, type: 3}
+  Punch1: {fileID: 8300000, guid: 1bfe7eca1f4f5ed49b3957a98ba85cc5, type: 3}
+  Punch2: {fileID: 8300000, guid: aaa21f616b6f40a4dbeec67e5e0aeb7d, type: 3}
 --- !u!82 &1981940494
 AudioSource:
   m_ObjectHideFlags: 0

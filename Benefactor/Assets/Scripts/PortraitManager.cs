@@ -10,6 +10,9 @@ public class PortraitManager : MonoBehaviour
     public Sprite BlankPortrait;
     public Sprite RaskolnikovNeutral;
     public Sprite IvanovnaNeutral;
+    public Sprite Pepov;
+    public Sprite Patron;
+    public Sprite Sergey;
 
     public void Awake()
     {
@@ -28,6 +31,15 @@ public class PortraitManager : MonoBehaviour
                 break;
             case "BlankPortrait":
                 ImageComponent.sprite = BlankPortrait;
+                break;
+            case "Pepov":
+                ImageComponent.sprite = Pepov;
+                break;
+            case "Patron":
+                ImageComponent.sprite = Patron;
+                break;
+            case "Sergey":
+                ImageComponent.sprite = Sergey;
                 break;
             default:
                 Debug.LogError("Invalid portrait name: " + newPortraitName);

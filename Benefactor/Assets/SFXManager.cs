@@ -14,6 +14,10 @@ public class SFXManager : MonoBehaviour
     public AudioClip FootstepsApproaching;
     public AudioClip FootstepsLeaving;
     public AudioClip DoorOpening;
+    public AudioClip Punch1;
+    public AudioClip Punch2;
+
+
 
     // Start is called before the first frame update
     void Awake()
@@ -38,6 +42,12 @@ public class SFXManager : MonoBehaviour
                 break;
             case "DoorOpening":
                 SFXSource.clip = DoorOpening;
+                break;
+            case "Punch":
+                SFXSource.clip = Punch1;
+                break;
+            case "Punch2":
+                SFXSource.clip = Punch2;
                 break;
             default:
                 Debug.Log("No SFX found for " + clip);

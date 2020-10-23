@@ -48,6 +48,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 1183741245
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1854832052530748161, guid: c1ec50cdeb4614d43a656cfe494016c5,
+  m_Sprite: {fileID: 8117776094873184575, guid: c9f957b97ca25564eaadd52e25a26be2,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -101,7 +102,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.0039216, y: 1.0039216}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -132,4 +133,5 @@ MonoBehaviour:
   damagedSprite: {fileID: -1007832776062502064, guid: c1ec50cdeb4614d43a656cfe494016c5,
     type: 3}
   corpseSprite: {fileID: 0}
+  fire: {fileID: 0}
   reputation: 50

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5393083452000282008}
   - component: {fileID: -8898801123736280384}
   - component: {fileID: 3241137450749891006}
-  m_Layer: 8
+  m_Layer: 1
   m_Name: Fire
   m_TagString: Damaging
   m_Icon: {fileID: 0}
@@ -72,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1183741245
-  m_SortingLayer: 2
+  m_SortingLayerID: 2007457449
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

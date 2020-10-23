@@ -58,32 +58,21 @@ MonoBehaviour:
   houseWallLength:
     minimum: 3
     maximum: 5
-  player: {fileID: 6594416824975255305, guid: 9dfdcd00a8877bb4d8342c8be1806065, type: 3}
+  player: {fileID: 5828532957960981727, guid: 9dfdcd00a8877bb4d8342c8be1806065, type: 3}
   exit: {fileID: 4738714068660868784, guid: eb35feb23eb52bd4d986e17334b1d9f3, type: 3}
   floorTiles:
   - {fileID: 6793900256970249569, guid: 89c8331683823014e9900980e63e7b52, type: 3}
   - {fileID: 1508380317589558186, guid: 5e3ef656344fe9b45bdbe7939a5df8b5, type: 3}
   - {fileID: 3901565958152476448, guid: 0c98515c5b0811647bd4fb83c980c9d3, type: 3}
-  - {fileID: 268986815550182303, guid: d346a9ed8387c6f46831e332a572c295, type: 3}
-  - {fileID: 2751170386621357190, guid: e5342392e38f35c41aaad6d1ee1c8b88, type: 3}
-  - {fileID: 5090652967855533826, guid: c34ffbeacdcc6c64ebb3a375a6787f5e, type: 3}
-  - {fileID: 2977033966422886258, guid: 9e7f62eb7d09ed248bacebf36da94018, type: 3}
-  - {fileID: 2875453705104043709, guid: 6ab23752e811b7a4c9b8521fc8c85b6b, type: 3}
-  wallTiles:
+  objects:
   - {fileID: 7991227353612988546, guid: 452a827b76b83484fb5d8b24688c5a2f, type: 3}
-  - {fileID: 7110917550641819669, guid: 839c5b553dc677a469e79f882d1b553f, type: 3}
-  - {fileID: 8065689519987455722, guid: 2252dd0a030c3c04d90269a819a3012b, type: 3}
-  - {fileID: 2894570229678480883, guid: e511a1b976396a04c9b0bd911b992ce6, type: 3}
-  - {fileID: 7516315685448922205, guid: eb18636887f2e94469929389edffa4b8, type: 3}
-  - {fileID: 401109042432714246, guid: f07eb8a8f30e86c448faeaec0c59dcae, type: 3}
-  - {fileID: 6549912615576886170, guid: 67c2cedc731587346820060d56ebbd98, type: 3}
-  - {fileID: 6889720950204154999, guid: 0116be4fdc8edcb4d8861a576f38a2a8, type: 3}
+  - {fileID: 7991227353612988546, guid: 77211cd42fc70d74e906334983cb2c46, type: 3}
+  - {fileID: 7991227353612988546, guid: dd2a35f8c84e27b4ba3121e96f625596, type: 3}
   itemTiles:
   - {fileID: 8913211509250880351, guid: ae876cd8e3a9f8c4c9af44a00acef1e0, type: 3}
   - {fileID: 8913211509250880351, guid: b67a25e2dbb90a64ba4959583c7d4227, type: 3}
   - {fileID: 6156389141310141637, guid: d7223e9ce65c5ff40a98ff9432da0fcf, type: 3}
   - {fileID: 6156389141310141637, guid: 3c8bc909cfcf86140a11ded9170ebd02, type: 3}
-  - {fileID: 7991227353612988546, guid: a5fdddaf6ee309f459778da6eb66886f, type: 3}
   enemyTiles:
   - {fileID: 5495209542717074604, guid: 95434a6419c3c8540b8a58911e28f596, type: 3}
   - {fileID: 8178759162555290993, guid: 70d91124e870e344f89f261e24c1ac92, type: 3}
@@ -93,12 +82,8 @@ MonoBehaviour:
   - {fileID: 74827881571744996, guid: 51b24de1afb6b1b419c7268059d798f5, type: 3}
   houseWallTiles:
   - {fileID: 7991227353612988546, guid: 09a647a8d5f41a54ea0acd103fd5e609, type: 3}
-  - {fileID: 7991227353612988546, guid: 2df4a3cc6978edc44a19911f9ebf43be, type: 3}
-  - {fileID: 7991227353612988546, guid: a3ca0183fb83a57438e4b22b725b5ad3, type: 3}
   roofTiles:
   - {fileID: 7991227353612988546, guid: 553753cb26ad80d4dade0166efbe5771, type: 3}
-  - {fileID: 7991227353612988546, guid: 8260a89ee6f9bb3418cfdcada5514446, type: 3}
-  - {fileID: 7991227353612988546, guid: 77998d956dec4a943b18762974f9ecf4, type: 3}
   basicDoor: {fileID: 7991227353612988546, guid: edb7eb91ba0d2e842b1982ee35ffd0ae,
     type: 3}
   keyDoor: {fileID: 7991227353612988546, guid: d1f47c6aab1d5f9419dab868d1e0b77b, type: 3}
@@ -125,4 +110,5 @@ MonoBehaviour:
   characters: []
   activeCharacterIndex: 0
   activeCharacter: {fileID: 0}
+  dialogueInProgress: 0
   round: 0

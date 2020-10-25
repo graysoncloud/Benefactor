@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3250592248702125131}
   - component: {fileID: -2388374184263182209}
   m_Layer: 8
-  m_Name: HouseWall2
+  m_Name: HouseWallFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,6 +48,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 1183741245
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7736213677792020534, guid: c1ec50cdeb4614d43a656cfe494016c5,
+  m_Sprite: {fileID: 7726447682282358601, guid: 104f81bb64df4d345848ce4ead839f40,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -101,7 +102,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.0039216, y: 1.0039216}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -129,7 +130,8 @@ MonoBehaviour:
   damageable: 1
   repairable: 0
   leavesCorpse: 0
-  damagedSprite: {fileID: -3553346069815653258, guid: c1ec50cdeb4614d43a656cfe494016c5,
+  damagedSprite: {fileID: 7726447682282358601, guid: 104f81bb64df4d345848ce4ead839f40,
     type: 3}
   corpseSprite: {fileID: 0}
+  fire: {fileID: 0}
   reputation: 50

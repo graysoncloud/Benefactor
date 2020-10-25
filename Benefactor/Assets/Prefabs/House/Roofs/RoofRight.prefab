@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -6671347456016425821}
   - component: {fileID: 3480862152981588539}
   m_Layer: 8
-  m_Name: Roof2
+  m_Name: RoofRight
   m_TagString: Roof
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,6 +48,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 2007457449
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 6845915310270175125, guid: dd508ba6ed2973c4992d1dd9ef559378,
+  m_Sprite: {fileID: -4566365901998973053, guid: c9f957b97ca25564eaadd52e25a26be2,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

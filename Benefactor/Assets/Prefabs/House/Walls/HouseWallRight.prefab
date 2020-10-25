@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3250592248702125131}
   - component: {fileID: -2388374184263182209}
   m_Layer: 8
-  m_Name: HouseWall1
+  m_Name: HouseWallRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 1183741245
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8117776094873184575, guid: c9f957b97ca25564eaadd52e25a26be2,
+  m_Sprite: {fileID: 7406941843746067170, guid: 104f81bb64df4d345848ce4ead839f40,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -130,7 +130,7 @@ MonoBehaviour:
   damageable: 1
   repairable: 0
   leavesCorpse: 0
-  damagedSprite: {fileID: -1007832776062502064, guid: c1ec50cdeb4614d43a656cfe494016c5,
+  damagedSprite: {fileID: 7406941843746067170, guid: 104f81bb64df4d345848ce4ead839f40,
     type: 3}
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}

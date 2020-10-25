@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7732909630141236205}
   - component: {fileID: 4260946265005922778}
   - component: {fileID: -6671347456016425821}
-  - component: {fileID: -5164862262321326182}
+  - component: {fileID: 3480862152981588539}
   m_Layer: 8
-  m_Name: Roof3
+  m_Name: RoofFrontOuterCornerLeft
   m_TagString: Roof
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,6 +48,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 2007457449
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3342021948748943337, guid: dd508ba6ed2973c4992d1dd9ef559378,
+  m_Sprite: {fileID: 5849641839801096286, guid: c9f957b97ca25564eaadd52e25a26be2,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -96,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8959f2c492359bf41b3219c6bd9c07ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &-5164862262321326182
+--- !u!61 &3480862152981588539
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

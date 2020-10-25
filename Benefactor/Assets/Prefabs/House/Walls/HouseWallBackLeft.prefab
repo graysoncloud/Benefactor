@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3250592248702125131}
   - component: {fileID: -2388374184263182209}
   m_Layer: 8
-  m_Name: Barrel
+  m_Name: HouseWallBackLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 1183741245
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -8568042794190644651, guid: 7e77f6e79af63fe458428002edc50ced,
+  m_Sprite: {fileID: -7229037912106761437, guid: 104f81bb64df4d345848ce4ead839f40,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -102,14 +102,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.875, y: 1.1875}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
 --- !u!114 &-2388374184263182209
 MonoBehaviour:
@@ -126,11 +126,12 @@ MonoBehaviour:
   Collisions:
     serializedVersion: 2
     m_Bits: 0
-  maxHealth: 2
+  maxHealth: 5
   damageable: 1
   repairable: 0
   leavesCorpse: 0
-  damagedSprite: {fileID: 0}
+  damagedSprite: {fileID: -7229037912106761437, guid: 104f81bb64df4d345848ce4ead839f40,
+    type: 3}
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
   reputation: 50

@@ -37,14 +37,20 @@ public class Roof : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        overPlayer = true;
-        checkRoofs();
+        if (other.gameObject.GetComponent<Player>() != null)
+        {
+            overPlayer = true;
+            checkRoofs();
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        overPlayer = false;
-        checkRoofs();
+        if (other.gameObject.GetComponent<Player>() != null)
+        {
+            overPlayer = false;
+            checkRoofs();
+        }
     }
 
     void checkRoofs()

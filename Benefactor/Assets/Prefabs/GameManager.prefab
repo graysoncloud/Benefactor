@@ -50,11 +50,11 @@ MonoBehaviour:
     minimum: 5
     maximum: 10
   houseCount:
-    minimum: 3
-    maximum: 7
+    minimum: 5
+    maximum: 10
   houseWallLength:
     minimum: 6
-    maximum: 12
+    maximum: 14
   player: {fileID: 5828532957960981727, guid: 9dfdcd00a8877bb4d8342c8be1806065, type: 3}
   exit: {fileID: 4738714068660868784, guid: eb35feb23eb52bd4d986e17334b1d9f3, type: 3}
   groundTiles:
@@ -85,6 +85,10 @@ MonoBehaviour:
   houseWallBackRight: {fileID: 7991227353612988546, guid: 09d3569d04250bf4d9d5e340a1abe0c9,
     type: 3}
   houseWallBackLeft: {fileID: 7991227353612988546, guid: c9a8b071ea757f04e822f97529ce3671,
+    type: 3}
+  houseWallCornerLeft: {fileID: 7991227353612988546, guid: 506ae3ea7b41de142b549b1894c33c2e,
+    type: 3}
+  houseWallCornerRight: {fileID: 7991227353612988546, guid: de79f1312748bda429694283cd362dce,
     type: 3}
   roofFlat: {fileID: 7991227353612988546, guid: 553753cb26ad80d4dade0166efbe5771,
     type: 3}

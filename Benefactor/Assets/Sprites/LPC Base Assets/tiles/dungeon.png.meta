@@ -287,6 +287,12 @@ TextureImporter:
   - first:
       213: -248512161167664867
     second: dungeon_94
+  - first:
+      213: -2775604605821565932
+    second: dungeon_95
+  - first:
+      213: 8210987299791612023
+    second: dungeon_96
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -2366,6 +2372,48 @@ TextureImporter:
       bones: []
       spriteID: d199c3f818b1d8cf0800000000000000
       internalID: -248512161167664867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dungeon_95
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 414411911521b79d0800000000000000
+      internalID: -2775604605821565932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dungeon_96
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 778a25b027943f170800000000000000
+      internalID: 8210987299791612023
       vertices: []
       indices: 
       edges: []

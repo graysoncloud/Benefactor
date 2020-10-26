@@ -329,7 +329,7 @@ public class Character : InteractableObject
                 {
                     foreach (var hitCollider2 in hitColliders)
                     {
-                        if (hitCollider != hitCollider2 && (Vector2)hitCollider.transform.position == (Vector2)hitCollider2.transform.position) {
+                        if (hitCollider != hitCollider2 && hitCollider2.GetComponent<InteractableObject>() != null && (Vector2)hitCollider.transform.position == (Vector2)hitCollider2.transform.position) {
                             safe = false;
                             break;
                         }

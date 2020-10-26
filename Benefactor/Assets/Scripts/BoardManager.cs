@@ -39,6 +39,8 @@ public class BoardManager : MonoBehaviour
     public GameObject houseWallFrontLeft;
     public GameObject houseWallBackRight;
     public GameObject houseWallBackLeft;
+    public GameObject houseWallCornerLeft;
+    public GameObject houseWallCornerRight;
 
     public GameObject roofFlat;
     public GameObject roofFront;
@@ -150,7 +152,7 @@ public class BoardManager : MonoBehaviour
         return randomPosition;
     }
 
-    void LayoutRoom(Vector2 start, Vector2 stop, String roomType, int house, int topRoomDoor, int bottomRoomDoor, int mainRoomDoor) //roomType can be "Main", "Top", or "Bottom"
+    void LayoutRoom(Vector2 start, Vector2 stop, String roomType, int house, int topRoomDoor, int bottomRoomDoor, int mainRoomDoor, int bottomStartX = -1, int bottomStopX = -1) //roomType can be "Main", "Top", or "Bottom"
     {
         for (float x = start.x; x <= stop.x; x++)
         {
@@ -166,26 +168,52 @@ public class BoardManager : MonoBehaviour
                     if (tile == start)
                     {
                         floor = null;
-                        objectTile = houseWallFrontLeft;
+                        objectTile = (tile.x == bottomStartX) ? houseWallLeft : houseWallFrontLeft;
                     }
                     else if (tile == new Vector2(stop.x, start.y))
                     {
                         floor = null;
-                        objectTile = houseWallFrontRight;
+                        objectTile = (tile.x == bottomStopX) ? houseWallRight : houseWallFrontRight;
                     }
                     else if (tile == new Vector2(start.x + 1, start.y + 1))
-                        roofTile = roofFrontOuterCornerLeft;
+                        roofTile = (tile.x == bottomStartX + 1) ? roofLeft : roofFrontOuterCornerLeft;
                     else if (tile == new Vector2(stop.x - 1, start.y + 1))
-                        roofTile = roofFrontOuterCornerRight;
+                        roofTile = (tile.x == bottomStopX - 1) ? roofRight : roofFrontOuterCornerRight;
                     else if (tile.y == start.y)
                     {
+                        objectTile = houseWallFront;
                         if ((roomType == "Bottom" && bottomRoomDoor == tile.x) || (roomType == "Main" && mainRoomDoor == tile.x))
                             objectTile = Random.Range(0, 3) == 0 ? keyDoor : basicDoor;
-                        else
-                            objectTile = houseWallFront;
+                        else if (roomType == "Main")
+                        {
+                            if (tile.x == bottomStartX)
+                                objectTile = houseWallCornerLeft;
+                            else if (tile.x == bottomStopX)
+                                objectTile = houseWallCornerRight;
+                        }
+                        if (roomType == "Main")
+                        {
+                            if (tile.x == bottomStartX + 1)
+                                roofTile = roofLeft;
+                            else if (tile.x == bottomStopX - 1)
+                                roofTile = roofRight;
+                            else if (tile.x > bottomStartX + 1 && tile.x < bottomStopX - 1)
+                                roofTile = roofFlat;
+                        }
                     }
                     else if (tile.y == start.y + 1 && tile.x != start.x && tile.x != stop.x)
+                    {
                         roofTile = roofFront;
+                        if (roomType == "Main")
+                        {
+                            if (tile.x == bottomStartX + 1)
+                                roofTile = roofFrontInnerCornerLeft;
+                            else if (tile.x == bottomStopX - 1)
+                                roofTile = roofFrontInnerCornerRight;
+                            else if (tile.x > bottomStartX + 1 && tile.x < bottomStopX - 1)
+                                roofTile = roofFlat;
+                        }
+                    }
                 }
                 if (roomType != "Bottom")
                 {
@@ -202,13 +230,15 @@ public class BoardManager : MonoBehaviour
                     else if (tile.y == stop.y && tile.x > start.x && tile.x < stop.x)
                     {
                         floor = null;
-                        if (roomType == "Main" && topRoomDoor == tile.x)
+                        objectTile = houseWallFront;
+                        if (roomType == "Main")
                         {
-                            floor = floorTile;
-                            objectTile = Random.Range(0, 3) == 0 ? keyDoor : basicDoor;
+                            if (tile.x == topRoomDoor)
+                            {
+                                floor = floorTile;
+                                objectTile = Random.Range(0, 3) == 0 ? keyDoor : basicDoor;
+                            }
                         }
-                        else
-                            objectTile = houseWallFront;
                         if (tile.x == start.x + 1)
                             roofTile = roofBackCornerLeft;
                         else if (tile.x == stop.x - 1)
@@ -258,23 +288,24 @@ public class BoardManager : MonoBehaviour
                 gridPositions.Remove(tile);
             }
         }
-        if (roomType == "Bottom")
-        {
-            for (float x = start.x + 1; x <= stop.x - 1; x++)
-            {
-                GameObject roofTile;
-                if (x == start.x + 1)
-                    roofTile = roofFrontInnerCornerLeft;
-                else if (x == stop.x - 1)
-                    roofTile = roofFrontInnerCornerRight;
-                else
-                    roofTile = roofFlat;
-                GameObject roofObject = Instantiate(roofTile, new Vector2(x, stop.y + 1), Quaternion.identity);
-                Roof roof = roofObject.GetComponent<Roof>();
-                roof.setRoofIndex(house);
-                Roofs[house].Add(roof);
-            }
-        }
+        //if (roomType == "Bottom")
+        //{
+        //    for (float x = start.x + 1; x <= stop.x - 1; x++)
+        //    {
+        //        for (float y = stop.y + 1; y <= stop.y + 2; y++)
+        //        {
+        //            GameObject roofTile = roofFlat;
+        //            if (x == start.x + 1)
+        //                roofTile = (y == stop.y + 2) ? roofFrontInnerCornerLeft : roofLeft;
+        //            else if (x == stop.x - 1)
+        //                roofTile = (y == stop.y + 2) ? roofFrontInnerCornerRight : roofRight;
+        //            GameObject roofObject = Instantiate(roofTile, new Vector2(x, y), Quaternion.identity);
+        //            Roof roof = roofObject.GetComponent<Roof>();
+        //            roof.setRoofIndex(house);
+        //            Roofs[house].Add(roof);
+        //        }
+        //    }
+        //}
     }
 
     void LayoutHouses()
@@ -292,11 +323,15 @@ public class BoardManager : MonoBehaviour
             Roofs.Add(new List<Roof>());
             int topRoomDoor = -1;
             int bottomRoomDoor = -1;
+            int bottomStartX = -1;
+            int bottomStopX = -1;
             int mainRoomDoor;
             if (start.y >= position.y + 3)
             {
                 Vector2 roomStart = new Vector2(Random.Range(0, length / 2), 0) + position;
+                bottomStartX = (int) roomStart.x;
                 Vector2 roomStop = new Vector2((int) Random.Range(roomStart.x + 4, position.x + length), (int) (start.y - 1));
+                bottomStopX = (int) roomStop.x;
                 bottomRoomDoor = (int) Random.Range(roomStart.x + 1, roomStop.x - 1);
                 mainRoomDoor = (int) Random.Range(roomStart.x + 1, roomStop.x - 1);
                 LayoutRoom(roomStart, roomStop, "Bottom", i, topRoomDoor, bottomRoomDoor, mainRoomDoor);
@@ -313,7 +348,7 @@ public class BoardManager : MonoBehaviour
                 LayoutRoom(roomStart, roomStop, "Top", i, topRoomDoor, bottomRoomDoor, mainRoomDoor);
             }
 
-            LayoutRoom(start, stop, "Main", i, topRoomDoor, bottomRoomDoor, mainRoomDoor);
+            LayoutRoom(start, stop, "Main", i, topRoomDoor, bottomRoomDoor, mainRoomDoor, bottomStartX, bottomStopX);
 
             //tileChoice = triggerDoor;
             //GameObject instance = Instantiate(tileChoice, position, Quaternion.identity) as GameObject;

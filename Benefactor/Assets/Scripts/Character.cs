@@ -330,14 +330,17 @@ public class Character : InteractableObject
                         }
                     }
                 }
-                if (tag != "Player" && (hitObject.tag == "Enemy" || hitObject.tag == "Player"))
+                else if (hitObject.tag == "Enemy" || hitObject.tag == "Player")
                 {
-                    if (action == "Heal")
-                        safe = allies.Contains(hitObject); //only heal allies
-                    if (action == "Attack")
-                        safe = enemies.Contains(hitObject); //only attack enemies
+                    if (tag != "Player")
+                    {
+                        if (action == "Heal")
+                            safe = allies.Contains(hitObject); //only heal allies
+                        else if (action == "Attack" || action == "Steal")
+                            safe = enemies.Contains(hitObject); //only attack enemies
+                    }
+                    safe = safe ? hitCollider.GetComponent<Character>().inventory.Count > 0 : false;
                 }
-
                 if (safe)
                     objects.Add(hitObject);
             }

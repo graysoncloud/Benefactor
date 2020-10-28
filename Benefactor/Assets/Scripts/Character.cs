@@ -511,7 +511,7 @@ public class Character : InteractableObject
     {
         GameManager.instance.CameraTarget(toStealFrom.gameObject);
         Character character = toStealFrom.gameObject.GetComponent<Character>();
-        weightStolen = 0;
+        this.weightStolen = 0;
 
         foreach (HoldableObject item in character.inventory)
         {

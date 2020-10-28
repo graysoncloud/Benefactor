@@ -337,7 +337,7 @@ public class Player : Character
     protected override void Steal(InteractableObject toStealFrom)
     {
         looting = true;
-        weightStolen = 0;
+        this.weightStolen = 0;
         GameManager.instance.CameraTarget(toStealFrom.gameObject);
         Character character = toStealFrom.gameObject.GetComponent<Character>();
         ShowInventory("", 0, character.inventory);

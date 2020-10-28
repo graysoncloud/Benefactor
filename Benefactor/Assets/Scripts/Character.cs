@@ -513,7 +513,7 @@ public class Character : InteractableObject
         foreach (HoldableObject item in character.inventory)
         {
             weightStolen += item.weight;
-            if (UnityEngine.Random.Range(0, 10) < this.weightStolen)
+            if (CaughtStealing())
             {
                 character.Enemy(this);
                 break;
@@ -524,6 +524,11 @@ public class Character : InteractableObject
 
         StartCoroutine(NextStep());
         currentObjective = null;
+    }
+
+    protected bool CaughtStealing()
+    {
+        return UnityEngine.Random.Range(0, 10) < this.weightStolen;
     }
 
     protected virtual IEnumerator EndTurn()
@@ -587,7 +592,12 @@ public class Character : InteractableObject
         {
             rationale -= (toAttack.GetReputation() * 0.1);
         }
-
+        else
+        {
+            Character character = toAttack.gameObject.GetComponent<Character>();
+            if (character != null)
+                character.Enemy(this);
+        }
         currentObjective = null; //TEMP
     }
 
@@ -598,6 +608,10 @@ public class Character : InteractableObject
         toHeal.Heal(medicine.amount * (rationale / 50));
 
         Remove(medicine);
+
+        Character character = toHeal.gameObject.GetComponent<Character>();
+        if (character != null)
+            character.Ally(this);
 
         currentObjective = null; //TEMP
     }

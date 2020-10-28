@@ -307,7 +307,7 @@ public class Player : Character
             {
                 weightStolen += item.weight;
                 Character character = currentObjective.target.gameObject.GetComponent<Character>();
-                if (UnityEngine.Random.Range(0, 10) < this.weightStolen)
+                if (CaughtStealing())
                 {
                     character.Enemy(this);
                     Back();

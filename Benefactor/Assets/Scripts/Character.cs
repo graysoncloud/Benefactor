@@ -619,6 +619,7 @@ public class Character : InteractableObject
     public void Ally(Character character)
     {
         allies.Add(character);
+        enemies.Remove(character);
         foreach (Character ally in allies)
         {
             if (!ally.allies.Contains(character))
@@ -629,6 +630,7 @@ public class Character : InteractableObject
     public void Enemy(Character character)
     {
         enemies.Add(character);
+        allies.Remove(character);
         foreach (Character ally in allies)
         {
             if (!ally.enemies.Contains(character))

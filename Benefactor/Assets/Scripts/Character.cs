@@ -52,7 +52,6 @@ public class Character : InteractableObject
     public bool isTurn;
     public bool isMoving;
     public bool talkable;
-    public HoldableObject[] startingItems;
 
     protected Animator animator;
     private float inverseMoveTime;
@@ -62,7 +61,7 @@ public class Character : InteractableObject
     protected Dictionary<Vector2, Vector2[]> paths;
     protected Dictionary<String, List<InteractableObject>> actableObjects;
     protected SortedSet<String> actions;
-    public Dictionary<String, List<HoldableObject>> inventory;
+    public List<HoldableObject> inventory;
     protected int attackRange;
     protected List<InteractableObject> allies;
     protected List<InteractableObject> enemies;
@@ -84,16 +83,10 @@ public class Character : InteractableObject
         paths = new Dictionary<Vector2, Vector2[]>();
         actableObjects = new Dictionary<String, List<InteractableObject>>();
         actions = new SortedSet<String>();
-        inventory = new Dictionary<String, List<HoldableObject>>();
         allies = new List<InteractableObject>();
         allies.Add(this);
         enemies = new List<InteractableObject>();
         enemies.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>()); //temporarily adds Player to enemies as default
-
-        foreach (HoldableObject item in startingItems)
-        {
-            Pickup(Instantiate(item));
-        }
 
         GameManager.instance.AddCharacterToList(this);
 
@@ -146,7 +139,7 @@ public class Character : InteractableObject
     protected virtual void UpdateObjectives()
     {
         Objective healClosest = new Objective(GetClosest(allies), "Heal");
-        if (healClosest != null && IsDamaged() && inventory.ContainsKey("Medicine") && !HasObjective(healClosest))
+        if (healClosest != null && IsDamaged() && HasItemType("Medicine") && !HasObjective(healClosest))
             objectives.Prepend(healClosest);
 
         Objective attackClosest = new Objective(GetClosest(enemies), "Attack");
@@ -267,10 +260,10 @@ public class Character : InteractableObject
             return;
 
         GetAttackRange();
-        if (inventory.ContainsKey("Weapon"))
+        if (HasItemType("Weapon"))
             GetObjectsToActOn("Attack", attackRange);
 
-        if (inventory.ContainsKey("Medicine"))
+        if (HasItemType("Medicine"))
         {
             GetObjectsToActOn("Heal", 1);
             if (IsDamaged())
@@ -289,21 +282,22 @@ public class Character : InteractableObject
 
         GetObjectsToActOn("Door", 1);
 
-        if (inventory.ContainsKey("Key"))
+        if (HasItemType("Key"))
             GetObjectsToActOn("Unlock", 1);
 
         GetObjectsToActOn("Lever", 1);
 
         GetObjectsToActOn("Loot", 1);
+
+        GetObjectsToActOn("Steal", 1);
     }
 
     protected void GetAttackRange()
     {
         attackRange = 1;
-        if (inventory.ContainsKey("Weapon"))
+        if (HasItemType("Weapon"))
         {
-            List<HoldableObject> weapons;
-            inventory.TryGetValue("Weapon", out weapons);
+            List<HoldableObject> weapons = SortedInventory("Weapon");
             foreach (HoldableObject weapon in weapons)
             {
                 if (weapon.range > attackRange)
@@ -411,6 +405,10 @@ public class Character : InteractableObject
                 if (objects != null && objects.Contains(currentObjective.target))
                     Loot(currentObjective.target);
                 break;
+            case "Steal":
+                if (objects != null && objects.Contains(currentObjective.target))
+                    Steal(currentObjective.target);
+                break;
             case "Wait":
                 StartCoroutine(EndTurn());
                 currentObjective = null;
@@ -422,8 +420,7 @@ public class Character : InteractableObject
 
     protected virtual void SelectItem(String type)
     {
-        List<HoldableObject> items;
-        inventory.TryGetValue(type, out items);
+        List<HoldableObject> items = SortedInventory(type);
 
         int i = 0;
         if (type == "Weapon")
@@ -506,6 +503,22 @@ public class Character : InteractableObject
         currentObjective = null;
     }
 
+    protected virtual void Steal(InteractableObject toStealFrom)
+    {
+        GameManager.instance.CameraTarget(toStealFrom.gameObject);
+
+        Character character = toStealFrom.gameObject.GetComponent<Character>();
+
+        foreach (HoldableObject item in character.inventory)
+        {
+            Pickup(item);
+            character.Remove(item);
+        }
+
+        StartCoroutine(NextStep());
+        currentObjective = null;
+    }
+
     protected virtual IEnumerator EndTurn()
     {
         //yield return new WaitForSeconds(actionDelay);
@@ -520,6 +533,16 @@ public class Character : InteractableObject
         StartCoroutine(GameManager.instance.nextTurn());
     }
 
+    protected List<HoldableObject> SortedInventory(String type)
+    {
+        return inventory.FindAll(e => e.type == type);
+    }
+
+    public bool HasItemType(String type)
+    {
+        return SortedInventory(type).Count > 0;
+    }
+
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.GetComponent<HoldableObject>() != null)
@@ -528,31 +551,18 @@ public class Character : InteractableObject
         }
     }
 
-    protected virtual void Pickup (HoldableObject toPickup, Boolean start = false)
+    public virtual void Pickup (HoldableObject toPickup, Boolean start = false)
     {
-        if (inventory.ContainsKey(toPickup.type))
-        {
-            List<HoldableObject> toPickupList;
-            inventory.TryGetValue(toPickup.type, out toPickupList);
-            toPickupList.Add(toPickup);
-        }
-        else
-        {
-            inventory.Add(toPickup.type, new List<HoldableObject>{toPickup});
-        }
+        inventory.Add(toPickup);
         if (!start)
             toPickup.gameObject.SetActive(false);
 
         UpdateState();
     }
 
-    protected void Remove(HoldableObject item)
+    public void Remove(HoldableObject item)
     {
-        List<HoldableObject> items;
-        inventory.TryGetValue(item.type, out items);
-        items.Remove(item);
-        if (items.Count == 0)
-            inventory.Remove(item.type);
+        inventory.Remove(item);
     }
 
     protected void Attack (InteractableObject toAttack, HoldableObject weapon)
@@ -593,6 +603,7 @@ public class Character : InteractableObject
     public override SortedSet<String> GetActions()
     {
         receiveActions = base.GetActions();
+        receiveActions.Add("Steal"); //ADDED TO TEST
         if (talkable)
             receiveActions.Add("Talk");
 

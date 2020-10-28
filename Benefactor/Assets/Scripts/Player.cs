@@ -48,6 +48,7 @@ public class Player : Character
         actionButtons.Add("Unlock", GameObject.Find("UnlockButton"));
         actionButtons.Add("Lever", GameObject.Find("LeverButton"));
         actionButtons.Add("Loot", GameObject.Find("LootButton"));
+        actionButtons.Add("Steal", GameObject.Find("StealButton"));
         actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
 
@@ -298,8 +299,17 @@ public class Player : Character
         {
             Pickup(item);
             Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
-            storage.Remove(item);
-            ShowInventory("", 0, storage.items);
+            if (storage != null)
+            {
+                storage.Remove(item);
+                ShowInventory("", 0, storage.items);
+            }
+            else
+            {
+                Character character = currentObjective.target.gameObject.GetComponent<Character>();
+                character.Remove(item);
+                ShowInventory("", 0, character.inventory);
+            }
             return;
         }
         
@@ -315,6 +325,14 @@ public class Player : Character
         Storage storage = toLoot.gameObject.GetComponent<Storage>();
         storage.Open();
         ShowInventory("", 0, storage.items);
+    }
+
+    protected override void Steal(InteractableObject toStealFrom)
+    {
+        looting = true;
+        GameManager.instance.CameraTarget(toStealFrom.gameObject);
+        Character character = toStealFrom.gameObject.GetComponent<Character>();
+        ShowInventory("", 0, character.inventory);
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)
@@ -477,7 +495,7 @@ public class Player : Character
     private void ShowInventory(String type, int range = 0, List<HoldableObject> items = null)
     {
         if (items == null)
-            inventory.TryGetValue(type, out items);
+            items = SortedInventory(type);
         int j = 0;
         for (int i = 0; i < items.Count; i++)
         {
@@ -508,7 +526,8 @@ public class Player : Character
         {
             looting = false;
             Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
-            storage.Close();
+            if (storage != null)
+                storage.Close();
             HideInventory();
             HideBackButton();
             StartCoroutine(NextStep());

@@ -173,7 +173,10 @@ MonoBehaviour:
   leavesCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
+  fire: {fileID: 0}
   reputation: 50
+  portrait: {fileID: 0}
+  name: 
   moveTime: 0.1
   totalMoves: 5
   talkingRange: 5
@@ -184,7 +187,7 @@ MonoBehaviour:
   isTurn: 0
   isMoving: 0
   talkable: 0
-  startingItems:
+  inventory:
   - {fileID: -5498856414594888391, guid: 70791d2237bfa6f4fb33643eaed4084d, type: 3}
   itemsParent: {fileID: 0}
   inventoryUI: {fileID: 0}

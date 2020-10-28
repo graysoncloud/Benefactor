@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9080466321961566256
 Transform:
   m_ObjectHideFlags: 0
@@ -48,6 +48,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -125,7 +126,7 @@ MonoBehaviour:
   icon: {fileID: -7549622210256717415, guid: 67da5321f3ad3144a9b90e2c8caa047f, type: 3}
   type: Weapon
   name: Knife
-  uses: 30
+  uses: 26
   amount: 1
   range: 1
   blastRadius: 0

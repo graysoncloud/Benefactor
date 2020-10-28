@@ -186,7 +186,7 @@ public class DialogueManager : MonoBehaviour
         if (conversationType == "threaten")
         {
             // Intimidation algorithm here (I think it can stay this simple):
-            if (player.GetComponent<Character>().inventory.ContainsKey("Weapon"))
+            if (player.GetComponent<Character>().HasItemType("Weapon"))
             {
                 // Insert code to set a "fleeing" variable to true here (threat worked)
                 System.Random rand = new System.Random();

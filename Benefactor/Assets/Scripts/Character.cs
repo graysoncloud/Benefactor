@@ -69,6 +69,7 @@ public class Character : InteractableObject
     protected int movesLeft;
     protected int actionsLeft;
     protected State lastState;
+    protected int weightStolen;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -86,7 +87,7 @@ public class Character : InteractableObject
         allies = new List<InteractableObject>();
         allies.Add(this);
         enemies = new List<InteractableObject>();
-        enemies.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>()); //temporarily adds Player to enemies as default
+        //enemies.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>()); //temporarily adds Player to enemies as default
 
         GameManager.instance.AddCharacterToList(this);
 
@@ -139,11 +140,11 @@ public class Character : InteractableObject
     protected virtual void UpdateObjectives()
     {
         Objective healClosest = new Objective(GetClosest(allies), "Heal");
-        if (healClosest != null && IsDamaged() && HasItemType("Medicine") && !HasObjective(healClosest))
+        if (healClosest.target != null && IsDamaged() && HasItemType("Medicine") && !HasObjective(healClosest))
             objectives.Prepend(healClosest);
 
         Objective attackClosest = new Objective(GetClosest(enemies), "Attack");
-        if (attackClosest != null && destructive && !HasObjective(attackClosest))
+        if (attackClosest.target != null && destructive && !HasObjective(attackClosest))
             objectives.Add(attackClosest);
 
         if ((currentObjective == null && objectives.Count == 0) || (actionsLeft <= 0 && movesLeft <= 0))
@@ -506,11 +507,17 @@ public class Character : InteractableObject
     protected virtual void Steal(InteractableObject toStealFrom)
     {
         GameManager.instance.CameraTarget(toStealFrom.gameObject);
-
         Character character = toStealFrom.gameObject.GetComponent<Character>();
+        weightStolen = 0;
 
         foreach (HoldableObject item in character.inventory)
         {
+            weightStolen += item.weight;
+            if (UnityEngine.Random.Range(0, 10) < this.weightStolen)
+            {
+                character.Enemy(this);
+                break;
+            }
             Pickup(item);
             character.Remove(item);
         }
@@ -593,6 +600,26 @@ public class Character : InteractableObject
         Remove(medicine);
 
         currentObjective = null; //TEMP
+    }
+
+    public void Ally(Character character)
+    {
+        allies.Add(character);
+        foreach (Character ally in allies)
+        {
+            if (!ally.allies.Contains(character))
+                ally.Ally(character);
+        }
+    }
+
+    public void Enemy(Character character)
+    {
+        enemies.Add(character);
+        foreach (Character ally in allies)
+        {
+            if (!ally.enemies.Contains(character))
+                ally.Enemy(character);
+        }
     }
 
     protected virtual void TalkTo(InteractableObject toTalkTo)

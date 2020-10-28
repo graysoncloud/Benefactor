@@ -297,7 +297,6 @@ public class Player : Character
     {
         if (looting)
         {
-            Pickup(item);
             Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
             if (storage != null)
             {
@@ -306,10 +305,18 @@ public class Player : Character
             }
             else
             {
+                weightStolen += item.weight;
                 Character character = currentObjective.target.gameObject.GetComponent<Character>();
+                if (UnityEngine.Random.Range(0, 10) < this.weightStolen)
+                {
+                    character.Enemy(this);
+                    Back();
+                    return;
+                }
                 character.Remove(item);
                 ShowInventory("", 0, character.inventory);
             }
+            Pickup(item);
             return;
         }
         
@@ -330,6 +337,7 @@ public class Player : Character
     protected override void Steal(InteractableObject toStealFrom)
     {
         looting = true;
+        weightStolen = 0;
         GameManager.instance.CameraTarget(toStealFrom.gameObject);
         Character character = toStealFrom.gameObject.GetComponent<Character>();
         ShowInventory("", 0, character.inventory);

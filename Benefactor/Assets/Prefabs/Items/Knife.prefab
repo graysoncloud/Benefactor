@@ -131,3 +131,4 @@ MonoBehaviour:
   range: 1
   blastRadius: 0
   copies: 1
+  weight: 4

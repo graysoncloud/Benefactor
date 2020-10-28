@@ -13,6 +13,7 @@ public class HoldableObject : MonoBehaviour
     public int range; //distance to shoot or throw an object
     public int blastRadius; //blast radius, 1 normally, over 1 for area of effect throwables
     public int copies;
+    public int weight;
 
     // Start is called before the first frame update
     void Start()

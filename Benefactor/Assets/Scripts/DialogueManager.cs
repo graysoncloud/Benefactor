@@ -186,15 +186,18 @@ public class DialogueManager : MonoBehaviour
         if (conversationType == "threaten")
         {
             // Intimidation algorithm here (I think it can stay this simple):
+            // Would ideally choose what item to threaten with though
             if (player.GetComponent<Character>().HasItemType("Weapon"))
             {
                 // Insert code to set a "fleeing" variable to true here (threat worked)
+                talkingNPC.GetComponent<Character>().subdued = true;
                 System.Random rand = new System.Random();
                 int index = rand.Next(intimidationSuccessResponses.Length);
                 string randomResponse = intimidationSuccessResponses[index];
                 StartCoroutine(readDialogue(randomResponse, talkingNPC));
             } else
             {
+                // Insert code to convert neutral to enemy?
                 System.Random rand = new System.Random();
                 int index = rand.Next(intimidationFailureResponses.Length);
                 string randomResponse = intimidationFailureResponses[index];

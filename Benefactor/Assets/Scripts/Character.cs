@@ -52,6 +52,7 @@ public class Character : InteractableObject
     public bool isTurn;
     public bool isMoving;
     public bool talkable;
+    public bool subdued;
 
     protected Animator animator;
     private float inverseMoveTime;
@@ -70,12 +71,14 @@ public class Character : InteractableObject
     protected int actionsLeft;
     protected State lastState;
     protected int weightStolen;
+    protected double subduedRatio = .34;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         isTurn = false;
         isMoving = false;
+        subdued = false;
         destructive = true; //make it start false unless agitated?
 
         animator = GetComponent<Animator>();
@@ -88,6 +91,9 @@ public class Character : InteractableObject
         allies.Add(this);
         enemies = new List<InteractableObject>();
         //enemies.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>()); //temporarily adds Player to enemies as default
+
+        // For testing purposes- should be moved to custom classes for NPCs
+        maxHealth = 3;
 
         GameManager.instance.AddCharacterToList(this);
 
@@ -109,21 +115,33 @@ public class Character : InteractableObject
         yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
-        UpdateObjectives();
-        LogObjectives();
-        FindPath();
-        yield return new WaitForSeconds(moveTime);
-        if (pathToObjective.Length > 0)
+
+        if (subdued)
         {
-            yield return StartCoroutine(FollowPath());
-            StartCoroutine(NextStep());
+            Debug.Log("Subdued! Not Acting.");
+            yield return new WaitForSeconds(actionDelay);
+            StartCoroutine(EndTurn());
         }
+
         else
         {
-            GetAvailableTargets();
-            GetAvailableActions();
-            Act();
-         }
+            Debug.Log("Made it");
+            UpdateObjectives();
+            LogObjectives();
+            FindPath();
+            yield return new WaitForSeconds(moveTime);
+            if (pathToObjective.Length > 0)
+            {
+                yield return StartCoroutine(FollowPath());
+                StartCoroutine(NextStep());
+            }
+            else
+            {
+                GetAvailableTargets();
+                GetAvailableActions();
+                Act();
+            }
+        }
     }
 
     protected void LogObjectives()
@@ -585,6 +603,17 @@ public class Character : InteractableObject
         GameManager.instance.CameraTarget(toAttack.gameObject);
 
         toAttack.TakeDamage(weapon.amount * (weapon.range == 1 ? strength : 1) * (rationale / 50));
+
+        // Check for subdued
+        if (toAttack.GetHealth() / toAttack.maxHealth < subduedRatio)
+        {
+            if (toAttack.gameObject.GetComponent<Character>() != null)
+            {
+                Debug.Log("Character Subdued");
+                toAttack.gameObject.GetComponent<Character>().subdued = true;
+            }
+        }
+
         weapon.uses--;
         if (weapon.uses == 0)
             Remove(weapon);
@@ -649,9 +678,12 @@ public class Character : InteractableObject
     public override SortedSet<String> GetActions()
     {
         receiveActions = base.GetActions();
-        receiveActions.Add("Steal"); //ADDED TO TEST
         if (talkable)
             receiveActions.Add("Talk");
+
+        // Should be able to steal from allies. Not sure if that part works yet.
+        if (subdued || allies.Contains(GameObject.FindObjectOfType<Player>().GetComponent<InteractableObject>()))
+            receiveActions.Add("Steal");
 
         return receiveActions;
     }

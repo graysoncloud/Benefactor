@@ -307,7 +307,7 @@ public class Player : Character
             {
                 weightStolen += item.weight;
                 Character character = currentObjective.target.gameObject.GetComponent<Character>();
-                if (CaughtStealing())
+                if (CaughtStealing(character))
                 {
                     character.Enemy(this);
                     Back();

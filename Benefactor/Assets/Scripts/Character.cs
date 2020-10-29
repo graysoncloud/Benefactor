@@ -162,7 +162,7 @@ public class Character : InteractableObject
             objectives.Prepend(healClosest);
 
         Objective attackClosest = new Objective(GetClosest(enemies), "Attack");
-        if (attackClosest.target != null && destructive && !HasObjective(attackClosest))
+        if (attackClosest.target != null && destructive && !subdued && !HasObjective(attackClosest))
             objectives.Add(attackClosest);
 
         if ((currentObjective == null && objectives.Count == 0) || (actionsLeft <= 0 && movesLeft <= 0))
@@ -354,8 +354,10 @@ public class Character : InteractableObject
                     {
                         if (action == "Heal")
                             safe = allies.Contains(hitObject); //only heal allies
-                        else if (action == "Attack" || action == "Steal")
+                        else if (action == "Attack")
                             safe = enemies.Contains(hitObject); //only attack enemies
+                        else if (action == "Steal")
+                            safe = !enemies.Contains(hitObject) || hitObject.GetComponent<Character>().subdued; //can't steal from non-subdued enemies
                     }
                     safe = safe ? hitCollider.GetComponent<Character>().inventory.Count > 0 : false;
                 }
@@ -534,7 +536,7 @@ public class Character : InteractableObject
         foreach (HoldableObject item in character.inventory)
         {
             weightStolen += item.weight;
-            if (CaughtStealing())
+            if (CaughtStealing(character))
             {
                 character.Enemy(this);
                 break;
@@ -547,9 +549,9 @@ public class Character : InteractableObject
         currentObjective = null;
     }
 
-    protected bool CaughtStealing()
+    protected bool CaughtStealing(Character character)
     {
-        return UnityEngine.Random.Range(0, 10) < this.weightStolen;
+        return character.subdued ? false : UnityEngine.Random.Range(0, 10) < this.weightStolen;
     }
 
     protected virtual IEnumerator EndTurn()
@@ -650,24 +652,28 @@ public class Character : InteractableObject
 
     public void Ally(Character character)
     {
-        allies.Add(character);
         enemies.Remove(character);
+        allies.Add(character);
         foreach (Character ally in allies)
         {
-            if (!ally.allies.Contains(character))
+            if (ally != character && !ally.allies.Contains(character))
                 ally.Ally(character);
         }
+        if (!character.allies.Contains(this))
+            character.Ally(this);
     }
 
     public void Enemy(Character character)
     {
-        enemies.Add(character);
         allies.Remove(character);
+        enemies.Add(character);
         foreach (Character ally in allies)
         {
-            if (!ally.enemies.Contains(character))
+            if (ally != character &&  !ally.enemies.Contains(character))
                 ally.Enemy(character);
         }
+        if (!character.enemies.Contains(this))
+            character.Enemy(this);
     }
 
     protected virtual void TalkTo(InteractableObject toTalkTo)
@@ -682,8 +688,8 @@ public class Character : InteractableObject
             receiveActions.Add("Talk");
 
         // Should be able to steal from allies. Not sure if that part works yet.
-        if (subdued || allies.Contains(GameObject.FindObjectOfType<Player>().GetComponent<InteractableObject>()))
-            receiveActions.Add("Steal");
+        // if (subdued || allies.Contains(GameObject.FindObjectOfType<Player>().GetComponent<InteractableObject>()))
+        receiveActions.Add("Steal"); // I do checks in GetActions() for relationships btwn any two characters, not just regarding player
 
         return receiveActions;
     }

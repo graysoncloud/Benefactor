@@ -356,10 +356,9 @@ public class Character : InteractableObject
                             safe = allies.Contains(hitObject); //only heal allies
                         else if (action == "Attack")
                             safe = enemies.Contains(hitObject); //only attack enemies
-                        else if (action == "Steal")
-                            safe = !enemies.Contains(hitObject) || hitObject.GetComponent<Character>().subdued; //can't steal from non-subdued enemies
                     }
-                    safe = safe ? hitCollider.GetComponent<Character>().inventory.Count > 0 : false;
+                    if (action == "Steal")
+                        safe = hitCollider.GetComponent<Character>().inventory.Count > 0 & (!enemies.Contains(hitObject) || hitObject.GetComponent<Character>().subdued);
                 }
                 if (safe)
                     objects.Add(hitObject);

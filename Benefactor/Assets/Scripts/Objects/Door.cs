@@ -11,13 +11,13 @@ public class Door : InteractableObject
     public Lever trigger;
 
     protected bool open;
+    protected Animator animator;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-
-        doorSprite = Instantiate(doorSprite, transform.position, Quaternion.identity);
+        animator = GetComponent<Animator>();
     }
 
     public void Toggle()
@@ -31,21 +31,20 @@ public class Door : InteractableObject
     void Open()
     {
         open = true;
+        animator.SetBool("Open", true);
         ErasePosition();
-        doorSprite.Open();
     }
 
     void Close()
     {
         open = false;
+        animator.SetBool("Open", false);
         UpdatePosition();
-        doorSprite.Close();
     }
 
     public void Unlock()
     {
         locked = false;
-        doorSprite.Unlock();
     }
 
     public bool IsOpen()

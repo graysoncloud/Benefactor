@@ -114,13 +114,12 @@ MonoBehaviour:
     type: 3}
   basicDoor: {fileID: 7991227353612988546, guid: edb7eb91ba0d2e842b1982ee35ffd0ae,
     type: 3}
-  keyDoor: {fileID: 7991227353612988546, guid: d1f47c6aab1d5f9419dab868d1e0b77b, type: 3}
-  triggerDoor: {fileID: 7991227353612988546, guid: 7f3f9ab40edc8364da09717ca3c48d18,
+  keyDoor: {fileID: 7991227353612988546, guid: 5c6f38b2b7b7abe4fa229e92d5e16d05, type: 3}
+  triggerDoor: {fileID: 7991227353612988546, guid: 761dcd5b48973cc4f83618f4c30be09a,
     type: 3}
   storage:
   - {fileID: 7991227353612988546, guid: c9f9bf2a8236fba4cbd82a0c0cf9610a, type: 3}
   - {fileID: 7991227353612988546, guid: 7a99bdff91c8cf04fbda6a59f2a23abe, type: 3}
-  furniture: []
 --- !u!114 &5498348103610966037
 MonoBehaviour:
   m_ObjectHideFlags: 0

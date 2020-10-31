@@ -266,6 +266,18 @@ TextureImporter:
   - first:
       213: -3281259461817948537
     second: inside_87
+  - first:
+      213: -4061873745718759341
+    second: inside_88
+  - first:
+      213: -555855029263698050
+    second: inside_89
+  - first:
+      213: 2955244180297683540
+    second: inside_90
+  - first:
+      213: -1461241000704778182
+    second: inside_91
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -2198,6 +2210,90 @@ TextureImporter:
       bones: []
       spriteID: 786a37287ef9672d0800000000000000
       internalID: -3281259461817948537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: inside_88
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 350b2f7595351a7c0800000000000000
+      internalID: -4061873745718759341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: inside_89
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e777f12cbc43948f0800000000000000
+      internalID: -555855029263698050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: inside_90
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4521f27ace2230920800000000000000
+      internalID: 2955244180297683540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: inside_91
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3061c54d01a8bbe0800000000000000
+      internalID: -1461241000704778182
       vertices: []
       indices: 
       edges: []

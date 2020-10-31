@@ -293,6 +293,15 @@ TextureImporter:
   - first:
       213: 8210987299791612023
     second: dungeon_96
+  - first:
+      213: -277675770364147502
+    second: dungeon_97
+  - first:
+      213: 5019254671810250931
+    second: dungeon_98
+  - first:
+      213: 155410129978136549
+    second: dungeon_99
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -2414,6 +2423,69 @@ TextureImporter:
       bones: []
       spriteID: 778a25b027943f170800000000000000
       internalID: 8210987299791612023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dungeon_97
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d846b8ab5f752cf0800000000000000
+      internalID: -277675770364147502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dungeon_98
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b84876e789f7a540800000000000000
+      internalID: 5019254671810250931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dungeon_99
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e718d790b0282200800000000000000
+      internalID: 155410129978136549
       vertices: []
       indices: 
       edges: []

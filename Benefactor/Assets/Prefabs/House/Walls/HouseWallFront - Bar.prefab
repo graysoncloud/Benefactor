@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7732909630141236205}
   - component: {fileID: 4260946265005922778}
-  - component: {fileID: 2306534337288087210}
-  - component: {fileID: 8945055773003432077}
+  - component: {fileID: 3250592248702125131}
+  - component: {fileID: -2388374184263182209}
   m_Layer: 8
-  m_Name: TriggerDoorSprite
+  m_Name: HouseWallFront - Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,6 +48,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -72,7 +73,8 @@ SpriteRenderer:
   m_SortingLayerID: 1183741245
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4a94ba0fb1cbe5644ba25248e13ccd56, type: 3}
+  m_Sprite: {fileID: -277675770364147502, guid: 104f81bb64df4d345848ce4ead839f40,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -83,28 +85,33 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &2306534337288087210
-Rigidbody2D:
-  serializedVersion: 4
+--- !u!61 &3250592248702125131
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7991227353612988546}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_Enabled: 1
+  m_Density: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!114 &8945055773003432077
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.9, y: 0.9}
+  m_EdgeRadius: 0
+--- !u!114 &-2388374184263182209
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,9 +120,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 7991227353612988546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 221d92e708440d44d8c109b10556f932, type: 3}
+  m_Script: {fileID: 11500000, guid: 2600fd7fc31304e4f9e29d9ff040aeae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 90
-  openAngle: 90
-  unlockedSprite: {fileID: 21300000, guid: 4a94ba0fb1cbe5644ba25248e13ccd56, type: 3}
+  Collisions:
+    serializedVersion: 2
+    m_Bits: 0
+  maxHealth: 5
+  damageable: 1
+  repairable: 0
+  leavesCorpse: 0
+  damagedSprite: {fileID: -277675770364147502, guid: 104f81bb64df4d345848ce4ead839f40,
+    type: 3}
+  corpseSprite: {fileID: 0}
+  fire: {fileID: 0}
+  reputation: 50

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2306534337288087210}
   - component: {fileID: 3250592248702125131}
   - component: {fileID: -4912204553916616799}
+  - component: {fileID: -5755080771419565434}
   m_Layer: 8
   m_Name: Door
   m_TagString: Door
@@ -49,6 +50,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -152,9 +154,28 @@ MonoBehaviour:
   leavesCorpse: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
+  fire: {fileID: 0}
   reputation: 50
   locked: 0
   takesKey: 0
-  doorSprite: {fileID: 8945055773003432077, guid: a054ffb98cd5e3647b9a434cf0ec9166,
-    type: 3}
+  doorSprite: {fileID: 0}
   trigger: {fileID: 0}
+--- !u!95 &-5755080771419565434
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7991227353612988546}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d93e84a21b9dfd3468b67e19a3bf16ce, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

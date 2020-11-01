@@ -259,14 +259,16 @@ public class Character : InteractableObject
         isMoving = false;
     }
 
-    protected IEnumerator SmoothMovement(Vector3 end)
+    protected IEnumerator SmoothMovement(Vector2 end)
     {
-        float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
+        float sqrRemainingDistance = ((Vector2)transform.position - end).sqrMagnitude;
         while (sqrRemainingDistance > float.Epsilon)
         {
-            Vector3 newPosition = Vector3.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime * 10);
+            Vector2 newPosition = Vector2.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime * 10);
             rb2D.MovePosition(newPosition);
-            sqrRemainingDistance = (transform.position - end).sqrMagnitude;
+            sqrRemainingDistance = ((Vector2)transform.position - end).sqrMagnitude;
+            Debug.Log(sqrRemainingDistance);
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
             yield return null;
         }
     }

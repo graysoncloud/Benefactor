@@ -73,7 +73,7 @@ public class BoardManager : MonoBehaviour
         {
             for (int y = 1; y < rows - 1; y++)
             {
-                gridPositions.Add(new Vector3(x, y, 0f));
+                gridPositions.Add(new Vector3(x, y, y));
             }
         }
     }
@@ -131,7 +131,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    Vector2 RandomHousePosition(int length, int attempt = 0)
+    Vector3 RandomHousePosition(int length, int attempt = 0)
     {
         attempt++;
         if (attempt > 10)
@@ -140,12 +140,12 @@ public class BoardManager : MonoBehaviour
         }
 
         int randomIndex = Random.Range(0, gridPositions.Count);
-        Vector2 randomPosition = gridPositions[randomIndex];
+        Vector3 randomPosition = gridPositions[randomIndex];
         for (int x = 0; x <= length; x++)
         {
             for (int y = 0; y <= length; y++)
             {
-                Vector2 checkPosition = new Vector2(x + (int)randomPosition.x, y + (int)randomPosition.y);
+                Vector3 checkPosition = new Vector3(x + (int)randomPosition.x, y + (int)randomPosition.y, y + (int)randomPosition.y);
                 if (!gridPositions.Contains(checkPosition)) { return RandomHousePosition(length, attempt); }
             }
         }
@@ -277,10 +277,10 @@ public class BoardManager : MonoBehaviour
                     }
                 }
                 if (objectTile != null)
-                    Instantiate(objectTile, tile, Quaternion.identity);
+                    Instantiate(objectTile, new Vector3 (tile.x, tile.y, tile.y), Quaternion.identity);
                 if (roofTile != null)
                 {
-                    GameObject roofObject = Instantiate(roofTile, tile, Quaternion.identity);
+                    GameObject roofObject = Instantiate(roofTile, new Vector3(tile.x, tile.y, tile.y), Quaternion.identity);
                     Roof roof = roofObject.GetComponent<Roof>();
                     roof.setRoofIndex(house);
                     Roofs[house].Add(roof);
@@ -289,7 +289,7 @@ public class BoardManager : MonoBehaviour
                 {
                     Instantiate(floor, tile, Quaternion.identity);
                 }
-                gridPositions.Remove(tile);
+                gridPositions.Remove(new Vector3(tile.x, tile.y, tile.y));
             }
         }
     }

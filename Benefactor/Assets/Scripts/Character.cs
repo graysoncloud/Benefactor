@@ -53,11 +53,11 @@ public class Character : InteractableObject
     public bool isMoving;
     public bool talkable;
     public bool subdued;
+    public Objective currentObjective;
+    public List<Objective> objectives;
 
     protected Animator animator;
     private float inverseMoveTime;
-    protected List<Objective> objectives;
-    protected Objective currentObjective;
     protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
     protected Dictionary<String, List<InteractableObject>> actableObjects;
@@ -267,7 +267,6 @@ public class Character : InteractableObject
             Vector2 newPosition = Vector2.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime * 10);
             rb2D.MovePosition(newPosition);
             sqrRemainingDistance = ((Vector2)transform.position - end).sqrMagnitude;
-            Debug.Log(sqrRemainingDistance);
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
             yield return null;
         }

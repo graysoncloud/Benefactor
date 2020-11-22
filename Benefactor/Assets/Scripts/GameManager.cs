@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
         characters = new List<Character>();
         boardScript = GetComponent<BoardManager>();
         dialogueInProgress = false;
-
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -107,6 +106,12 @@ public class GameManager : MonoBehaviour
             yield break;
         }
         activeCharacter = characters[activeCharacterIndex];
+        if (activeCharacter.tag != "Player" && activeCharacter.currentObjective == null && activeCharacter.objectives.Count == 0)
+        {
+            StartCoroutine(nextTurn());
+            yield break;
+        }
+
         Debug.Log("Active Character Index: " + activeCharacterIndex);
 
         CameraTarget(activeCharacter.gameObject);

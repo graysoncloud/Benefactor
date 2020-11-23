@@ -180,16 +180,16 @@ public class BoardManager : MonoBehaviour
         Instantiate(table, new Vector3(tile.x, tile.y, tile.y), Quaternion.identity);
         Grid[(int)tile.x][(int)tile.y] = new Node(tile, true, 2);
         if (tile.y + 1 != stop.y && Random.Range(0, 2) == 0 && GetNode(new Vector2(tile.x, tile.y + 1)).Weight == 1)
-        { Instantiate(chairFront, new Vector3(tile.x, tile.y + 1, tile.y + 1), Quaternion.identity);
+        { Instantiate((Random.Range(0, 5) == 0) ? RandomObject(enemies) : chairFront, new Vector3(tile.x, tile.y + 1, tile.y + 1), Quaternion.identity);
             Grid[(int)tile.x][(int)tile.y + 1] = new Node(tile, true, 2); }
-        if (tile.y != start.y - 1 && Random.Range(0, 2) == 0 && GetNode(new Vector2(tile.x, tile.y - 1)).Weight == 1)
-        { Instantiate(chairBack, new Vector3(tile.x, tile.y - 1, tile.y - 1), Quaternion.identity);
+        if (tile.y != start.y && Random.Range(0, 2) == 0 && GetNode(new Vector2(tile.x, tile.y - 1)).Weight == 1)
+        { Instantiate((Random.Range(0, 5) == 0) ? RandomObject(enemies) : chairBack, new Vector3(tile.x, tile.y - 1, tile.y - 1), Quaternion.identity);
             Grid[(int)tile.x][(int)tile.y - 1] = new Node(tile, true, 2); }
         if (tile.x - 1 != start.x && Random.Range(0, 2) == 0 && GetNode(new Vector2(tile.x - 1, tile.y)).Weight == 1)
-        { Instantiate(chairLeft, new Vector3(tile.x - 1, tile.y, tile.y), Quaternion.identity);
+        { Instantiate((Random.Range(0, 5) == 0) ? RandomObject(enemies) : chairLeft, new Vector3(tile.x - 1, tile.y, tile.y), Quaternion.identity);
             Grid[(int)tile.x - 1][(int)tile.y] = new Node(tile, true, 2); }
         if (tile.x + 1 != stop.x && Random.Range(0, 2) == 0 && GetNode(new Vector2(tile.x + 1, tile.y)).Weight == 1)
-        { Instantiate(chairRight, new Vector3(tile.x + 1, tile.y, tile.y), Quaternion.identity);
+        { Instantiate((Random.Range(0, 5) == 0) ? RandomObject(enemies) : chairRight, new Vector3(tile.x + 1, tile.y, tile.y), Quaternion.identity);
             Grid[(int)tile.x + 1][(int)tile.y] = new Node(tile, true, 2); }
     }
 

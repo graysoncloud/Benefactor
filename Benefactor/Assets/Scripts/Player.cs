@@ -129,7 +129,7 @@ public class Player : Character
         {
             if (hit.transform != null)
             {
-                if (hit.transform.gameObject.tag != "Roof" && hit.transform.gameObject.tag != "Damaging" && (hit.transform.gameObject.tag != "Door" || !hit.transform.gameObject.GetComponent<Door>().IsOpen()))
+                if (hit.transform.gameObject.tag != "Roof" && hit.transform.gameObject.tag != "Damaging" && hit.transform.gameObject.tag != "Chair" && (hit.transform.gameObject.tag != "Door" || !hit.transform.gameObject.GetComponent<Door>().IsOpen()))
                     return;
             }
         }

@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 7732909630141236205}
   - component: {fileID: 4260946265005922778}
   - component: {fileID: 3250592248702125131}
-  - component: {fileID: -2388374184263182209}
+  - component: {fileID: 8640811492069854479}
   m_Layer: 8
   m_Name: Chair Front
-  m_TagString: Untagged
+  m_TagString: Chair
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,7 +111,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-2388374184263182209
+--- !u!114 &8640811492069854479
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,13 +120,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7991227353612988546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2600fd7fc31304e4f9e29d9ff040aeae, type: 3}
+  m_Script: {fileID: 11500000, guid: 79981d96bede6274796b51b1750ec961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Collisions:
     serializedVersion: 2
     m_Bits: 0
-  maxHealth: 2
+  maxHealth: 1
   damageable: 1
   repairable: 0
   leavesCorpse: 0
@@ -134,3 +134,4 @@ MonoBehaviour:
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
   reputation: 50
+  offset: 0.1

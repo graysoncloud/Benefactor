@@ -219,7 +219,7 @@ public class BoardManager : MonoBehaviour
                 else if (tile.y == stop.y - 4 && tile.x > start.x + 1)
                     objectTile = (Random.Range(0, 3) == 0) ? RandomObject(enemies) : stool;
                 else if (tile.y < stop.y - 5)
-                    if (Random.Range(0, 4) == 0) { PlaceTable(tile, start, new Vector2(stop.x, stop.y - 5)); }
+                    if (Random.Range(0, 5) == 0) { PlaceTable(tile, start, new Vector2(stop.x, stop.y - 5)); }
                 break;
             case "Entry":
                 switch (Random.Range(0, 2))
@@ -522,7 +522,8 @@ public class BoardManager : MonoBehaviour
         BoardSetup();
         InitializeList();
         LayoutBuildings();
-        LayoutObjectAtRandom(natureObjects, objectCount.minimum, objectCount.maximum);
+        LayoutObjectAtRandom(natureObjects, objectCount.minimum, objectCount.maximum/2);
+        LayoutObjectAtRandom(streetObjects, objectCount.minimum, objectCount.maximum/2);
         int enemyCount = (int)Mathf.Log(level, 2f) + 2; //added 2
         LayoutObjectAtRandom(enemies, enemyCount, enemyCount);
         Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);

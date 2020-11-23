@@ -64,7 +64,10 @@ MonoBehaviour:
   - {fileID: 6793900256970249569, guid: 89c8331683823014e9900980e63e7b52, type: 3}
   - {fileID: 1508380317589558186, guid: 5e3ef656344fe9b45bdbe7939a5df8b5, type: 3}
   - {fileID: 3901565958152476448, guid: 0c98515c5b0811647bd4fb83c980c9d3, type: 3}
-  streetTiles: []
+  streetTiles:
+  - {fileID: 7991227353612988546, guid: 66de3572df508d2428de0f57f37c0aa5, type: 3}
+  - {fileID: 7991227353612988546, guid: 77211cd42fc70d74e906334983cb2c46, type: 3}
+  - {fileID: 7991227353612988546, guid: dd2a35f8c84e27b4ba3121e96f625596, type: 3}
   natureObjects:
   - {fileID: 7991227353612988546, guid: 452a827b76b83484fb5d8b24688c5a2f, type: 3}
   - {fileID: 7991227353612988546, guid: 44b08350b38e4a04f80ae5172d79fc06, type: 3}
@@ -130,6 +133,7 @@ MonoBehaviour:
   shelves:
   - {fileID: 7991227353612988546, guid: 91cab95606af37b4f909b8ab93d727f9, type: 3}
   - {fileID: 7991227353612988546, guid: 07e6558f8ebef41449ffa5ddb1989344, type: 3}
+  - {fileID: 7991227353612988546, guid: 77211cd42fc70d74e906334983cb2c46, type: 3}
   bar:
   - {fileID: 7991227353612988546, guid: 06284a21fc37d6c43a27511e1aca41d9, type: 3}
   - {fileID: 7991227353612988546, guid: c0985990a45ad9548b8f2addb6808c11, type: 3}

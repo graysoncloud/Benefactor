@@ -1,2 +1,2 @@
-# Benefactor
-A research project looking into morality in video games
+# Senior Capstone Project
+Booker Martin,	Caitlin Colina,	Megan Reyes, Michael Elias

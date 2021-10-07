@@ -9,58 +9,28 @@ using UnityEngine.SocialPlatforms;
 
 public class Player : Character
 {
-    public Transform itemsParent;
-    public GameObject inventoryUI;
-    public InventorySlot[] slots;
-    public Text rationaleText;
-    public Text healthText;
     public bool gettingMove;
     public bool gettingAction;
     public bool gettingTarget;
     public bool gettingItem;
     public bool looting;
 
-    public GameObject tileIndicator;
-    public List<GameObject> indicators;
-    private CanvasGroup actionMenu;
-    private Dictionary<String, GameObject> actionButtons;
-    private GameObject backButton;
-
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        Debug.Log("BEFORE");
+        // if (!playable) {
+        //     return;
+        // }
+
         gettingMove = false;
         gettingTarget = false;
         looting = false;
 
-        rationaleText = GameObject.Find("RationaleText").GetComponent<Text>();
-        rationaleText.text = "Rationale: " + rationale;
-        healthText = GameObject.Find("HealthText").GetComponent<Text>();
-        healthText.text = "Health: " + health;
-        
-        actionMenu = GameObject.Find("ActionPanel").GetComponent<CanvasGroup>();
-        actionButtons = new Dictionary<String, GameObject>();
-        actionButtons.Add("Attack", GameObject.Find("AttackButton"));
-        actionButtons.Add("Talk", GameObject.Find("TalkButton"));
-        actionButtons.Add("Heal", GameObject.Find("HealButton"));
-        actionButtons.Add("Door", GameObject.Find("DoorButton"));
-        actionButtons.Add("Unlock", GameObject.Find("UnlockButton"));
-        actionButtons.Add("Lever", GameObject.Find("LeverButton"));
-        actionButtons.Add("Loot", GameObject.Find("LootButton"));
-        actionButtons.Add("Steal", GameObject.Find("StealButton"));
-        actionButtons.Add("Wait", GameObject.Find("WaitButton"));
-        HideActionMenu();
-
-        inventoryUI = GameObject.Find("InventoryParent");
-        inventoryUI.transform.position = new Vector2(Screen.width / 2, Screen.height / 4);
-        itemsParent = GameObject.Find("Inventory").GetComponent<Transform>();
-        slots = itemsParent.GetComponentsInChildren<InventorySlot>();
-        HideInventory();
-
-        backButton = GameObject.Find("BackButton");
-        backButton.transform.position = new Vector2(Screen.width*0.9f, Screen.height*0.1f);
-        HideBackButton();
+        GameManager.instance.AddCharacterToList(this);
+        Debug.Log(GameManager.instance.characters);
+        Debug.Log("AFTER");
     }
 
     // Update is called once per frame
@@ -89,6 +59,10 @@ public class Player : Character
 
     protected override IEnumerator NextStep()
     {
+        if (!playable) {
+            yield return base.NextStep();
+        }
+
         // Prevents the rest of the players turn from happening until dialogue is resolved (hopefully)
         if (GameManager.instance.dialogueInProgress)
             yield return new WaitUntil(() => GameManager.instance.dialogueInProgress == false);
@@ -97,9 +71,9 @@ public class Player : Character
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
         if (lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
-            HideBackButton();
+            GameManager.instance.HideBackButton();
         else
-            ShowBackButton();
+            GameManager.instance.ShowBackButton();
 
         UpdateObjectives();
         GetPaths();
@@ -109,6 +83,11 @@ public class Player : Character
 
     protected override void UpdateObjectives()
     {
+        if (!playable) {
+            base.UpdateObjectives();
+            return;
+        }
+
         currentObjective = new Objective(null, null);
     }
 
@@ -164,6 +143,11 @@ public class Player : Character
 
     protected override void FindPath()
     {
+        if (!playable) {
+            base.FindPath();
+            return;
+        }
+
         if (paths.Count == 1)
         {
             paths.TryGetValue(transform.position, out pathToObjective);
@@ -171,7 +155,7 @@ public class Player : Character
         }
         else
         {
-            ShowPaths();
+            GameManager.instance.ShowPaths(paths);
             gettingMove = true;
             Debug.Log("Player waiting for move input");
         }
@@ -184,17 +168,17 @@ public class Player : Character
         if (paths.ContainsKey(coords))
         {
             paths.TryGetValue(coords, out pathToObjective);
-            HighlightPath(pathToObjective);
+            GameManager.instance.HighlightPath(pathToObjective);
 
             if (Input.GetMouseButtonDown(0))
             {
-                HideIndicators();
+                GameManager.instance.HideIndicators();
                 return false;
             }
         }
         else
         {
-            UnhighlightPaths();
+            GameManager.instance.UnhighlightPaths();
         }
 
         return true;
@@ -222,14 +206,14 @@ public class Player : Character
             StartCoroutine(EndTurn());
         else
         {
-            SetupActionMenu();
+            GameManager.instance.SetupActionMenu(actions);
             gettingAction = true;
         }
     }
 
-    protected void GetActionInput(string action)
+    public void GetActionInput(string action)
     {
-        HideActionMenu();
+        GameManager.instance.HideActionMenu();
         currentObjective.action = action;
         gettingAction = false;
         if (currentObjective.action != "Wait")
@@ -240,7 +224,7 @@ public class Player : Character
 
     protected void SelectTarget()
     {
-        ShowObjects(GetObjects());
+        GameManager.instance.ShowObjects(GetObjects());
         gettingTarget = true;
         Debug.Log("Player waiting for target input");
     }
@@ -261,18 +245,18 @@ public class Player : Character
         {
             if ((Vector2)o.transform.position == coords)
             {
-                HighlightPath(new Vector2[] { coords });
+                GameManager.instance.HighlightPath(new Vector2[] { coords });
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     currentObjective.target = o;
                     GameManager.instance.CameraTarget(o.gameObject);
-                    HideIndicators();
+                    GameManager.instance.HideIndicators();
                     return false;
                 }
             }
             else
-                UnhighlightPath(new Vector2[] { o.transform.position });
+                GameManager.instance.UnhighlightPath(new Vector2[] { o.transform.position });
         }
 
         return true;
@@ -288,7 +272,7 @@ public class Player : Character
 
     protected override void SelectItem(String type)
     {
-        ShowInventory(type, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
+        GameManager.instance.ShowInventory(type, inventory, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
         gettingItem = true;
         Debug.Log("Player waiting for item input");
     }
@@ -301,7 +285,7 @@ public class Player : Character
             if (storage != null)
             {
                 storage.Remove(item);
-                ShowInventory("", 0, storage.items);
+                GameManager.instance.ShowInventory("", inventory, 0, storage.items);
             }
             else
             {
@@ -314,14 +298,14 @@ public class Player : Character
                     return;
                 }
                 character.Remove(item);
-                ShowInventory("", 0, character.inventory);
+                GameManager.instance.ShowInventory("", inventory, 0, character.inventory);
             }
             Pickup(item);
             return;
         }
         
         gettingItem = false;
-        HideInventory();
+        GameManager.instance.HideInventory();
         base.ChooseItem(item);
     }
 
@@ -331,7 +315,7 @@ public class Player : Character
         GameManager.instance.CameraTarget(toLoot.gameObject);
         Storage storage = toLoot.gameObject.GetComponent<Storage>();
         storage.Open();
-        ShowInventory("", 0, storage.items);
+        GameManager.instance.ShowInventory("", inventory, 0, storage.items);
     }
 
     protected override void Steal(InteractableObject toStealFrom)
@@ -340,7 +324,7 @@ public class Player : Character
         this.weightStolen = 0;
         GameManager.instance.CameraTarget(toStealFrom.gameObject);
         Character character = toStealFrom.gameObject.GetComponent<Character>();
-        ShowInventory("", 0, character.inventory);
+        GameManager.instance.ShowInventory("", inventory, 0, character.inventory);
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)
@@ -371,7 +355,7 @@ public class Player : Character
     public override void TakeDamage (double loss)
     {
         base.TakeDamage(loss);
-        UpdateHealth();
+        GameManager.instance.UpdateHealth(health);
         animator.SetTrigger("playerHit");
         CheckIfGameOver();
     }
@@ -379,153 +363,13 @@ public class Player : Character
     public override void Heal (double amount)
     {
         base.Heal(amount);
-        UpdateHealth();
-    }
-
-    private void UpdateHealth()
-    {
-        healthText.text = "Health: " + health;
+        GameManager.instance.UpdateHealth(health);
     }
 
     protected override void TalkTo(InteractableObject toTalkTo)
     {
-        HideBackButton();
+        GameManager.instance.HideBackButton();
         base.TalkTo(toTalkTo);
-    }
-
-    private void SetupActionMenu()
-    {
-        Vector2 position = new Vector2(Screen.width / 2, Screen.height / 3);
-        GameObject buttonForScale;
-        actionButtons.TryGetValue("Attack", out buttonForScale);
-        float buttonHeight = buttonForScale.GetComponent<RectTransform>().rect.height,
-            buttonWidth = buttonForScale.GetComponent<RectTransform>().rect.width,
-            spacing = buttonHeight*0.3f,
-            width  = buttonWidth + spacing * 2,
-            height = (buttonHeight + spacing) * actions.Count + spacing;
-        RectTransform panelRectTransform = GameObject.Find("ActionPanel").transform.GetComponent<RectTransform>();
-        panelRectTransform.sizeDelta = new Vector2(width, height);
-        panelRectTransform.transform.position = position;
-        int index = 0;
-        foreach (string action in actions)
-        {
-            GameObject button;
-            actionButtons.TryGetValue(action, out button);
-            button.SetActive(true);
-            button.transform.position = new Vector2(position.x, position.y + height/2 - spacing - buttonHeight/2 - (buttonHeight + spacing) * index);
-            Debug.Log(button.transform.position);
-            index++;
-        }
-
-        actionMenu.alpha = 1f;
-        actionMenu.blocksRaycasts = true;
-        Debug.Log("Player waiting for act input");
-    }
-
-    private void HideActionMenu()
-    {
-        actionMenu.alpha = 0f;
-        actionMenu.blocksRaycasts = false;
-        foreach (GameObject button in actionButtons.Values)
-        {
-            button.SetActive(false);
-        }
-    }
-
-    private void ShowPaths()
-    {
-        HideIndicators();
-
-        foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
-        {
-            indicators.Add(Instantiate(tileIndicator, entry.Key, Quaternion.identity));
-            indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-        }
-    }
-
-    public void ShowObjects(List<InteractableObject> objects)
-    {
-        HideIndicators();
-
-        foreach (InteractableObject o in objects)
-        {
-            indicators.Add(Instantiate(tileIndicator, o.transform.position, Quaternion.identity));
-            indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-        }
-    }
-
-    private void HideIndicators()
-    {
-        foreach (GameObject indicator in indicators)
-        {
-            Destroy(indicator);
-        }
-        indicators.Clear();
-    }
-
-    private void HighlightPath(Vector2[] path)
-    {
-        foreach (GameObject indicator in indicators)
-        {
-            if (indicator == null) { break; }
-            if (path.Contains((Vector2)indicator.transform.position))
-            {
-                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-            }
-            else
-            {
-                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-            }
-        }
-    }
-
-    private void UnhighlightPath(Vector2[] path)
-    {
-        foreach (GameObject indicator in indicators)
-        {
-            if (indicator == null) { break; }
-            if (path.Contains((Vector2)indicator.transform.position))
-            {
-                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-            }
-        }
-    }
-
-    private void UnhighlightPaths()
-    {
-        foreach (GameObject indicator in indicators)
-        {
-            if (indicator == null) { break; }
-            indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-        }
-    }
-
-    private void ShowInventory(String type, int range = 0, List<HoldableObject> items = null)
-    {
-        if (items == null)
-            items = SortedInventory(type);
-        int j = 0;
-        for (int i = 0; i < items.Count; i++)
-        {
-            if (items != null && (range == 0 || items[i].range >= range))
-            {
-                slots[j].AddItem(items[i]);
-                j++;
-            }
-        }
-        while (j < slots.Length)
-        {
-            slots[j].ClearSlot();
-            j++;
-        }
-
-        inventoryUI.SetActive(true);
-        ShowBackButton();
-    }
-
-    private void HideInventory()
-    {
-        inventoryUI.SetActive(false);
     }
 
     public void Back()
@@ -536,35 +380,35 @@ public class Player : Character
             Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
             if (storage != null)
                 storage.Close();
-            HideInventory();
-            HideBackButton();
+            GameManager.instance.HideInventory();
+            GameManager.instance.HideBackButton();
             StartCoroutine(NextStep());
             return;
         }
         
         if (gettingMove)
         {
-            HideIndicators();
+            GameManager.instance.HideIndicators();
             gettingMove = false;
         }
         else if (gettingAction)
         {
-            HideActionMenu();
+            GameManager.instance.HideActionMenu();
             gettingAction = false;
         }
         else if (gettingTarget)
         {
-            HideIndicators();
+            GameManager.instance.HideIndicators();
             gettingTarget = false;
         }
         else if (gettingItem)
         {
-            HideInventory();
+            GameManager.instance.HideInventory();
             gettingItem = false;
         }
 
         health = lastState.health;
-        UpdateHealth();
+        GameManager.instance.UpdateHealth(health);
         movesLeft = lastState.moves;
         actionsLeft = lastState.actions;
         transform.position = lastState.position;
@@ -573,17 +417,7 @@ public class Player : Character
 
     protected override IEnumerator EndTurn()
     {
-        HideBackButton();
+        GameManager.instance.HideBackButton();
         yield return StartCoroutine(base.EndTurn());
-    }
-
-        private void ShowBackButton()
-    {
-        backButton.SetActive(true);
-    }
-
-    private void HideBackButton()
-    {
-        backButton.SetActive(false);
     }
 }

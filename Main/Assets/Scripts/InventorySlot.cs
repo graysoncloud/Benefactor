@@ -30,6 +30,6 @@ public class InventorySlot : MonoBehaviour
 
     public void OnPress()
     {
-        player.ChooseItem(item);
+        GameManager.instance.activeCharacter.ChooseItem(item);
     }
 }

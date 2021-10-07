@@ -40,6 +40,7 @@ public class Character : InteractableObject
         }
     }
 
+    public bool playable;
     public Sprite portrait;
     public string name;
     public float moveTime;
@@ -95,7 +96,7 @@ public class Character : InteractableObject
         // For testing purposes- should be moved to custom classes for NPCs
         maxHealth = 3;
 
-        GameManager.instance.AddCharacterToList(this);
+        // GameManager.instance.AddCharacterToList(this);
 
         base.Start();
     }
@@ -317,7 +318,7 @@ public class Character : InteractableObject
         attackRange = 1;
         if (HasItemType("Weapon"))
         {
-            List<HoldableObject> weapons = SortedInventory("Weapon");
+            List<HoldableObject> weapons = GameManager.instance.SortedInventory("Weapon", inventory);
             foreach (HoldableObject weapon in weapons)
             {
                 if (weapon.range > attackRange)
@@ -351,7 +352,7 @@ public class Character : InteractableObject
                 }
                 else if (hitObject.tag == "Enemy" || hitObject.tag == "Player")
                 {
-                    if (tag != "Player")
+                    if (!playable && tag != "Player")
                     {
                         if (action == "Heal")
                             safe = allies.Contains(hitObject); //only heal allies
@@ -444,7 +445,7 @@ public class Character : InteractableObject
 
     protected virtual void SelectItem(String type)
     {
-        List<HoldableObject> items = SortedInventory(type);
+        List<HoldableObject> items = GameManager.instance.SortedInventory(type, inventory);
 
         int i = 0;
         if (type == "Weapon")
@@ -568,14 +569,9 @@ public class Character : InteractableObject
         StartCoroutine(GameManager.instance.nextTurn());
     }
 
-    protected List<HoldableObject> SortedInventory(String type)
-    {
-        return inventory.FindAll(e => e.type == type);
-    }
-
     public bool HasItemType(String type)
     {
-        return SortedInventory(type).Count > 0;
+        return GameManager.instance.SortedInventory(type, inventory).Count > 0;
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)

@@ -524,10 +524,10 @@ public class BoardManager : MonoBehaviour
         LayoutBuildings();
         LayoutObjectAtRandom(natureObjects, objectCount.minimum, objectCount.maximum/2);
         LayoutObjectAtRandom(streetObjects, objectCount.minimum, objectCount.maximum/2);
+        Instantiate(player, new Vector3(0, 0, 0f), Quaternion.identity);
         int enemyCount = (int)Mathf.Log(level, 2f) + 2; //added 2
         LayoutObjectAtRandom(enemies, enemyCount, enemyCount);
         Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
-        //Instantiate(player, new Vector3(0, 0, 0f), Quaternion.identity);
 
         return Grid;
     }

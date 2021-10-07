@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8178759162555290998}
   - component: {fileID: 8251151558638009708}
   - component: {fileID: 4865629748997947593}
-  - component: {fileID: 5100585776285455737}
+  - component: {fileID: 2098954084122828602}
   m_Layer: 8
   m_Name: Enemy2
   m_TagString: Enemy
@@ -152,7 +152,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
---- !u!114 &5100585776285455737
+--- !u!114 &2098954084122828602
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8178759162555290993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21825f0c59a08b3489267517aabe7f53, type: 3}
+  m_Script: {fileID: 11500000, guid: f7968022afbccab499a4bdae3b821e4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Collisions:
@@ -175,6 +175,7 @@ MonoBehaviour:
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
   reputation: 50
+  playable: 1
   portrait: {fileID: 0}
   name: 
   moveTime: 0.1
@@ -189,5 +190,12 @@ MonoBehaviour:
   talkable: 1
   subdued: 0
   inventory:
+  - {fileID: -5498856414594888391, guid: 70791d2237bfa6f4fb33643eaed4084d, type: 3}
   - {fileID: -5498856414594888391, guid: ae876cd8e3a9f8c4c9af44a00acef1e0, type: 3}
+  - {fileID: 2648351601887277121, guid: 3c8bc909cfcf86140a11ded9170ebd02, type: 3}
   - {fileID: -5498856414594888391, guid: b67a25e2dbb90a64ba4959583c7d4227, type: 3}
+  gettingMove: 0
+  gettingAction: 0
+  gettingTarget: 0
+  gettingItem: 0
+  looting: 0

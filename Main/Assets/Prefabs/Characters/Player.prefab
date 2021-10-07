@@ -190,6 +190,7 @@ MonoBehaviour:
   subdued: 0
   inventory:
   - {fileID: -5498856414594888391, guid: 70791d2237bfa6f4fb33643eaed4084d, type: 3}
+  playable: 1
   itemsParent: {fileID: 0}
   inventoryUI: {fileID: 0}
   slots: []

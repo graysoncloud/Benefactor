@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cost: 5
+  damagePerTurn: 1
 --- !u!50 &3241137450749891006
 Rigidbody2D:
   serializedVersion: 4

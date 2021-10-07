@@ -6,6 +6,7 @@ public class Damaging : MonoBehaviour
 {
     protected BoxCollider2D boxCollider;
     public int cost;
+    public int damagePerTurn;
 
     // Start is called before the first frame update
     void Start()

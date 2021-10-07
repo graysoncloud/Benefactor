@@ -565,6 +565,7 @@ public class Character : InteractableObject
         else
             yield return new WaitForSeconds(0f);
 
+        CheckSpace(true);
         isTurn = false;
         StartCoroutine(GameManager.instance.nextTurn());
     }
@@ -690,13 +691,18 @@ public class Character : InteractableObject
         return receiveActions;
     }
 
-    protected void CheckSpace()
+    protected void CheckSpace(bool end = false)
     {
         boxCollider.enabled = false;
         Collider2D hitCollider = Physics2D.OverlapCircle((Vector2)transform.position, 0.1f);
         boxCollider.enabled = true;
-        if (hitCollider != null && hitCollider.gameObject.tag == "Damaging")
-            TakeDamage(1);
+        if (!end && hitCollider != null && hitCollider.gameObject.tag == "Damaging")
+            TakeDamage(hitCollider.gameObject.GetComponent<Damaging>().damagePerTurn);
+        if (hitCollider != null && hitCollider.gameObject.tag == "Roof")
+            if (end)
+                hitCollider.gameObject.GetComponent<Roof>().showRoof();
+            else
+                hitCollider.gameObject.GetComponent<Roof>().hideRoof();
     }
 
     protected void UpdateState()

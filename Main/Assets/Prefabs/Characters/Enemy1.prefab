@@ -175,7 +175,7 @@ MonoBehaviour:
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
   reputation: 50
-  playable: 1
+  playable: 0
   portrait: {fileID: 0}
   name: 
   moveTime: 0.1

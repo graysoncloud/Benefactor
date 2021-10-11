@@ -49,8 +49,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (characters.Count > 0) { doingSetup = false;  } //kinda sketchy way of making sure characters have been loaded in, might change to a time delay?
-
         if (!doingSetup && gettingNextCharacter)
         {
             gettingNextCharacter = GameObject.Find("MouseManager").GetComponent<MouseManager>().GetNextCharacter(GetPlayableCharacters());
@@ -64,6 +62,10 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(NextTurn());
         }
+    }
+
+    public void FinishSetup() {
+        doingSetup = false;
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -121,6 +123,7 @@ public class GameManager : MonoBehaviour
         GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowPaths(paths);
 
         gettingNextCharacter = true;
+        GameObject.Find("Main Camera").GetComponent<FollowPlayer>().FollowMouse();
         CameraTarget(GetPlayableCharacters()[0].gameObject); //temp until camera follows mouse
     }
 
@@ -172,6 +175,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Active Character: " + activeCharacter);
         CameraTarget(activeCharacter.gameObject);
+        GameObject.Find("Main Camera").GetComponent<FollowPlayer>().FollowTarget();
         activeCharacter.StartTurn();
     }
 

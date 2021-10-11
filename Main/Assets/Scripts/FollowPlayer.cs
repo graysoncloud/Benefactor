@@ -24,7 +24,7 @@ public class FollowPlayer : MonoBehaviour
             if (followMouse)
             {
                 Vector2 mouseScreenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                float moveFraction = 0.2f; //only move camera if the mouse is this close to edge of screen
+                double moveFraction = 0.1; //only move camera if the mouse is this close to edge of screen
                 if (mouseScreenPosition.x > Screen.width * moveFraction && mouseScreenPosition.x < Screen.width * (1-moveFraction) &&
                     mouseScreenPosition.y > Screen.height * moveFraction && mouseScreenPosition.y < Screen.height * (1-moveFraction))
                 {
@@ -45,7 +45,19 @@ public class FollowPlayer : MonoBehaviour
             else
             {
                 moveSpeed = Math.Max(distance * 2, 0.03f);
-                transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
+                Vector3 newPosition = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
+                Vector2 minPosition = new Vector2(7.0f, 3.0f);
+                BoardManager board = GameManager.instance.GetComponent<BoardManager>();
+                Vector2 maxPosition = new Vector2((float)board.columns - minPosition.x - 1, (float)board.rows - minPosition.y - 1);
+                if (newPosition.x < minPosition.x)
+                    newPosition.x = minPosition.x;
+                if (newPosition.y < minPosition.y)
+                    newPosition.y = minPosition.y;
+                if (newPosition.x > maxPosition.x)
+                    newPosition.x = maxPosition.x;
+                if (newPosition.y > maxPosition.y)
+                    newPosition.y = maxPosition.y;
+                transform.position = newPosition;
             }
         }
     }

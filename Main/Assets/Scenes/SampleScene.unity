@@ -1936,7 +1936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e00fddaf3bcbf6d4fb04e8e627985d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
+  followMouse: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

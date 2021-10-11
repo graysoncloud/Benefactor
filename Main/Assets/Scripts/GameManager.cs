@@ -56,13 +56,13 @@ public class GameManager : MonoBehaviour
             gettingNextCharacter = GameObject.Find("MouseManager").GetComponent<MouseManager>().GetNextCharacter(GetPlayableCharacters());
             if (!gettingNextCharacter)
             {
-                startTurn();
+                StartTurn();
             }
         }
 
         if (!doingSetup && activeCharacter == null)
         {
-            StartCoroutine(nextTurn());
+            StartCoroutine(NextTurn());
         }
     }
 
@@ -132,10 +132,10 @@ public class GameManager : MonoBehaviour
         int i = new System.Random().Next(nonplayableCharacters.Count);
         activeCharacter = nonplayableCharacters[i];
 
-        startTurn();
+        StartTurn();
     }
 
-    public IEnumerator nextTurn()
+    public IEnumerator NextTurn()
     {
         if (GetPlayableCharacters().Count == 0)
         {
@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
                 playerTurn = false;
             else
             {
-                nextRound();
+                NextRound();
                 yield break;
             }
         }
@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour
                 playerTurn = true;
             else
             {
-                nextRound();
+                NextRound();
                 yield break;
             }
         }
@@ -168,14 +168,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void startTurn()
+    private void StartTurn()
     {
         Debug.Log("Active Character: " + activeCharacter);
         CameraTarget(activeCharacter.gameObject);
         activeCharacter.StartTurn();
     }
 
-    public void nextRound()
+    public void NextRound()
     {
         round++;
         playerTurn = playerStart;
@@ -185,7 +185,7 @@ public class GameManager : MonoBehaviour
             character.hasGone = false;
         }
 
-        StartCoroutine(nextTurn());
+        StartCoroutine(NextTurn());
     }
 
     public void AddCharacterToList(Player character)

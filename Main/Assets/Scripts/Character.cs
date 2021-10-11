@@ -569,7 +569,7 @@ public class Character : InteractableObject
         CheckSpace(true);
         isTurn = false;
         hasGone = true;
-        StartCoroutine(GameManager.instance.nextTurn());
+        StartCoroutine(GameManager.instance.NextTurn());
     }
 
     public bool HasItemType(String type)

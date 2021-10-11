@@ -163,17 +163,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 0
   levelStartDelay: 2
-  turnDelay: 0.2
+  turnDelay: 0.5
   characters: []
-  activeCharacterIndex: 0
+  gettingNextCharacter: 0
   activeCharacter: {fileID: 0}
   dialogueInProgress: 0
   round: 0
-  inventoryUI: {fileID: 0}
-  itemsParent: {fileID: 0}
-  slots: []
-  rationaleText: {fileID: 0}
-  healthText: {fileID: 0}
-  tileIndicator: {fileID: 6793900256970249569, guid: 73dc820bc82c3724ab6d3f763aac8d46,
-    type: 3}
-  indicators: []
+  playerStart: 1

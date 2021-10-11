@@ -19,18 +19,12 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
-        Debug.Log("BEFORE");
-        // if (!playable) {
-        //     return;
-        // }
 
         gettingMove = false;
         gettingTarget = false;
         looting = false;
 
         GameManager.instance.AddCharacterToList(this);
-        Debug.Log(GameManager.instance.characters);
-        Debug.Log("AFTER");
     }
 
     // Update is called once per frame
@@ -215,6 +209,11 @@ public class Player : Character
 
     protected override void SelectItem(String type)
     {
+        if (!playable) {
+            base.SelectItem(type);
+            return;
+        }
+
         GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowInventory(type, inventory, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
         gettingItem = true;
         Debug.Log("Player waiting for item input");

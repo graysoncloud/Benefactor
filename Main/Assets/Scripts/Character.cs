@@ -51,6 +51,7 @@ public class Character : InteractableObject
     public double strength; //multiplier for range 1 weapon
     public double rationale;
     public bool isTurn;
+    public bool hasGone;
     public bool isMoving;
     public bool talkable;
     public bool subdued;
@@ -91,7 +92,7 @@ public class Character : InteractableObject
         allies = new List<InteractableObject>();
         allies.Add(this);
         enemies = new List<InteractableObject>();
-        // enemies.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>()); //temporarily adds Player to enemies as default
+        enemies.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>()); //temporarily adds Player to enemies as default
 
         // For testing purposes- should be moved to custom classes for NPCs
         maxHealth = 3;
@@ -113,7 +114,7 @@ public class Character : InteractableObject
 
     protected virtual IEnumerator NextStep()
     {
-        yield return new WaitForSeconds(actionDelay);
+        // yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
 
@@ -567,6 +568,7 @@ public class Character : InteractableObject
 
         CheckSpace(true);
         isTurn = false;
+        hasGone = true;
         StartCoroutine(GameManager.instance.nextTurn());
     }
 

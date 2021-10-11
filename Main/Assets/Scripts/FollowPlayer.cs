@@ -9,11 +9,12 @@ public class FollowPlayer : MonoBehaviour
     private float moveSpeed;
     public bool followMouse;
     protected GameObject toFollow;
+    protected Vector2 minPosition = new Vector2(7.5f, 3.5f);
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        transform.position = new Vector3(minPosition.x, minPosition.y, -10);;
     }
 
     // Update is called once per frame
@@ -46,7 +47,6 @@ public class FollowPlayer : MonoBehaviour
             {
                 moveSpeed = Math.Max(distance * 2, 0.03f);
                 Vector3 newPosition = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
-                Vector2 minPosition = new Vector2(7.0f, 3.0f);
                 BoardManager board = GameManager.instance.GetComponent<BoardManager>();
                 Vector2 maxPosition = new Vector2((float)board.columns - minPosition.x - 1, (float)board.rows - minPosition.y - 1);
                 if (newPosition.x < minPosition.x)

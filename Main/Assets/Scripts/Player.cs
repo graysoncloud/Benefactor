@@ -61,7 +61,7 @@ public class Player : Character
         if (GameManager.instance.dialogueInProgress)
             yield return new WaitUntil(() => GameManager.instance.dialogueInProgress == false);
 
-        yield return new WaitForSeconds(actionDelay);
+        // yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
         if (lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)

@@ -59,7 +59,7 @@ public class Character : InteractableObject
 
     protected Animator animator;
     private float inverseMoveTime;
-    protected Vector2[] pathToObjective;
+    public Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
     protected Dictionary<String, List<InteractableObject>> actableObjects;
     protected SortedSet<String> actions;
@@ -318,7 +318,7 @@ public class Character : InteractableObject
         attackRange = 1;
         if (HasItemType("Weapon"))
         {
-            List<HoldableObject> weapons = GameManager.instance.SortedInventory("Weapon", inventory);
+            List<HoldableObject> weapons = GameObject.Find("MenuManager").GetComponent<MenuManager>().SortedInventory("Weapon", inventory);
             foreach (HoldableObject weapon in weapons)
             {
                 if (weapon.range > attackRange)
@@ -445,7 +445,7 @@ public class Character : InteractableObject
 
     protected virtual void SelectItem(String type)
     {
-        List<HoldableObject> items = GameManager.instance.SortedInventory(type, inventory);
+        List<HoldableObject> items = GameObject.Find("MenuManager").GetComponent<MenuManager>().SortedInventory(type, inventory);
 
         int i = 0;
         if (type == "Weapon")
@@ -572,7 +572,7 @@ public class Character : InteractableObject
 
     public bool HasItemType(String type)
     {
-        return GameManager.instance.SortedInventory(type, inventory).Count > 0;
+        return GameObject.Find("MenuManager").GetComponent<MenuManager>().SortedInventory(type, inventory).Count > 0;
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)

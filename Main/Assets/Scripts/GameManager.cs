@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public List<Player> characters;
     private bool doingSetup;
 
+    public bool gettingNextCharacter;
     public int activeCharacterIndex;
     public Player activeCharacter;
     public bool dialogueInProgress;
@@ -41,6 +42,29 @@ public class GameManager : MonoBehaviour
         characters = new List<Player>();
         boardScript = GetComponent<BoardManager>();
         dialogueInProgress = false;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (characters.Count > 0) { doingSetup = false;  } //kinda sketchy way of making sure characters have been loaded in, might change to a time delay?
+
+        if (!doingSetup && gettingNextCharacter)
+        {
+            gettingNextCharacter = GameObject.Find("MouseManager").GetComponent<MouseManager>().GetNextCharacter(GetPlayableCharacters());
+            if (!gettingNextCharacter)
+            {
+                Debug.Log("Active Character: " + activeCharacter);
+                CameraTarget(activeCharacter.gameObject);
+                activeCharacter.StartTurn();
+            }
+        }
+
+        if (!doingSetup && activeCharacter == null)
+        {
+            // StartCoroutine(nextTurn());
+            SelectCharacter();
+        }
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -89,40 +113,42 @@ public class GameManager : MonoBehaviour
         enabled = false;
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (characters.Count > 0) { doingSetup = false;  } //kinda sketchy way of making sure characters have been loaded in, might change to a time delay?
-        if (!doingSetup && activeCharacterIndex == -1)
+    public void SelectCharacter() {
+        Dictionary<Vector2, Vector2[]> paths = new Dictionary<Vector2, Vector2[]>();
+        foreach (Player character in GetPlayableCharacters())
         {
-            StartCoroutine(nextTurn());
+            paths.Add((Vector2)character.transform.position, new Vector2[] { (Vector2)character.transform.position });
         }
+        GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowPaths(paths);
+
+        gettingNextCharacter = true;
     }
 
     public IEnumerator nextTurn()
     {
-        activeCharacterIndex++;
-        Debug.Log("Characters: " + characters);
-        if (activeCharacterIndex >= characters.Count)
-        {
-            nextRound();
-            yield break;
-        }
-        activeCharacter = characters[activeCharacterIndex];
-        if (!activeCharacter.playable && activeCharacter.currentObjective == null && activeCharacter.objectives.Count == 0)
-        {
-            Debug.Log("Active Character: " + activeCharacter);
-            StartCoroutine(nextTurn());
-            yield break;
-        }
+        // activeCharacterIndex++;
+        // Debug.Log("Characters: " + characters);
+        // if (activeCharacterIndex >= characters.Count)
+        // {
+        //     nextRound();
+        //     yield break;
+        // }
+        // activeCharacter = characters[activeCharacterIndex];
+        // if (!activeCharacter.playable && activeCharacter.currentObjective == null && activeCharacter.objectives.Count == 0)
+        // {
+        //     Debug.Log("Active Character: " + activeCharacter);
+        //     StartCoroutine(nextTurn());
+        //     yield break;
+        // }
+        
 
-        Debug.Log("Active Character Index: " + activeCharacterIndex);
+        // Debug.Log("Active Character Index: " + activeCharacterIndex);
 
-        CameraTarget(activeCharacter.gameObject);
+        // CameraTarget(activeCharacter.gameObject);
 
         yield return new WaitForSeconds(turnDelay);
-        activeCharacter.StartTurn();
+        // activeCharacter.StartTurn();
+        SelectCharacter();
     }
 
     public void nextRound()
@@ -135,6 +161,20 @@ public class GameManager : MonoBehaviour
     public void AddCharacterToList(Player character)
     {
         characters.Add(character);
+    }
+
+    private List<Player> GetPlayableCharacters()
+    {
+        List<Player> playableCharacters = new List<Player>();
+        foreach (Player character in characters)
+        {
+            if (character.playable)
+            {
+                playableCharacters.Add(character);
+            }
+        }
+
+        return playableCharacters;
     }
 
     public void RemoveDeadCharacters()

@@ -10,6 +10,31 @@ using UnityEngine.SocialPlatforms;
 
 public class MouseManager : MonoBehaviour
 {
+    public bool GetNextCharacter(List<Player> characters)
+    {
+        Vector2 coords = GetMousePosition();
+        
+        foreach (Player character in characters)
+        {
+            if ((Vector2)character.transform.position == coords)
+            {
+                GameObject.Find("MenuManager").GetComponent<MenuManager>().HighlightPath(new Vector2[] { coords });
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    GameManager.instance.activeCharacter = character;
+                    GameManager.instance.CameraTarget(character.gameObject);
+                    GameObject.Find("MenuManager").GetComponent<MenuManager>().HideIndicators();
+                    return false;
+                }
+            }
+            else
+                GameObject.Find("MenuManager").GetComponent<MenuManager>().UnhighlightPath(new Vector2[] { character.transform.position });
+        }
+
+        return true;
+    }
+
     public bool GetMoveInput(Character character, Dictionary<Vector2, Vector2[]> paths)
     {
         Vector2 coords = GetMousePosition();
@@ -37,7 +62,6 @@ public class MouseManager : MonoBehaviour
     {
         Vector2 coords = GetMousePosition();
         
-        // List<InteractableObject> objects = GetObjects();
         foreach (InteractableObject o in objects)
         {
             if ((Vector2)o.transform.position == coords)

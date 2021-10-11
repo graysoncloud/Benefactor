@@ -91,7 +91,7 @@ public class Character : InteractableObject
         allies = new List<InteractableObject>();
         allies.Add(this);
         enemies = new List<InteractableObject>();
-        //enemies.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>()); //temporarily adds Player to enemies as default
+        // enemies.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>()); //temporarily adds Player to enemies as default
 
         // For testing purposes- should be moved to custom classes for NPCs
         maxHealth = 3;

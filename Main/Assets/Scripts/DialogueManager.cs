@@ -141,8 +141,10 @@ public class DialogueManager : MonoBehaviour
         conversationType = null;
         dialogueBackground.SetActive(true);
         dialogueUI.text = "";
-        portrait.GetComponent<PortraitManager>().changePortrait("RaskolnikovNeutral");
-        talkingCharacter.GetComponent<Text>().text = "Raskolnikov";
+        // portrait.GetComponent<PortraitManager>().changePortrait("RaskolnikovNeutral");
+        // talkingCharacter.GetComponent<Text>().text = "Raskolnikov";
+        portrait.GetComponent<Image>().sprite = GameManager.instance.activeCharacter.GetComponent<Character>().portrait;
+        talkingCharacter.GetComponent<Text>().text = GameManager.instance.activeCharacter.GetComponent<Character>().name;
         conversationOptions.SetActive(true);
     }
    

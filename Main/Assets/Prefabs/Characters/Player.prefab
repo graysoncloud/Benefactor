@@ -175,8 +175,9 @@ MonoBehaviour:
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
   reputation: 50
-  portrait: {fileID: 0}
-  name: 
+  playable: 1
+  portrait: {fileID: 21300000, guid: 8304cdde25968a641986bd752e7b1a0c, type: 3}
+  name: MainChar
   moveTime: 0.1
   totalMoves: 5
   talkingRange: 5
@@ -190,17 +191,8 @@ MonoBehaviour:
   subdued: 0
   inventory:
   - {fileID: -5498856414594888391, guid: 70791d2237bfa6f4fb33643eaed4084d, type: 3}
-  playable: 1
-  itemsParent: {fileID: 0}
-  inventoryUI: {fileID: 0}
-  slots: []
-  rationaleText: {fileID: 0}
-  healthText: {fileID: 0}
   gettingMove: 0
   gettingAction: 0
   gettingTarget: 0
   gettingItem: 0
   looting: 0
-  tileIndicator: {fileID: 6793900256970249569, guid: 73dc820bc82c3724ab6d3f763aac8d46,
-    type: 3}
-  indicators: []

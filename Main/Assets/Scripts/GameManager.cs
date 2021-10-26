@@ -130,7 +130,6 @@ public class GameManager : MonoBehaviour
     public void AISelectCharacter()
     {
         List<Player> nonplayableCharacters = GetNonplayableCharacters();
-        Debug.Log("# of nonplayables: " + nonplayableCharacters.Count);
 
         int i = new System.Random().Next(nonplayableCharacters.Count);
         activeCharacter = nonplayableCharacters[i];

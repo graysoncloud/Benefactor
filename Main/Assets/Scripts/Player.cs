@@ -185,6 +185,10 @@ public class Player : Character
     public void GetActionInput(string action)
     {
         GameObject.Find("MenuManager").GetComponent<MenuManager>().HideActionMenu();
+        if (currentObjective == null) { //temp due to weird error
+            Debug.Log("Objective Null!");
+            currentObjective = new Objective(null, null);
+        }
         currentObjective.action = action;
         gettingAction = false;
         if (currentObjective.action != "Wait")

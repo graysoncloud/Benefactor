@@ -17,6 +17,7 @@ public class MenuManager : MonoBehaviour
     public Text healthText;
     public GameObject tileIndicator;
     public List<GameObject> indicators;
+    public GameObject mouseIndicator;
     private CanvasGroup actionMenu;
     private Dictionary<String, GameObject> actionButtons;
     private GameObject backButton;
@@ -140,9 +141,36 @@ public class MenuManager : MonoBehaviour
 
         foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
         {
-            indicators.Add(Instantiate(tileIndicator, entry.Key, Quaternion.identity));
-            indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+            ShowIndicator(entry.Key);
         }
+    }
+
+    public void ShowIndicator(Vector2 coords)
+    {
+        indicators.Add(Instantiate(tileIndicator, coords, Quaternion.identity));
+        indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+    }
+
+    // public void HideIndicator(Vector2 coords)
+    // {
+    //     foreach (GameObject indicator in indicators)
+    //     {
+    //         if ((Vector2)indicator.transform.position == coords) {
+    //             indicators.Remove(indicator);
+    //             Destroy(indicator);
+    //         }
+    //     }
+    // }
+
+    public void ShowMouseIndicator(Vector2 coords)
+    {
+        mouseIndicator = Instantiate(tileIndicator, coords, Quaternion.identity);
+        mouseIndicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+    }
+
+    public void HideMouseIndicator(Vector2 coords)
+    {
+        Destroy(mouseIndicator);
     }
 
     public void ShowObjects(List<InteractableObject> objects)

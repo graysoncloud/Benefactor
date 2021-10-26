@@ -10,26 +10,35 @@ using UnityEngine.SocialPlatforms;
 
 public class MouseManager : MonoBehaviour
 {
+    Vector2 currentMouseCoords;
+    MenuManager menuManager;
+
+    void Awake()
+    {
+        currentMouseCoords = new Vector2{};
+        menuManager = GameObject.Find("MenuManager").GetComponent<MenuManager>();
+    }
+
     public bool GetNextCharacter(List<Player> characters)
     {
-        Vector2 coords = GetMousePosition();
+        UpdateMousePosition();
         
         foreach (Player character in characters)
         {
-            if ((Vector2)character.transform.position == coords)
+            if ((Vector2)character.transform.position == currentMouseCoords)
             {
-                GameObject.Find("MenuManager").GetComponent<MenuManager>().HighlightPath(new Vector2[] { coords });
+                menuManager.HighlightPath(new Vector2[] { currentMouseCoords });
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     GameManager.instance.activeCharacter = character;
                     GameManager.instance.CameraTarget(character.gameObject);
-                    GameObject.Find("MenuManager").GetComponent<MenuManager>().HideIndicators();
+                    menuManager.HideIndicators();
                     return false;
                 }
             }
             else
-                GameObject.Find("MenuManager").GetComponent<MenuManager>().UnhighlightPath(new Vector2[] { character.transform.position });
+                menuManager.UnhighlightPath(new Vector2[] { character.transform.position });
         }
 
         return true;
@@ -37,22 +46,22 @@ public class MouseManager : MonoBehaviour
 
     public bool GetMoveInput(Character character, Dictionary<Vector2, Vector2[]> paths)
     {
-        Vector2 coords = GetMousePosition();
+        UpdateMousePosition();
 
-        if (paths.ContainsKey(coords))
+        if (paths.ContainsKey(currentMouseCoords))
         {
-            paths.TryGetValue(coords, out character.pathToObjective);
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().HighlightPath(character.pathToObjective);
+            paths.TryGetValue(currentMouseCoords, out character.pathToObjective);
+            menuManager.HighlightPath(character.pathToObjective);
 
             if (Input.GetMouseButtonDown(0))
             {
-                GameObject.Find("MenuManager").GetComponent<MenuManager>().HideIndicators();
+                menuManager.HideIndicators();
                 return false;
             }
         }
         else
         {
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().UnhighlightPaths();
+            menuManager.UnhighlightPaths();
         }
 
         return true;
@@ -60,34 +69,39 @@ public class MouseManager : MonoBehaviour
 
     public bool GetTargetInput(Character character, List<InteractableObject> objects)
     {
-        Vector2 coords = GetMousePosition();
+        UpdateMousePosition();
         
         foreach (InteractableObject o in objects)
         {
-            if ((Vector2)o.transform.position == coords)
+            if ((Vector2)o.transform.position == currentMouseCoords)
             {
-                GameObject.Find("MenuManager").GetComponent<MenuManager>().HighlightPath(new Vector2[] { coords });
+                menuManager.HighlightPath(new Vector2[] { currentMouseCoords });
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     character.currentObjective.target = o;
                     GameManager.instance.CameraTarget(o.gameObject);
-                    GameObject.Find("MenuManager").GetComponent<MenuManager>().HideIndicators();
+                    menuManager.HideIndicators();
                     return false;
                 }
             }
             else
-                GameObject.Find("MenuManager").GetComponent<MenuManager>().UnhighlightPath(new Vector2[] { o.transform.position });
+                menuManager.UnhighlightPath(new Vector2[] { o.transform.position });
         }
 
         return true;
     }
 
-    public Vector2 GetMousePosition()
+    public Vector2 UpdateMousePosition()
     {
         Vector2 mouseScreenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
         Vector2 coords = new Vector2((int)(mouseWorldPosition.x + 0.5), (int)(mouseWorldPosition.y + 0.5));
+        if (currentMouseCoords != coords) {
+            menuManager.HideMouseIndicator(currentMouseCoords);
+            currentMouseCoords = coords;
+            menuManager.ShowMouseIndicator(currentMouseCoords);
+        }
         return coords;
     }
 }

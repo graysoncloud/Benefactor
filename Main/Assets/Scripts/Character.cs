@@ -127,7 +127,6 @@ public class Character : InteractableObject
 
         else
         {
-            Debug.Log("Made it");
             UpdateObjectives();
             LogObjectives();
             FindPath();

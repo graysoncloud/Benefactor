@@ -10,11 +10,13 @@ public class FollowPlayer : MonoBehaviour
     public bool followMouse;
     protected GameObject toFollow;
     protected Vector2 minPosition = new Vector2(7.5f, 3.5f);
+    private MenuManager menuManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(minPosition.x, minPosition.y, -10);;
+        transform.position = new Vector3(minPosition.x, minPosition.y, -10);
+        menuManager = GameObject.Find("MenuManager").GetComponent<MenuManager>();
     }
 
     // Update is called once per frame
@@ -75,6 +77,7 @@ public class FollowPlayer : MonoBehaviour
     public void FollowTarget()
     {
         followMouse = false;
+        menuManager.HideMouseIndicator();
     }
 
 }

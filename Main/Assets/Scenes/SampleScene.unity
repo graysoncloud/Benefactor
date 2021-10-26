@@ -6894,11 +6894,19 @@ MonoBehaviour:
   inventoryUI: {fileID: 0}
   itemsParent: {fileID: 0}
   slots: []
-  rationaleText: {fileID: 0}
-  healthText: {fileID: 0}
-  tileIndicator: {fileID: 6793900256970249569, guid: 73dc820bc82c3724ab6d3f763aac8d46,
+  rationaleText: {fileID: 70341998}
+  healthText: {fileID: 1788682313}
+  mouseIndicatorSprite: {fileID: 6793900256970249569, guid: 73dc820bc82c3724ab6d3f763aac8d46,
+    type: 3}
+  tileIndicatorSprite: {fileID: 6793900256970249569, guid: c41cc62cef7c6d740b83c11df510124c,
     type: 3}
   indicators: []
+  mouseIndicator: {fileID: 0}
+  unhighlightedAlpha: 0.5
+  highlightedAlpha: 0.8
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  defaultPlayerColor: {r: 0, g: 0, b: 1, a: 1}
+  defaultEnemyColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!4 &1712919219
 Transform:
   m_ObjectHideFlags: 0

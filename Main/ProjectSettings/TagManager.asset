@@ -4,7 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
   - Exit
   - Roof
   - Door
@@ -13,6 +12,8 @@ TagManager:
   - Weapon
   - Damaging
   - Key
+  - Chair
+  - Character
   layers:
   - Default
   - TransparentFX
@@ -52,6 +53,9 @@ TagManager:
     locked: 0
   - name: Floor
     uniqueID: 4158560753
+    locked: 0
+  - name: Indicators
+    uniqueID: 3866128679
     locked: 0
   - name: Items
     uniqueID: 1183741245

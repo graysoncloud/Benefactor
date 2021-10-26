@@ -98,7 +98,7 @@ public class MouseManager : MonoBehaviour
         Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
         Vector2 coords = new Vector2((int)(mouseWorldPosition.x + 0.5), (int)(mouseWorldPosition.y + 0.5));
         if (currentMouseCoords != coords) {
-            menuManager.HideMouseIndicator(currentMouseCoords);
+            menuManager.HideMouseIndicator();
             currentMouseCoords = coords;
             menuManager.ShowMouseIndicator(currentMouseCoords);
         }

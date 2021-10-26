@@ -15,9 +15,15 @@ public class MenuManager : MonoBehaviour
     public InventorySlot[] slots;
     public Text rationaleText;
     public Text healthText;
-    public GameObject tileIndicator;
+    public GameObject mouseIndicatorSprite;
+    public GameObject tileIndicatorSprite;
     public List<GameObject> indicators;
     public GameObject mouseIndicator;
+    public float unhighlightedAlpha;
+    public float highlightedAlpha;
+    public Color defaultColor;
+    public Color defaultPlayerColor;
+    public Color defaultEnemyColor;
     private CanvasGroup actionMenu;
     private Dictionary<String, GameObject> actionButtons;
     private GameObject backButton;
@@ -51,6 +57,10 @@ public class MenuManager : MonoBehaviour
         backButton = GameObject.Find("BackButton");
         backButton.transform.position = new Vector2(Screen.width*0.9f, Screen.height*0.1f);
         HideBackButton();
+
+        defaultColor.a = unhighlightedAlpha;
+        defaultPlayerColor.a = unhighlightedAlpha;
+        defaultEnemyColor.a = unhighlightedAlpha;
     }
 
     public void SetupActionMenu(SortedSet<String> actions)
@@ -141,14 +151,14 @@ public class MenuManager : MonoBehaviour
 
         foreach (KeyValuePair<Vector2, Vector2[]> entry in paths)
         {
-            ShowIndicator(entry.Key);
+            ShowIndicator(entry.Key, defaultPlayerColor);
         }
     }
 
-    public void ShowIndicator(Vector2 coords)
+    public void ShowIndicator(Vector2 coords, Color color)
     {
-        indicators.Add(Instantiate(tileIndicator, coords, Quaternion.identity));
-        indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+        indicators.Add(Instantiate(tileIndicatorSprite, coords, Quaternion.identity));
+        indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = color;
     }
 
     // public void HideIndicator(Vector2 coords)
@@ -164,11 +174,11 @@ public class MenuManager : MonoBehaviour
 
     public void ShowMouseIndicator(Vector2 coords)
     {
-        mouseIndicator = Instantiate(tileIndicator, coords, Quaternion.identity);
-        mouseIndicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+        mouseIndicator = Instantiate(mouseIndicatorSprite, coords, Quaternion.identity);
+        mouseIndicator.GetComponent<SpriteRenderer>().material.color = defaultColor;
     }
 
-    public void HideMouseIndicator(Vector2 coords)
+    public void HideMouseIndicator()
     {
         Destroy(mouseIndicator);
     }
@@ -176,11 +186,14 @@ public class MenuManager : MonoBehaviour
     public void ShowObjects(List<InteractableObject> objects)
     {
         HideIndicators();
+        Color color = defaultColor;
 
         foreach (InteractableObject o in objects)
         {
-            indicators.Add(Instantiate(tileIndicator, o.transform.position, Quaternion.identity));
-            indicators[indicators.Count - 1].GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+            if (o.gameObject.tag == "Character") {
+                color = o.gameObject.GetComponent<Player>().playable ? defaultPlayerColor : defaultEnemyColor;
+            }
+            ShowIndicator(o.transform.position, defaultColor);
         }
     }
 
@@ -198,14 +211,16 @@ public class MenuManager : MonoBehaviour
         foreach (GameObject indicator in indicators)
         {
             if (indicator == null) { break; }
+            Color currentColor = indicator.GetComponent<SpriteRenderer>().material.color;
             if (path.Contains((Vector2)indicator.transform.position))
             {
-                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                currentColor.a = highlightedAlpha;
             }
             else
             {
-                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+                currentColor.a = unhighlightedAlpha;
             }
+            indicator.GetComponent<SpriteRenderer>().material.color = currentColor;
         }
     }
 
@@ -214,9 +229,11 @@ public class MenuManager : MonoBehaviour
         foreach (GameObject indicator in indicators)
         {
             if (indicator == null) { break; }
+            Color currentColor = indicator.GetComponent<SpriteRenderer>().material.color;
             if (path.Contains((Vector2)indicator.transform.position))
             {
-                indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+                currentColor.a = unhighlightedAlpha;
+                indicator.GetComponent<SpriteRenderer>().material.color = currentColor;
             }
         }
     }
@@ -226,7 +243,9 @@ public class MenuManager : MonoBehaviour
         foreach (GameObject indicator in indicators)
         {
             if (indicator == null) { break; }
-            indicator.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+            Color currentColor = indicator.GetComponent<SpriteRenderer>().material.color;
+            currentColor.a = unhighlightedAlpha;
+            indicator.GetComponent<SpriteRenderer>().material.color = currentColor;
         }
     }
 

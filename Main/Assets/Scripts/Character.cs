@@ -1,4 +1,4 @@
-﻿using AStarSharp;
+using AStarSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -92,7 +92,6 @@ public class Character : InteractableObject
         allies = new List<InteractableObject>();
         allies.Add(this);
         enemies = new List<InteractableObject>();
-        enemies.Add(GameObject.FindGameObjectWithTag("Player").GetComponent<InteractableObject>()); //temporarily adds Player to enemies as default
 
         // For testing purposes- should be moved to custom classes for NPCs
         maxHealth = 3;
@@ -350,9 +349,9 @@ public class Character : InteractableObject
                         }
                     }
                 }
-                else if (hitObject.tag == "Enemy" || hitObject.tag == "Player")
+                else if (hitObject.tag == "Character")
                 {
-                    if (!playable && tag != "Player")
+                    if (!playable)
                     {
                         if (action == "Heal")
                             safe = allies.Contains(hitObject); //only heal allies

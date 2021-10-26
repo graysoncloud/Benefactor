@@ -73,7 +73,7 @@ public class Character : InteractableObject
     protected int actionsLeft;
     protected State lastState;
     protected int weightStolen;
-    protected double subduedRatio = .34;
+    protected double subduedRatio = 0.25;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -95,8 +95,6 @@ public class Character : InteractableObject
 
         // For testing purposes- should be moved to custom classes for NPCs
         maxHealth = 3;
-
-        // GameManager.instance.AddCharacterToList(this);
 
         base.Start();
     }
@@ -698,11 +696,11 @@ public class Character : InteractableObject
         boxCollider.enabled = true;
         if (!end && hitCollider != null && hitCollider.gameObject.tag == "Damaging")
             TakeDamage(hitCollider.gameObject.GetComponent<Damaging>().damagePerTurn);
-        if (hitCollider != null && hitCollider.gameObject.tag == "Roof")
-            if (end)
-                hitCollider.gameObject.GetComponent<Roof>().showRoof();
-            else
-                hitCollider.gameObject.GetComponent<Roof>().hideRoof();
+        // if (hitCollider != null && hitCollider.gameObject.tag == "Roof")
+        //     if (end)
+        //         hitCollider.gameObject.GetComponent<Roof>().showRoof();
+        //     else
+        //         hitCollider.gameObject.GetComponent<Roof>().hideRoof();
     }
 
     protected void UpdateState()

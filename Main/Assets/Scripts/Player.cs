@@ -14,6 +14,8 @@ public class Player : Character
     public bool gettingTarget;
     public bool gettingItem;
     public bool looting;
+    private MenuManager menuManager;
+    private MouseManager mouseManager;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -23,6 +25,8 @@ public class Player : Character
         gettingMove = false;
         gettingTarget = false;
         looting = false;
+        menuManager = GameObject.Find("MenuManager").GetComponent<MenuManager>();
+        mouseManager = GameObject.Find("MouseManager").GetComponent<MouseManager>();
 
         GameManager.instance.AddCharacterToList(this);
     }
@@ -35,7 +39,7 @@ public class Player : Character
 
         if (gettingMove)
         {
-            gettingMove = GameObject.Find("MouseManager").GetComponent<MouseManager>().GetMoveInput(this, paths);
+            gettingMove = mouseManager.GetMoveInput(this, paths);
             if (!gettingMove)
             {
                 StartCoroutine(SelectedPath());
@@ -43,7 +47,7 @@ public class Player : Character
         }
         if (gettingTarget)
         {
-            gettingTarget = GameObject.Find("MouseManager").GetComponent<MouseManager>().GetTargetInput(this, GetObjects());
+            gettingTarget = mouseManager.GetTargetInput(this, GetObjects());
             if (!gettingTarget)
             {
                 Act();
@@ -65,9 +69,9 @@ public class Player : Character
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
         if (lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().HideBackButton();
+            menuManager.HideBackButton();
         else
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowBackButton();
+            menuManager.ShowBackButton();
 
         UpdateObjectives();
         GetPaths();
@@ -149,7 +153,7 @@ public class Player : Character
         }
         else
         {
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowPaths(paths);
+            menuManager.ShowPaths(paths);
             gettingMove = true;
             Debug.Log("Player waiting for move input");
         }
@@ -177,14 +181,14 @@ public class Player : Character
             StartCoroutine(EndTurn());
         else
         {
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().SetupActionMenu(actions);
+            menuManager.SetupActionMenu(actions);
             gettingAction = true;
         }
     }
 
     public void GetActionInput(string action)
     {
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().HideActionMenu();
+        menuManager.HideActionMenu();
         if (currentObjective == null) { //temp due to weird error
             Debug.Log("Objective Null!");
             currentObjective = new Objective(null, null);
@@ -199,7 +203,7 @@ public class Player : Character
 
     protected void SelectTarget()
     {
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowObjects(GetObjects());
+        menuManager.ShowObjects(GetObjects());
         gettingTarget = true;
         Debug.Log("Player waiting for target input");
     }
@@ -218,7 +222,7 @@ public class Player : Character
             return;
         }
 
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowInventory(type, inventory, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
+        menuManager.ShowInventory(type, inventory, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
         gettingItem = true;
         Debug.Log("Player waiting for item input");
     }
@@ -231,7 +235,7 @@ public class Player : Character
             if (storage != null)
             {
                 storage.Remove(item);
-                GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowInventory("", inventory, 0, storage.items);
+                menuManager.ShowInventory("", inventory, 0, storage.items);
             }
             else
             {
@@ -244,14 +248,14 @@ public class Player : Character
                     return;
                 }
                 character.Remove(item);
-                GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowInventory("", inventory, 0, character.inventory);
+                menuManager.ShowInventory("", inventory, 0, character.inventory);
             }
             Pickup(item);
             return;
         }
         
         gettingItem = false;
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().HideInventory();
+        menuManager.HideInventory();
         base.ChooseItem(item);
     }
 
@@ -261,7 +265,7 @@ public class Player : Character
         GameManager.instance.CameraTarget(toLoot.gameObject);
         Storage storage = toLoot.gameObject.GetComponent<Storage>();
         storage.Open();
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowInventory("", inventory, 0, storage.items);
+        menuManager.ShowInventory("", inventory, 0, storage.items);
     }
 
     protected override void Steal(InteractableObject toStealFrom)
@@ -270,7 +274,7 @@ public class Player : Character
         this.weightStolen = 0;
         GameManager.instance.CameraTarget(toStealFrom.gameObject);
         Character character = toStealFrom.gameObject.GetComponent<Character>();
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().ShowInventory("", inventory, 0, character.inventory);
+        menuManager.ShowInventory("", inventory, 0, character.inventory);
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)
@@ -301,7 +305,7 @@ public class Player : Character
     public override void TakeDamage (double loss)
     {
         base.TakeDamage(loss);
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().UpdateHealth(health);
+        menuManager.UpdateHealth(health);
         animator.SetTrigger("playerHit");
         CheckIfGameOver();
     }
@@ -309,12 +313,12 @@ public class Player : Character
     public override void Heal (double amount)
     {
         base.Heal(amount);
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().UpdateHealth(health);
+        menuManager.UpdateHealth(health);
     }
 
     protected override void TalkTo(InteractableObject toTalkTo)
     {
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().HideBackButton();
+        menuManager.HideBackButton();
         base.TalkTo(toTalkTo);
     }
 
@@ -326,35 +330,35 @@ public class Player : Character
             Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
             if (storage != null)
                 storage.Close();
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().HideInventory();
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().HideBackButton();
+            menuManager.HideInventory();
+            menuManager.HideBackButton();
             StartCoroutine(NextStep());
             return;
         }
         
         if (gettingMove)
         {
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().HideIndicators();
+            menuManager.HideIndicators();
             gettingMove = false;
         }
         else if (gettingAction)
         {
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().HideActionMenu();
+            menuManager.HideActionMenu();
             gettingAction = false;
         }
         else if (gettingTarget)
         {
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().HideIndicators();
+            menuManager.HideIndicators();
             gettingTarget = false;
         }
         else if (gettingItem)
         {
-            GameObject.Find("MenuManager").GetComponent<MenuManager>().HideInventory();
+            menuManager.HideInventory();
             gettingItem = false;
         }
 
         health = lastState.health;
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().UpdateHealth(health);
+        menuManager.UpdateHealth(health);
         movesLeft = lastState.moves;
         actionsLeft = lastState.actions;
         transform.position = lastState.position;
@@ -363,7 +367,7 @@ public class Player : Character
 
     protected override IEnumerator EndTurn()
     {
-        GameObject.Find("MenuManager").GetComponent<MenuManager>().HideBackButton();
+        menuManager.HideBackButton();
         yield return StartCoroutine(base.EndTurn());
     }
 }

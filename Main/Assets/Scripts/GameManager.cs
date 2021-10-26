@@ -65,6 +65,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void FinishSetup() {
+        foreach (List<Roof> Roof in Roofs) {
+            Roof.First().checkRoofs();
+        }
         doingSetup = false;
     }
 
@@ -194,6 +197,10 @@ public class GameManager : MonoBehaviour
     public void AddCharacterToList(Player character)
     {
         characters.Add(character);
+    }
+
+    public bool IsPlayableCharacter(Player character) {
+        return GetPlayableCharacters().Contains(character);
     }
 
     private List<Player> GetPlayableCharacters()

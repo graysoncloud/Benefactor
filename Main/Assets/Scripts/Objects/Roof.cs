@@ -9,14 +9,11 @@ public class Roof : MonoBehaviour
     private float curOpacity;
     private float targetOpacity;
     private int roofIndex;
-    private bool overPlayer;
 
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        boxCollider = GetComponent<BoxCollider2D>();
-        overPlayer = false;
         Show();
     }
 
@@ -37,7 +34,7 @@ public class Roof : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.GetComponent<Player>() == GameManager.instance.activeCharacter)
+        if (GameManager.instance.IsPlayableCharacter(other.gameObject.GetComponent<Player>()))
         {
             hideRoof();
         }
@@ -45,7 +42,7 @@ public class Roof : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.GetComponent<Player>() == GameManager.instance.activeCharacter)
+        if (GameManager.instance.IsPlayableCharacter(other.gameObject.GetComponent<Player>()))
         {
             showRoof();
         }
@@ -53,23 +50,21 @@ public class Roof : MonoBehaviour
 
     public void hideRoof()
     {
-        if (!overPlayer)
+        if (!GetOverPlayer())
         {
-            overPlayer = true;
             checkRoofs();
         }
     }
 
     public void showRoof()
     {
-        if (overPlayer)
+        if (GetOverPlayer())
         {
-            overPlayer = false;
             checkRoofs();
         }
     }
 
-    void checkRoofs()
+    public void checkRoofs()
     {
         bool roofOverPlayer = false;
         foreach (Roof roof in GameManager.instance.Roofs[roofIndex]) {
@@ -111,6 +106,10 @@ public class Roof : MonoBehaviour
 
     public bool GetOverPlayer()
     {
-        return overPlayer;
+        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider.enabled = false;
+        Collider2D hitCollider = Physics2D.OverlapCircle((Vector2)transform.position, 0.1f);
+        boxCollider.enabled = true;
+        return hitCollider != null && GameManager.instance.IsPlayableCharacter(hitCollider.gameObject.GetComponent<Player>());
     }
 }

@@ -83,7 +83,6 @@ public class MenuManager : MonoBehaviour
             actionButtons.TryGetValue(action, out button);
             button.SetActive(true);
             button.transform.position = new Vector2(position.x, position.y + height/2 - spacing - buttonHeight/2 - (buttonHeight + spacing) * index);
-            Debug.Log(button.transform.position);
             index++;
         }
 

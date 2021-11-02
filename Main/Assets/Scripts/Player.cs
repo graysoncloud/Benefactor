@@ -182,6 +182,7 @@ public class Player : Character
         else
         {
             menuManager.SetupActionMenu(actions);
+            menuManager.ShowBackButton();
             gettingAction = true;
         }
     }

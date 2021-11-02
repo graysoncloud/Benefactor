@@ -68,7 +68,7 @@ public class Player : Character
         // yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
-        if (lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
+        if ((movesLeft != totalMoves || actionsLeft != totalActions) && lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
             menuManager.HideBackButton();
         else
             menuManager.ShowBackButton();
@@ -339,8 +339,20 @@ public class Player : Character
         
         if (gettingMove)
         {
-            menuManager.HideIndicators();
-            gettingMove = false;
+            if (movesLeft == totalMoves && actionsLeft == totalActions && lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
+            {
+                menuManager.HideIndicators();
+                menuManager.HideBackButton();
+                isTurn = false;
+                gettingMove = false;
+                StartCoroutine(GameManager.instance.NextTurn());
+                return;
+            }
+            else
+            {
+                menuManager.HideIndicators();
+                gettingMove = false;
+            }
         }
         else if (gettingAction)
         {

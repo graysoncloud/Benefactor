@@ -7,35 +7,39 @@ using UnityEngine.SceneManagement;
 using AStarSharp;
 using System;
 using UnityEngine.SocialPlatforms;
+using UnityEditor;
 
 public class MenuManager : MonoBehaviour
 {
     public GameObject inventoryUI;
     public Transform itemsParent;
     public InventorySlot[] slots;
-    public Text rationaleText;
+    public GameObject playerStats;
+    public GameObject portrait;
+    public Text characterName;
     public Text healthText;
+    public Text movesText;
     public GameObject mouseIndicatorSprite;
     public GameObject tileIndicatorSprite;
     public List<GameObject> indicators;
-    public GameObject mouseIndicator;
+    private GameObject mouseIndicator;
     public float unhighlightedAlpha;
     public float highlightedAlpha;
     public Color defaultColor;
     public Color defaultPlayerColor;
     public Color defaultEnemyColor;
-    private CanvasGroup actionMenu;
+    public CanvasGroup actionMenu;
     private Dictionary<String, GameObject> actionButtons;
-    private GameObject backButton;
+    public GameObject backButton;
 
     void Awake()
     {
-        rationaleText = GameObject.Find("RationaleText").GetComponent<Text>();
-        // rationaleText.text = "Rationale: " + rationale;
-        healthText = GameObject.Find("HealthText").GetComponent<Text>();
+        // portrait = GameObject.Find("StatsPortrait");
+        // characterName = GameObject.Find("StatsCharacterName"); //.GetComponent<Text>();
+        // healthText = GameObject.Find("StatsHealthText").GetComponent<Text>();
         // healthText.text = "Health: " + health;
         
-        actionMenu = GameObject.Find("ActionPanel").GetComponent<CanvasGroup>();
+        // actionMenu = GameObject.Find("ActionPanel").GetComponent<CanvasGroup>();
         actionButtons = new Dictionary<String, GameObject>();
         actionButtons.Add("Attack", GameObject.Find("AttackButton"));
         actionButtons.Add("Talk", GameObject.Find("TalkButton"));
@@ -48,13 +52,16 @@ public class MenuManager : MonoBehaviour
         actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
 
-        inventoryUI = GameObject.Find("InventoryParent");
+        // inventoryUI = GameObject.Find("InventoryParent");
         inventoryUI.transform.position = new Vector2(Screen.width / 2, Screen.height / 4);
-        itemsParent = GameObject.Find("Inventory").GetComponent<Transform>();
+        // itemsParent = GameObject.Find("Inventory").GetComponent<Transform>();
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();
         HideInventory();
 
-        backButton = GameObject.Find("BackButton");
+        // playerStats = GameObject.Find("PlayerStats");
+        HidePlayerStats();
+
+        // backButton = GameObject.Find("BackButton");
         backButton.transform.position = new Vector2(Screen.width*0.9f, Screen.height*0.1f);
         HideBackButton();
 
@@ -134,6 +141,22 @@ public class MenuManager : MonoBehaviour
         inventoryUI.SetActive(false);
     }
 
+    public void ShowPlayerStats(InteractableObject target)
+    {
+        Character character = target.GetComponent<Character>();
+        portrait.GetComponent<Image>().sprite = (character != null) ? character.portrait : target.GetComponent<SpriteRenderer>().sprite;
+        characterName.GetComponent<Text>().text = (character != null) ? character.name : target.name.Replace("(Clone)", "");;
+        healthText.GetComponent<Text>().text = target.GetHealth().ToString();
+        movesText.GetComponent<Text>().text = (character != null) ? character.totalMoves.ToString() : "";
+        playerStats.SetActive(true);
+        // ShowBackButton();
+    }
+
+    public void HidePlayerStats()
+    {
+        playerStats.SetActive(false);
+    }
+
     public void ShowBackButton()
     {
         backButton.SetActive(true);
@@ -175,6 +198,15 @@ public class MenuManager : MonoBehaviour
     {
         mouseIndicator = Instantiate(mouseIndicatorSprite, coords, Quaternion.identity);
         mouseIndicator.GetComponent<SpriteRenderer>().material.color = defaultColor;
+        InteractableObject overlap = mouseIndicator.GetComponent<MouseIndicator>().FindInteractableObject();
+        if (overlap != null)
+        {
+            ShowPlayerStats(overlap);
+        }
+        else
+        {
+            HidePlayerStats();
+        }
     }
 
     public void HideMouseIndicator()

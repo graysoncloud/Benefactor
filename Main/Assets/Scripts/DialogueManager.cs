@@ -103,6 +103,7 @@ public class DialogueManager : MonoBehaviour
     private void Awake()
     {
         conversationOptions.SetActive(false);
+        dialogueBackground.SetActive(false);
     }
 
     private void Update()

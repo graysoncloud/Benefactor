@@ -99,6 +99,11 @@ public class Roof : MonoBehaviour
         targetOpacity = 100f;
     }
 
+    public bool Hidden()
+    {
+        return targetOpacity == 0f;
+    }
+
     public void setRoofIndex(int index)
     {
         roofIndex = index;

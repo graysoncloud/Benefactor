@@ -306,15 +306,15 @@ public class Player : Character
     public override void TakeDamage (double loss)
     {
         base.TakeDamage(loss);
-        menuManager.UpdateHealth(health);
-        animator.SetTrigger("playerHit");
+        // menuManager.UpdateHealth(health);
+        // animator.SetTrigger("playerHit");
         CheckIfGameOver();
     }
 
     public override void Heal (double amount)
     {
         base.Heal(amount);
-        menuManager.UpdateHealth(health);
+        // menuManager.UpdateHealth(health);
     }
 
     protected override void TalkTo(InteractableObject toTalkTo)
@@ -371,7 +371,7 @@ public class Player : Character
         }
 
         health = lastState.health;
-        menuManager.UpdateHealth(health);
+        // menuManager.UpdateHealth(health);
         movesLeft = lastState.moves;
         actionsLeft = lastState.actions;
         transform.position = lastState.position;

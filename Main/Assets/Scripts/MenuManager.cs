@@ -146,8 +146,8 @@ public class MenuManager : MonoBehaviour
         Character character = target.GetComponent<Character>();
         portrait.GetComponent<Image>().sprite = (character != null) ? character.portrait : target.GetComponent<SpriteRenderer>().sprite;
         characterName.GetComponent<Text>().text = (character != null) ? character.name : target.name.Replace("(Clone)", "");;
-        healthText.GetComponent<Text>().text = target.GetHealth().ToString();
-        movesText.GetComponent<Text>().text = (character != null) ? character.totalMoves.ToString() : "";
+        healthText.GetComponent<Text>().text = "❤️ " + target.GetHealth().ToString() + "/" + target.maxHealth;
+        movesText.GetComponent<Text>().text = (character != null) ? ("➤  " + character.totalMoves.ToString()) : "";
         playerStats.SetActive(true);
         // ShowBackButton();
     }
@@ -280,10 +280,10 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void UpdateHealth(double health)
-    {
-        healthText.text = "Health: " + health;
-    }
+    // public void UpdateHealth(double health)
+    // {
+    //     healthText.text = "Health: " + health;
+    // }
 
     public static void ActionButtonPressed(String action)
     {

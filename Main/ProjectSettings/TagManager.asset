@@ -54,9 +54,6 @@ TagManager:
   - name: Floor
     uniqueID: 4158560753
     locked: 0
-  - name: Indicators
-    uniqueID: 3866128679
-    locked: 0
   - name: Items
     uniqueID: 1183741245
     locked: 0
@@ -65,6 +62,9 @@ TagManager:
     locked: 0
   - name: Roof
     uniqueID: 2007457449
+    locked: 0
+  - name: Indicators
+    uniqueID: 3866128679
     locked: 0
   - name: UI
     uniqueID: 1370879151

@@ -27,11 +27,12 @@ public class BoardManager : MonoBehaviour
     public Count buildingCount;
     public Count buildingWallLength;
 
-    public GameObject player;
+    public GameObject[] players;
     public GameObject exit;
     public GameObject[] enemies;
     public GameObject[] groundTiles;
     public GameObject[] streetTiles;
+    public GameObject[] trees;
     public GameObject[] natureObjects;
     public GameObject[] streetObjects;
     public GameObject[] borderWalls;
@@ -84,12 +85,14 @@ public class BoardManager : MonoBehaviour
         {"House", new []{"Bedroom", "Storage"} }
     };
 
+    public List<Vector3> spawnPositions = new List<Vector3>();
+
     void InitializeList()
     {
         gridPositions.Clear();
-        for (int x = 1; x < columns - 1; x++)
+        for (int x = 0; x < columns; x++)
         {
-            for (int y = 1; y < rows - 1; y++)
+            for (int y = 0; y < rows; y++)
             {
                 gridPositions.Add(new Vector3(x, y, y));
             }
@@ -129,6 +132,18 @@ public class BoardManager : MonoBehaviour
         Roofs = new List<List<Roof>>();
     }
 
+    private void SpawnPlayers() {
+        int i = 0;
+        foreach (GameObject player in players) {
+            if (i >= spawnPositions.Count)
+                return;
+            Vector3 position = spawnPositions[i];
+            Instantiate(player, position, Quaternion.identity);
+            gridPositions.Remove(position);
+            i++;
+        }
+    }
+
     Vector3 RandomPosition()
     {
         int randomIndex = Random.Range(0, gridPositions.Count);
@@ -151,6 +166,21 @@ public class BoardManager : MonoBehaviour
             Vector3 randomPosition = RandomPosition();
             GameObject tileChoice = RandomObject(tileArray);
             Instantiate(tileChoice, randomPosition, Quaternion.identity);
+        }
+    }
+
+    void LayoutObjectAtCorners(GameObject[] tileArray)
+    {
+        for (int i = 0; i < gridPositions.Count; i++)
+        {
+            Vector3 position = gridPositions[i];
+            double spawnChance = Math.Pow((Math.Max(position.x, columns - position.x) * Math.Max(position.y, rows - position.y)), 3) / Math.Pow((columns * rows), 3);
+            if (Random.value < spawnChance)
+            {
+                gridPositions.RemoveAt(i);
+                GameObject tileChoice = RandomObject(tileArray);
+                Instantiate(tileChoice, position, Quaternion.identity);
+            }
         }
     }
 
@@ -521,13 +551,14 @@ public class BoardManager : MonoBehaviour
     {
         BoardSetup();
         InitializeList();
+        SpawnPlayers();
         LayoutBuildings();
+        LayoutObjectAtCorners(trees);
         LayoutObjectAtRandom(natureObjects, objectCount.minimum, objectCount.maximum/2);
         LayoutObjectAtRandom(streetObjects, objectCount.minimum, objectCount.maximum/2);
-        Instantiate(player, new Vector3(0, 0, 0f), Quaternion.identity);
-        int enemyCount = (int)Mathf.Log(level, 2f) + 2; //added 2
+        int enemyCount = (int)Mathf.Log(level, 2f); //added 2
         LayoutObjectAtRandom(enemies, enemyCount, enemyCount);
-        Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
+        // Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
 
         return Grid;
         GameManager.instance.FinishSetup();

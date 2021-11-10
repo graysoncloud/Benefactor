@@ -50,16 +50,17 @@ MonoBehaviour:
     minimum: 10
     maximum: 20
   buildingCount:
-    minimum: 5
-    maximum: 10
+    minimum: 3
+    maximum: 6
   buildingWallLength:
     minimum: 5
     maximum: 10
-  player: {fileID: 5828532957960981727, guid: 9dfdcd00a8877bb4d8342c8be1806065, type: 3}
+  players:
+  - {fileID: 5828532957960981727, guid: 9dfdcd00a8877bb4d8342c8be1806065, type: 3}
+  - {fileID: 8178759162555290993, guid: 70d91124e870e344f89f261e24c1ac92, type: 3}
   exit: {fileID: 4738714068660868784, guid: eb35feb23eb52bd4d986e17334b1d9f3, type: 3}
   enemies:
   - {fileID: 5495209542717074604, guid: 95434a6419c3c8540b8a58911e28f596, type: 3}
-  - {fileID: 8178759162555290993, guid: 70d91124e870e344f89f261e24c1ac92, type: 3}
   groundTiles:
   - {fileID: 6793900256970249569, guid: 89c8331683823014e9900980e63e7b52, type: 3}
   - {fileID: 1508380317589558186, guid: 5e3ef656344fe9b45bdbe7939a5df8b5, type: 3}
@@ -68,9 +69,10 @@ MonoBehaviour:
   - {fileID: 7991227353612988546, guid: 66de3572df508d2428de0f57f37c0aa5, type: 3}
   - {fileID: 7991227353612988546, guid: 77211cd42fc70d74e906334983cb2c46, type: 3}
   - {fileID: 7991227353612988546, guid: dd2a35f8c84e27b4ba3121e96f625596, type: 3}
+  trees:
+  - {fileID: 7991227353612988546, guid: 44b08350b38e4a04f80ae5172d79fc06, type: 3}
   natureObjects:
   - {fileID: 7991227353612988546, guid: 452a827b76b83484fb5d8b24688c5a2f, type: 3}
-  - {fileID: 7991227353612988546, guid: 44b08350b38e4a04f80ae5172d79fc06, type: 3}
   streetObjects:
   - {fileID: 7991227353612988546, guid: 77211cd42fc70d74e906334983cb2c46, type: 3}
   - {fileID: 7991227353612988546, guid: dd2a35f8c84e27b4ba3121e96f625596, type: 3}
@@ -149,6 +151,10 @@ MonoBehaviour:
   bed: {fileID: 0}
   stool: {fileID: 7991227353612988546, guid: 06f8a59fda86f8442a8d82193b2f9057, type: 3}
   stove: {fileID: 7991227353612988546, guid: fcf18b76e6d62734b97415eb793208b2, type: 3}
+  spawnPositions:
+  - {x: 15, y: 0, z: 0}
+  - {x: 16, y: 0, z: 0}
+  - {x: 16, y: 1, z: 1}
 --- !u!114 &5498348103610966037
 MonoBehaviour:
   m_ObjectHideFlags: 0

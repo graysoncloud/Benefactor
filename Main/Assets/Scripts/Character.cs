@@ -94,7 +94,7 @@ public class Character : InteractableObject
         enemies = new List<InteractableObject>();
 
         // For testing purposes- should be moved to custom classes for NPCs
-        maxHealth = 3;
+        maxHealth = 10;
 
         base.Start();
     }
@@ -127,6 +127,10 @@ public class Character : InteractableObject
             UpdateObjectives();
             LogObjectives();
             FindPath();
+            foreach (Vector2 coords in pathToObjective)
+            {
+                Debug.Log(coords);
+            }
             yield return new WaitForSeconds(moveTime);
             if (pathToObjective.Length > 0)
             {
@@ -155,6 +159,8 @@ public class Character : InteractableObject
 
     protected virtual void UpdateObjectives()
     {
+        if (currentObjective != null && currentObjective.action == "Wait")
+            currentObjective = null;
         Objective healClosest = new Objective(GetClosest(allies), "Heal");
         if (healClosest.target != null && IsDamaged() && HasItemType("Medicine") && !HasObjective(healClosest))
             objectives.Prepend(healClosest);
@@ -165,6 +171,7 @@ public class Character : InteractableObject
 
         if ((currentObjective == null && objectives.Count == 0) || (actionsLeft <= 0 && movesLeft <= 0))
         {
+            Debug.Log("Actions Left: " + actionsLeft + "Moves Left: " + movesLeft);
             if (currentObjective != null && currentObjective.action != "Wait")
                 objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
             currentObjective = new Objective(this, "Wait");
@@ -224,16 +231,29 @@ public class Character : InteractableObject
         {
             if (node.Weight > 1 || node.Weight == -1) //node.Weight == -1 signifies door
             {
-                objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
                 boxCollider.enabled = false;
                 Collider2D hitCollider = Physics2D.OverlapCircle(node.Position, 0.5f);
                 boxCollider.enabled = true;
-                InteractableObject newTarget = hitCollider.GetComponent<InteractableObject>();
-                if (newTarget != null)
-                    currentObjective = new Objective(newTarget, newTarget.tag == "Door" ? "Door" : "Attack");
-                Debug.Log("Obstacle: " + currentObjective.target + ": " + currentObjective.action);
-                Array.Resize(ref pathToObjective, i);
-                return;
+                if (hitCollider != null) {
+                    Roof roof = hitCollider.GetComponent<Roof>();
+                    if (roof != null)
+                    {
+                        roof.GetComponent<BoxCollider2D>().enabled = false;
+                        hitCollider = Physics2D.OverlapCircle(node.Position, 0.5f);
+                        roof.GetComponent<BoxCollider2D>().enabled = true;
+                    }
+                    InteractableObject newTarget = hitCollider.GetComponent<InteractableObject>();
+                    if (newTarget != null && newTarget != currentObjective.target)
+                    {
+                        objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
+                        currentObjective = new Objective(newTarget, newTarget.tag == "Door" ? "Door" : "Attack");
+                        Debug.Log("Obstacle: " + currentObjective.target + ": " + currentObjective.action);
+                    } else if (newTarget == null) {
+                        Debug.Log("Null Obstacle: " + newTarget);
+                    }
+                    Array.Resize(ref pathToObjective, i);
+                    return;
+                }
             }
 
             pathToObjective[i] = node.Position;
@@ -247,14 +267,18 @@ public class Character : InteractableObject
     {
         isMoving = true;
         ErasePosition();
+        string lastState = "";
         foreach (Vector2 coords in pathToObjective)
         {
+            animateMovement(coords, lastState);
             yield return StartCoroutine(SmoothMovement(coords));
             CheckSpace();
         }
         UpdatePosition();
         movesLeft -= pathToObjective.Length; //no "- 1" at end
         isMoving = false;
+        resetAnimations();
+        animator.SetTrigger("idle");
     }
 
     protected IEnumerator SmoothMovement(Vector2 end)
@@ -268,6 +292,42 @@ public class Character : InteractableObject
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
             yield return null;
         }
+    }
+
+    protected string animateMovement(Vector2 end, string lastState) {
+        string state = null;
+        if (transform.position.x < end.x && lastState != "moveRight")
+        {
+            state = "moveRight";
+        }
+        else if (transform.position.x > end.x && lastState != "moveLeft")
+        {
+            state = "moveLeft";
+        }
+        else if (transform.position.y < end.y && lastState != "moveBack")
+        {
+            state = "moveBack";
+        }
+        else if (transform.position.y > end.y && lastState != "moveFront")
+        {
+            state = "moveFront";
+        }
+        if (state == null)
+        {
+            state = lastState;
+        } else {
+            resetAnimations();
+            animator.SetTrigger(state);
+        }
+        return state;
+    }
+
+    protected void resetAnimations() {
+        animator.ResetTrigger("moveRight");
+        animator.ResetTrigger("moveLeft");
+        animator.ResetTrigger("moveBack");
+        animator.ResetTrigger("moveFront");
+        animator.ResetTrigger("idle");
     }
 
     virtual protected void GetAvailableTargets()
@@ -615,7 +675,7 @@ public class Character : InteractableObject
         if (weapon.uses == 0)
             Remove(weapon);
 
-        animator.SetTrigger("enemyAttack");
+        // animator.SetTrigger("enemyAttack");
 
         if (toAttack.GetHealth() <= 0)
         {

@@ -89,7 +89,7 @@ public class MenuManager : MonoBehaviour
             GameObject button;
             actionButtons.TryGetValue(action, out button);
             button.SetActive(true);
-            button.transform.position = new Vector2(position.x, position.y + height/2 - spacing - buttonHeight/2 - (buttonHeight + spacing) * index);
+            button.GetComponent<RectTransform>().transform.localPosition = new Vector2(0, (0 + height/2 - spacing - buttonHeight/2 - (buttonHeight + spacing) * index));
             index++;
         }
 

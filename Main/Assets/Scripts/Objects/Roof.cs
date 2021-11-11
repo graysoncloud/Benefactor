@@ -27,9 +27,9 @@ public class Roof : MonoBehaviour
         else
         {
             if (curOpacity < targetOpacity)
-                curOpacity += 100 * Time.deltaTime;
+                curOpacity += 200 * Time.deltaTime;
             else
-                curOpacity -= 100 * Time.deltaTime;
+                curOpacity -= 200 * Time.deltaTime;
         }
         spriteRenderer.color = new Color(1f, 1f, 1f, curOpacity / 100);
     }

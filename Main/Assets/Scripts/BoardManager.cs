@@ -560,12 +560,17 @@ public class BoardManager : MonoBehaviour
         LayoutObjectAtRandom(enemies, enemyCount, enemyCount);
         // Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
 
+        foreach(List<Roof> subRoofs in Roofs){
+            foreach(Roof roof in subRoofs){
+                Debug.Log(roof);
+            }
+        }
+        GameManager.instance.FinishSetup(Roofs);
         return Grid;
-        GameManager.instance.FinishSetup();
     }
 
-    public List<List<Roof>> GetRoofs()
-    {
-        return Roofs;
-    }
+    // public List<List<Roof>> GetRoofs()
+    // {
+    //     return Roofs;
+    // }
 }

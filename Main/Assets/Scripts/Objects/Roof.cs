@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ public class Roof : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        boxCollider = GetComponent<BoxCollider2D>();
         Show();
     }
 
@@ -25,28 +27,36 @@ public class Roof : MonoBehaviour
         else
         {
             if (curOpacity < targetOpacity)
-                curOpacity++;
+                curOpacity += 100 * Time.deltaTime;
             else
-                curOpacity--;
+                curOpacity -= 100 * Time.deltaTime;
         }
         spriteRenderer.color = new Color(1f, 1f, 1f, curOpacity / 100);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (GameManager.instance.IsPlayableCharacter(other.gameObject.GetComponent<Player>()))
-        {
-            hideRoof();
-        }
-    }
+    // void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     Debug.Log("PLAYER ENTER");
+    //     Player player = other.gameObject.GetComponent<Player>();
+    //     Debug.Log(player);
+    //     Debug.Log(player.playable);
+    //     if (player != null && player.playable)
+    //     {
+    //         hideRoof();
+    //     }
+    // }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (GameManager.instance.IsPlayableCharacter(other.gameObject.GetComponent<Player>()))
-        {
-            showRoof();
-        }
-    }
+    // void OnTriggerExit2D(Collider2D other)
+    // {
+    //     Debug.Log("PLAYER EXIT");
+    //     Player player = other.gameObject.GetComponent<Player>();
+    //     Debug.Log(player);
+    //     Debug.Log(player.playable);
+    //     if (player != null && player.playable)
+    //     {
+    //         showRoof();
+    //     }
+    // }
 
     public void hideRoof()
     {
@@ -67,7 +77,9 @@ public class Roof : MonoBehaviour
     public void checkRoofs()
     {
         bool roofOverPlayer = false;
-        foreach (Roof roof in GameManager.instance.Roofs[roofIndex]) {
+        Debug.Log(GameManager.instance.Roofs);
+        foreach (Roof roof in GameManager.instance.Roofs[roofIndex])
+        {
             if (roof.GetOverPlayer())
                 roofOverPlayer = true;
         }
@@ -111,10 +123,11 @@ public class Roof : MonoBehaviour
 
     public bool GetOverPlayer()
     {
-        boxCollider = GetComponent<BoxCollider2D>();
-        boxCollider.enabled = false;
-        Collider2D hitCollider = Physics2D.OverlapCircle((Vector2)transform.position, 0.1f);
-        boxCollider.enabled = true;
-        return hitCollider != null && GameManager.instance.IsPlayableCharacter(hitCollider.gameObject.GetComponent<Player>());
+        foreach (Player player in GameManager.instance.characters) {
+            if (player.playable && (Vector2)transform.position == (Vector2)player.transform.position) {
+                return true;
+            }
+        }
+        return false;
     }
 }

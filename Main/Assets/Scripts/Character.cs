@@ -127,10 +127,6 @@ public class Character : InteractableObject
             UpdateObjectives();
             LogObjectives();
             FindPath();
-            foreach (Vector2 coords in pathToObjective)
-            {
-                Debug.Log(coords);
-            }
             yield return new WaitForSeconds(moveTime);
             if (pathToObjective.Length > 0)
             {
@@ -171,7 +167,6 @@ public class Character : InteractableObject
 
         if ((currentObjective == null && objectives.Count == 0) || (actionsLeft <= 0 && movesLeft <= 0))
         {
-            Debug.Log("Actions Left: " + actionsLeft + "Moves Left: " + movesLeft);
             if (currentObjective != null && currentObjective.action != "Wait")
                 objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
             currentObjective = new Objective(this, "Wait");
@@ -227,32 +222,25 @@ public class Character : InteractableObject
         pathToObjective = new Vector2[Math.Min(movesLeft, path.Count - space)];
         if (pathToObjective.Length == 0) { return; }
         int i = 0;
+
         foreach (Node node in path)
         {
             if (node.Weight > 1 || node.Weight == -1) //node.Weight == -1 signifies door
             {
                 boxCollider.enabled = false;
-                Collider2D hitCollider = Physics2D.OverlapCircle(node.Position, 0.5f);
+                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(node.Position, 0.5f);
                 boxCollider.enabled = true;
-                if (hitCollider != null) {
-                    Roof roof = hitCollider.GetComponent<Roof>();
-                    if (roof != null)
-                    {
-                        roof.GetComponent<BoxCollider2D>().enabled = false;
-                        hitCollider = Physics2D.OverlapCircle(node.Position, 0.5f);
-                        roof.GetComponent<BoxCollider2D>().enabled = true;
-                    }
+                foreach (Collider2D hitCollider in hitColliders)
+                {
                     InteractableObject newTarget = hitCollider.GetComponent<InteractableObject>();
                     if (newTarget != null && newTarget != currentObjective.target)
                     {
                         objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
                         currentObjective = new Objective(newTarget, newTarget.tag == "Door" ? "Door" : "Attack");
                         Debug.Log("Obstacle: " + currentObjective.target + ": " + currentObjective.action);
-                    } else if (newTarget == null) {
-                        Debug.Log("Null Obstacle: " + newTarget);
+                        Array.Resize(ref pathToObjective, i);
+                        return;
                     }
-                    Array.Resize(ref pathToObjective, i);
-                    return;
                 }
             }
 
@@ -756,11 +744,11 @@ public class Character : InteractableObject
         boxCollider.enabled = true;
         if (!end && hitCollider != null && hitCollider.gameObject.tag == "Damaging")
             TakeDamage(hitCollider.gameObject.GetComponent<Damaging>().damagePerTurn);
-        // if (hitCollider != null && hitCollider.gameObject.tag == "Roof")
-        //     if (end)
-        //         hitCollider.gameObject.GetComponent<Roof>().showRoof();
-        //     else
-        //         hitCollider.gameObject.GetComponent<Roof>().hideRoof();
+        CheckRoof();
+    }
+
+    protected void CheckRoof() {
+        GameManager.instance.CheckRoofs();
     }
 
     protected void UpdateState()

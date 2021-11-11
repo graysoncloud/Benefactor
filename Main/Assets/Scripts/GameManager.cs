@@ -64,11 +64,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void FinishSetup() {
+    public void FinishSetup(List<List<Roof>> roofs) {
+        Roofs = roofs;
+        Debug.Log(Roofs.Count);
+        doingSetup = false;
+    }
+
+    public void CheckRoofs() {
         foreach (List<Roof> Roof in Roofs) {
+            if (Roof.Count == 0)
+                continue;
+            Debug.Log(Roof.First());
             Roof.First().checkRoofs();
         }
-        doingSetup = false;
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -100,7 +108,7 @@ public class GameManager : MonoBehaviour
 
         characters.Clear();
         Grid = boardScript.SetupScene(level);
-        Roofs = boardScript.GetRoofs();
+        // Roofs = boardScript.GetRoofs();
         round = 0;
     }
 

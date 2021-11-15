@@ -296,10 +296,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -309,8 +311,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -338,6 +340,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -2308,9 +2311,101 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      inside_82: 669184244925242892
+      inside_88: -4061873745718759341
+      inside_40: -6067874971946700824
+      inside_9: 5343774425697271732
+      inside_66: 3520338180049318328
+      inside_38: -5444962265627744233
+      inside_33: -5136837074017035810
+      inside_65: 6785954314084845185
+      inside_78: 4082985651972552707
+      inside_49: -5918735169840751936
+      inside_54: -2071345986573170884
+      inside_90: 2955244180297683540
+      inside_57: 3570408575265287276
+      inside_74: 2925422289045540380
+      inside_59: 8794855137783198243
+      inside_4: -3159373967292191595
+      inside_52: -1929953171139708935
+      inside_55: 1393326066920039300
+      inside_64: 7292637487000720877
+      inside_29: -4334908729079573209
+      inside_10: 5205685796858644241
+      inside_62: -3503194619728865332
+      inside_83: 8953670525043239419
+      inside_19: -3620704953716702681
+      inside_48: -5973238736887082190
+      inside_84: 2080769386941747905
+      inside_2: -4535074048522920865
+      inside_44: 2598240695365236489
+      inside_73: -2828026397792503864
+      inside_75: 3805977818252890496
+      inside_23: -3169847262517447407
+      inside_35: -5308988444116525579
+      inside_30: -8868475665434670
+      inside_17: -640904543992825736
+      inside_80: -5044530019849115603
+      inside_89: -555855029263698050
+      inside_85: -517432718765009178
+      inside_79: -8065362041708835248
+      inside_14: 4093907687032703779
+      inside_71: 7147829232353601553
+      inside_28: 1801197968436725452
+      inside_3: 6696878938533527509
+      inside_70: -157160716385775672
+      inside_34: 2402103637798975533
+      inside_63: 6500098893761588701
+      inside_37: -436746684325440804
+      inside_81: -4894003285333466200
+      inside_15: 1811421486476023410
+      inside_8: 4288265408434893996
+      inside_91: -1461241000704778182
+      inside_20: 93332597319322039
+      inside_50: 4190332894194889435
+      inside_12: 5841078749969726191
+      inside_11: -6275356397902231036
+      inside_22: -7055936542138069969
+      inside_32: 2969004836763193797
+      inside_5: 6995023442814134182
+      inside_51: 3375940143525682766
+      inside_60: -3465975637110214182
+      inside_7: -1849033192627518048
+      inside_68: -5639013564823981736
+      inside_72: 5251198241123409754
+      inside_87: -3281259461817948537
+      inside_27: 1676285338962848541
+      inside_46: -3378900206455956209
+      inside_36: 2203588823858333989
+      inside_61: -2137007653465699665
+      inside_1: 7481605169071158664
+      inside_16: -2687936409443565010
+      inside_21: 6993433677561470782
+      inside_31: -8894015061370202158
+      inside_42: -2730293429301501203
+      inside_77: 1185001483946079189
+      inside_53: -7247213205016045129
+      inside_41: 5255221295182832467
+      inside_24: -506431122198335938
+      inside_58: -5921347067318263017
+      inside_45: -6167645556047139853
+      inside_86: 4839524912793297369
+      inside_6: 5081585780740693538
+      inside_43: 8326346188798089818
+      inside_76: -8888470808460008516
+      inside_18: -8535285938526780309
+      inside_56: 8146901224370891991
+      inside_69: -1400666875608306715
+      inside_26: 1701534171125894444
+      inside_47: 8216021533268430647
+      inside_25: -4396490992298807527
+      inside_0: 3105379272556981734
+      inside_67: -2233043558767364733
+      inside_39: -8374826117803757582
+      inside_13: -1572425989639533465
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

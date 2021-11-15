@@ -59,10 +59,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -72,8 +74,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -101,6 +103,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -412,9 +415,22 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      castlefloors_outside_5: 909647973028898617
+      castlefloors_outside_1: 3882632589075792863
+      castlefloors_outside_7: 5324909107843405025
+      castlefloors_outside_4: -292788617516556658
+      castlefloors_outside_12: -527466283998976462
+      castlefloors_outside_9: 4512832631555110223
+      castlefloors_outside_8: -5050078221550194331
+      castlefloors_outside_10: -1249348436433538516
+      castlefloors_outside_3: -1086628000825777014
+      castlefloors_outside_0: -7872926931710222932
+      castlefloors_outside_2: -2458379160502410718
+      castlefloors_outside_11: -7030636021786122778
+      castlefloors_outside_6: 1430050928779298405
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

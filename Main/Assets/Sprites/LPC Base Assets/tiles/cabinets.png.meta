@@ -239,10 +239,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -252,8 +254,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -281,6 +283,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1747,9 +1750,77 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      cabinets_30: -6967558454999965487
+      cabinets_70: -4940400498780784659
+      cabinets_10: 315264050853489003
+      cabinets_25: 9078020565909742870
+      cabinets_31: -4410606818121353064
+      cabinets_12: -4262187628116273066
+      cabinets_43: 8208269455743554190
+      cabinets_66: 5426826715927611602
+      cabinets_32: -7570832962285055427
+      cabinets_52: 5958579888943918204
+      cabinets_0: -64719530322090483
+      cabinets_57: -2783484926677042921
+      cabinets_40: -7934006214422391050
+      cabinets_67: -8492837392904145265
+      cabinets_55: 6481400331644708044
+      cabinets_42: 30662108778977564
+      cabinets_35: 7633515799520650737
+      cabinets_28: -5894377147004494577
+      cabinets_54: -2525252763624003249
+      cabinets_49: 3296524816314992779
+      cabinets_7: 9211646168690293479
+      cabinets_33: 3398018521531678366
+      cabinets_38: -3581064159020168484
+      cabinets_26: -1466455032775125249
+      cabinets_27: 8142935283521319725
+      cabinets_65: -1478824406464509056
+      cabinets_44: 5364965855878789878
+      cabinets_17: -2580142103882979405
+      cabinets_47: -2666256024961579330
+      cabinets_34: -596158552457940723
+      cabinets_45: 1224631724098234069
+      cabinets_59: 470123470174393531
+      cabinets_4: 1151009468945943252
+      cabinets_48: 5247266910785790386
+      cabinets_51: 6550454426244952850
+      cabinets_58: -1305681687770531064
+      cabinets_16: -4023812908699945660
+      cabinets_5: -9035694158600668542
+      cabinets_6: 4244326121947651600
+      cabinets_37: -7633903359359038218
+      cabinets_68: -3074803031438048718
+      cabinets_23: -6248128517870975883
+      cabinets_39: -1006947437387213039
+      cabinets_29: -8313122807967978478
+      cabinets_36: 6870134906938977669
+      cabinets_24: 3182497868412749933
+      cabinets_63: 1290928626920250940
+      cabinets_71: 8747941803891043822
+      cabinets_20: 6160255037237233260
+      cabinets_41: 200749406562863585
+      cabinets_60: 1829466936457767130
+      cabinets_8: 5742650686957145614
+      cabinets_18: -4668774321457962561
+      cabinets_50: 773689633544079939
+      cabinets_56: 7511728297979295713
+      cabinets_21: 3253969071652443888
+      cabinets_61: -3778885268726239367
+      cabinets_13: -5924836313652549408
+      cabinets_15: 7779543663032676842
+      cabinets_9: 5112451828119714632
+      cabinets_14: -315411599158590641
+      cabinets_62: 7947525273713643052
+      cabinets_11: -2800786865607691870
+      cabinets_46: 7195400271737293593
+      cabinets_69: -6804886395678283384
+      cabinets_22: 4527440382278261379
+      cabinets_64: -481876010418124901
+      cabinets_19: 2663939149334435092
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -140,10 +140,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -153,8 +155,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -182,6 +184,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1060,9 +1063,49 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      bridges_32: -628455468113848483
+      bridges_15: 4241106056099468173
+      bridges_33: 5384223686202597112
+      bridges_7: -8576279329637667652
+      bridges_3: -5552401678144934118
+      bridges_18: 3611082258260893566
+      bridges_24: -5812366584195210354
+      bridges_37: 2468268700051209030
+      bridges_38: 4509174111473280239
+      bridges_10: -189948657327557736
+      bridges_36: 8690090537447195521
+      bridges_31: -7793886228605694711
+      bridges_13: 8934247437813414436
+      bridges_4: 6857625550919262035
+      bridges_11: -5279010908920050199
+      bridges_35: 2089577225245691601
+      bridges_14: 2065823027689658113
+      bridges_5: -966171055937846194
+      bridges_27: -7487276280795427964
+      bridges_34: -5831506771854398494
+      bridges_29: 4863448259553367497
+      bridges_39: 4190662668195558925
+      bridges_2: 8947161182862793046
+      bridges_23: 7156730879316260773
+      bridges_0: 3997396699908052844
+      bridges_21: -993075776378175801
+      bridges_1: -2154808368091415049
+      bridges_12: 4143902384442177239
+      bridges_6: 6726371529366769753
+      bridges_26: -3383261510941869983
+      bridges_25: -2320328285976659773
+      bridges_9: -8794285334704985447
+      bridges_28: -747293259180748306
+      bridges_20: 2639974837160061875
+      bridges_16: -3350766121406267991
+      bridges_17: -214888026984896991
+      bridges_8: 7398579745434154838
+      bridges_19: 1838328202803621766
+      bridges_22: -2998398507983751813
+      bridges_30: -5955373314530775866
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

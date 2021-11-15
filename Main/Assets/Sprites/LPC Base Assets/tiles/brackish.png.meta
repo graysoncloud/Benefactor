@@ -74,10 +74,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -87,8 +89,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -116,6 +118,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -532,9 +535,27 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      brackish_14: -4220416262139700335
+      brackish_15: -2396587489021309735
+      brackish_0: 1019006155107830000
+      brackish_2: 6500189710112859848
+      brackish_8: -7990433682728297146
+      brackish_16: -6437243777415887803
+      brackish_10: 5687874277100432986
+      brackish_4: 3627048677184647941
+      brackish_9: 8989069465977875915
+      brackish_5: 5690886669574504350
+      brackish_12: 1062122438912646231
+      brackish_17: 8045448656376343964
+      brackish_7: -6361289416542767486
+      brackish_11: 9129834528334411980
+      brackish_6: -1924448837828576504
+      brackish_3: -4058561025959024079
+      brackish_13: -7450818899645320718
+      brackish_1: 5455909926440952339
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -155,10 +155,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -168,8 +170,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -197,6 +199,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1159,9 +1162,53 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      victoria_25: 4119564067773803263
+      victoria_18: 1648346839519097038
+      victoria_36: -7803566771805418148
+      victoria_28: 749952361248250148
+      victoria_24: -2078557845685698207
+      victoria_12: 2767669021759743687
+      victoria_2: -7012085070685746706
+      victoria_20: 390705993597589583
+      victoria_44: 2545341219408781423
+      victoria_32: 8021120599190721138
+      victoria_40: -7476856683265593027
+      victoria_14: 5165697410979490411
+      victoria_37: 6102573653216923281
+      victoria_21: -8252507561432265323
+      victoria_16: 8257964916795124542
+      victoria_29: 3329364303563440949
+      victoria_5: 7590066447146493733
+      victoria_38: 4802630402824978397
+      victoria_23: 1909495193362842624
+      victoria_9: 4206080934786340599
+      victoria_3: 8847779640038546400
+      victoria_10: -2959351387344002648
+      victoria_1: 2590051470947856320
+      victoria_11: -6208081067047618981
+      victoria_7: 6374672493093521189
+      victoria_17: 2587689986122019587
+      victoria_41: -2908630157491399131
+      victoria_8: 7652944877810542367
+      victoria_30: 3853955430926435909
+      victoria_19: 6544895437865008477
+      victoria_26: 1294490810988326614
+      victoria_0: 691905212622998910
+      victoria_13: 5410033755156955201
+      victoria_6: -5222508409296595901
+      victoria_31: 6654882815546515239
+      victoria_35: -148041067257020027
+      victoria_39: -6582360559111194107
+      victoria_4: 6778116084755845092
+      victoria_43: -7660008460231827584
+      victoria_34: -2778830149558210039
+      victoria_42: -7465461704899495699
+      victoria_33: -444275250569068233
+      victoria_15: 5625642298774259577
+      victoria_22: -808001283781510854
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

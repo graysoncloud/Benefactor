@@ -200,10 +200,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -213,8 +215,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -242,6 +244,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1540,9 +1543,69 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      castlefloors_37: 6917162038446257381
+      castlefloors_46: -1119461800889003679
+      castlefloors_38: -6189120285074676291
+      castlefloors_16: 4186632350281929492
+      castlefloors_51: 6260024796229033091
+      castlefloors_23: -1178100526631424874
+      castlefloors_18: -31581202583143922
+      castlefloors_25: 3436489941577151262
+      castlefloors_49: -1193469574114572573
+      castlefloors_4: 86430734069746532
+      castlefloors_41: -1134391923361498934
+      castlefloors_48: -5554699645630712017
+      castlefloors_39: 6957690781746168212
+      castlefloors_6: -7868397897570572067
+      castlefloors_9: -2446009478344448247
+      castlefloors_32: 5453142917295517913
+      castlefloors_24: 5224178022336728344
+      castlefloors_31: -5122230090540375021
+      castlefloors_3: -6796568536038061742
+      castlefloors_43: 8298064914763847992
+      castlefloors_15: 7801983508130999108
+      castlefloors_36: -2053883190501236436
+      castlefloors_14: -1366657648861649059
+      castlefloors_56: 243037090378114106
+      castlefloors_20: 7318352241505012307
+      castlefloors_30: 784516280504223746
+      castlefloors_57: -7781857492596068991
+      castlefloors_2: 7778386989391191096
+      castlefloors_1: -5209631969623843470
+      castlefloors_21: 315435910074123080
+      castlefloors_40: -1175316364182925242
+      castlefloors_11: 303720960640511818
+      castlefloors_28: -8450013584246038129
+      castlefloors_7: -1944900606210787242
+      castlefloors_13: 6341911389686261939
+      castlefloors_34: 8710990041872540910
+      castlefloors_59: 1305799027674558344
+      castlefloors_53: 6004113865074282264
+      castlefloors_29: 4708535485654870040
+      castlefloors_42: 2685336268964236304
+      castlefloors_10: -5214395723307138668
+      castlefloors_45: 806966854585390967
+      castlefloors_5: -4478145852614655819
+      castlefloors_27: 8039241673620783759
+      castlefloors_55: 7111981675764303471
+      castlefloors_0: 356522210541135319
+      castlefloors_44: -5680755056062804347
+      castlefloors_22: -5591130622933281364
+      castlefloors_58: 8090286192466270699
+      castlefloors_54: 7561433298340849246
+      castlefloors_52: -7697117880023348873
+      castlefloors_12: -6789414605295568152
+      castlefloors_35: -2465770648871885579
+      castlefloors_33: -3518560600870281231
+      castlefloors_8: -956920104984871952
+      castlefloors_26: -6774234369023895924
+      castlefloors_50: 1541880889557004804
+      castlefloors_47: 7488196018213136046
+      castlefloors_17: 8495376843902847884
+      castlefloors_19: 5101200456709598128
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

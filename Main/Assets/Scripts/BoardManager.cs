@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 using AStarSharp;
 using System.Linq;
@@ -48,17 +49,7 @@ public class BoardManager : MonoBehaviour
     public GameObject houseWallCornerLeft;
     public GameObject houseWallCornerRight;
 
-    public GameObject roofFlat;
-    public GameObject roofFront;
-    public GameObject roofRight;
-    public GameObject roofLeft;
-    public GameObject roofFrontInnerCornerRight;
-    public GameObject roofFrontInnerCornerLeft;
-    public GameObject roofFrontOuterCornerRight;
-    public GameObject roofFrontOuterCornerLeft;
-    public GameObject roofBackCornerLeft;
-    public GameObject roofBackCornerRight;
-
+    public GameObject roof;
     public GameObject floorTile;
     public GameObject basicDoor;
     public GameObject keyDoor;
@@ -89,6 +80,7 @@ public class BoardManager : MonoBehaviour
 
     void InitializeList()
     {
+        Roofs = new List<List<Roof>>();
         gridPositions.Clear();
         for (int x = 0; x < columns; x++)
         {
@@ -129,7 +121,7 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        Roofs = new List<List<Roof>>();
+        // Roofs = new List<List<Roof>>();
     }
 
     private void SpawnPlayers() {
@@ -314,7 +306,7 @@ public class BoardManager : MonoBehaviour
         if (!gridPositions.Contains(new Vector3(x, y, y)))
             return;
         GameObject objectTile = null;
-        GameObject roofTile = null;
+        bool roofTile = false;
         GameObject floor = floorTile;
         Vector2 tile = new Vector2(x, y);
         if (location != "Top")
@@ -330,9 +322,9 @@ public class BoardManager : MonoBehaviour
                 objectTile = (tile.x == bottomStopX) ? houseWallRight : houseWallFrontRight;
             }
             else if (tile == new Vector2(start.x + 1, start.y + 1))
-                roofTile = (tile.x == bottomStartX + 1) ? roofLeft : roofFrontOuterCornerLeft;
+                roofTile = true;
             else if (tile == new Vector2(stop.x - 1, start.y + 1))
-                roofTile = (tile.x == bottomStopX - 1) ? roofRight : roofFrontOuterCornerRight;
+                roofTile = true;
             else if (tile.y == start.y)
             {
                 objectTile = type == "Bar" && ((bottomRoomDoor == -1 && location == "Main" && (tile.x - 1 == mainRoomDoor) || (mainRoomDoor - 1 == start.x - 1 && tile.x + 1 == mainRoomDoor)) || 
@@ -357,24 +349,18 @@ public class BoardManager : MonoBehaviour
                 if (location == "Main")
                 {
                     if (tile.x == bottomStartX + 1)
-                        roofTile = roofLeft;
+                        roofTile = true;
                     else if (tile.x == bottomStopX - 1)
-                        roofTile = roofRight;
+                        roofTile = true;
                     else if (tile.x > bottomStartX + 1 && tile.x < bottomStopX - 1)
-                        roofTile = roofFlat;
+                        roofTile = true;
                 }
             }
             else if (tile.y == start.y + 1 && tile.x != start.x && tile.x != stop.x)
             {
-                roofTile = roofFront;
+                roofTile = true;
                 if (location == "Main")
                 {
-                    if (tile.x == bottomStartX + 1)
-                        roofTile = roofFrontInnerCornerLeft;
-                    else if (tile.x == bottomStopX - 1)
-                        roofTile = roofFrontInnerCornerRight;
-                    else if (tile.x > bottomStartX + 1 && tile.x < bottomStopX - 1)
-                        roofTile = roofFlat;
                     if (type == "Bar")
                         PlaceObject("Bar", tile, start, stop, topRoomDoor);
                 }
@@ -406,15 +392,10 @@ public class BoardManager : MonoBehaviour
                         Grid[(int)x][(int)y + 1] = new Node(new Vector2(x, y + 1), true, 2);
                     }
                 }
-                if (tile.x == start.x + 1)
-                    roofTile = (tile.x == topStartX + 1) ? roofLeft : roofBackCornerLeft;
-                else if (tile.x == stop.x - 1)
-                    roofTile = (tile.x == topStopX - 1) ? roofRight : roofBackCornerRight;
-                else
-                    roofTile = roofFlat;
+                roofTile = true;
             }
         }
-        if (objectTile == null && roofTile == null)
+        if (objectTile == null && !roofTile)
         {
             if (tile.x == start.x)
             {
@@ -428,7 +409,7 @@ public class BoardManager : MonoBehaviour
             }
             else if (tile.x == start.x + 1)
             {
-                roofTile = roofLeft;
+                roofTile = true;
                 if (location == "Main" && type == "Bar")
                     PlaceObject("Bar", tile, start, stop, topRoomDoor);
                 else if (GetNode(new Vector2(tile.x, tile.y - 1)).Weight == 1 && GetNode(new Vector2(tile.x, tile.y + 1)).Weight == 1)
@@ -436,7 +417,7 @@ public class BoardManager : MonoBehaviour
             }
             else if (tile.x == stop.x - 1)
             {
-                roofTile = roofRight;
+                roofTile = true;
                 if (location == "Main" && type == "Bar")
                     PlaceObject("Bar", tile, start, stop, topRoomDoor);
                 else if (GetNode(new Vector2(tile.x, tile.y - 1)).Weight == 1 && GetNode(new Vector2(tile.x, tile.y + 1)).Weight == 1)
@@ -444,7 +425,7 @@ public class BoardManager : MonoBehaviour
             }
             else
             {
-                roofTile = roofFlat;
+                roofTile = true;
                 if (location == "Main" && type == "Bar")
                     PlaceObject("Bar", tile, start, stop, topRoomDoor);
                 else if (GetNode(new Vector2(tile.x, tile.y - 1)).Weight == 1 && GetNode(new Vector2(tile.x, tile.y + 1)).Weight == 1 && GetNode(new Vector2(tile.x - 1, tile.y)).Weight == 1 && GetNode(new Vector2(tile.x + 1, tile.y)).Weight == 1)
@@ -456,12 +437,12 @@ public class BoardManager : MonoBehaviour
             Instantiate(objectTile, new Vector3(x, y, y), Quaternion.identity);
             Grid[(int)x][(int)y] = new Node(new Vector2(x, y), true, 2);
         }
-        if (roofTile != null)
+        if (roofTile)
         {
-            GameObject roofObject = Instantiate(roofTile, new Vector3(x, y, y-1.5f), Quaternion.identity);
-            Roof roof = roofObject.GetComponent<Roof>();
-            roof.setRoofIndex(house);
-            Roofs[house].Add(roof);
+            GameObject roofObject = Instantiate(roof, new Vector3(x, y, y-1.5f), Quaternion.identity);
+            Roof roofScript = roofObject.GetComponent<Roof>();
+            roofScript.setRoofIndex(house);
+            Roofs[house].Add(roofScript);
         }
         if (floor != null)
             Instantiate(floor, tile, Quaternion.identity);
@@ -560,11 +541,11 @@ public class BoardManager : MonoBehaviour
         LayoutObjectAtRandom(enemies, enemyCount, enemyCount);
         // Instantiate(exit, new Vector3(columns - 1, rows - 1, 0f), Quaternion.identity);
 
-        foreach(List<Roof> subRoofs in Roofs){
-            foreach(Roof roof in subRoofs){
-                Debug.Log(roof);
-            }
-        }
+        // foreach(List<Roof> subRoofs in Roofs){
+        //     foreach(Roof roof in subRoofs){
+        //         Debug.Log(roof);
+        //     }
+        // }
         GameManager.instance.FinishSetup(Roofs);
         return Grid;
     }

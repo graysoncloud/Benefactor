@@ -194,10 +194,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -207,8 +209,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -236,6 +238,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -1429,9 +1432,64 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      house_54: -8386232459520793593
+      house_46: 2162783927736239385
+      house_21: 4279323706144049897
+      house_51: 6594044805525956762
+      house_10: 8117776094873184575
+      house_43: -5759492078357312082
+      house_16: -1425630420749943662
+      house_29: -1943517631288930070
+      house_37: 7959783544211440892
+      house_18: -192376643039840949
+      house_25: 124106915415856038
+      house_11: 8394464646228673883
+      house_8: -592144858011753898
+      house_49: -8982070511100915421
+      house_7: 986476396582447780
+      house_53: -3648405428443916959
+      house_42: -7431828944206269360
+      house_30: -6568140490241397226
+      house_52: -1857818018927210138
+      house_24: -3875703725391605398
+      house_32: 3369446855076228593
+      house_41: 5849641839801096286
+      house_31: 1730938722020219759
+      house_0: -1923994175756728024
+      house_2: 575601758146719918
+      house_34: -4566365901998973053
+      house_40: 833085023719985140
+      house_33: 6840981286097152370
+      house_9: -2015168664109823455
+      house_19: 7571049629451306115
+      house_20: 3440057425021937346
+      house_3: 8131065375128214768
+      house_15: -8256488084435607779
+      house_1: -3211844383458338046
+      house_35: -4244695752201314179
+      house_22: 5334645852879232224
+      house_47: 5011934631851293317
+      house_39: 669107283009774607
+      house_27: 8113068288895388051
+      house_45: 263825270510447183
+      house_48: 2321624105847721357
+      house_57: 8312180331046262534
+      house_26: 5040236938126086928
+      house_28: 1871501760412800866
+      house_44: -6578575950685827700
+      house_50: -9017421394347522870
+      house_55: -389095175236374531
+      house_13: -6774112544649857685
+      house_36: -4249861376430646584
+      house_38: 5595160758739723846
+      house_23: -1262901884133355389
+      house_4: 7377706198654792900
+      house_17: -1155424440685516343
+      house_56: 2124939666082118984
+      house_5: -2153866347550864425
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

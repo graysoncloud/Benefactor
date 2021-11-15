@@ -74,10 +74,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -87,8 +89,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -116,6 +118,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -532,9 +535,27 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      cement_14: -1095045107127680832
+      cement_1: 8255795535297848876
+      cement_5: -3745310147218845707
+      cement_6: 2507293818610126806
+      cement_11: 8336721432165636485
+      cement_7: -3100555608157252705
+      cement_0: 1461149993224910671
+      cement_12: 4818216392633445822
+      cement_15: 281244507151992140
+      cement_17: -7778546678699750409
+      cement_4: 800986956169796160
+      cement_8: -7112471891259877081
+      cement_3: -5580054612225117714
+      cement_13: 4677807053455954307
+      cement_9: 2434898729567835821
+      cement_10: -6303336554383752219
+      cement_16: 7337483234638369217
+      cement_2: -4212474378507695403
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

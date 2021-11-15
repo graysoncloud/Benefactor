@@ -74,10 +74,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -87,8 +89,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -116,6 +118,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -532,9 +535,27 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      watergrass_16: -4107775894480735506
+      watergrass_2: -7545204914771921804
+      watergrass_9: 3183329816176961621
+      watergrass_11: 8876612985640186104
+      watergrass_1: -8513210304079244384
+      watergrass_10: -7483259442969508358
+      watergrass_8: -1923398338618151859
+      watergrass_12: 3628933251788633873
+      watergrass_6: -780603861287004156
+      watergrass_3: 1787054802417041348
+      watergrass_17: 2012845195225917754
+      watergrass_13: 5984553939006657834
+      watergrass_7: -1785294025900096360
+      watergrass_4: 8290218710383247403
+      watergrass_14: -5498015527673059172
+      watergrass_5: -1127190942304739560
+      watergrass_15: -8645649824751603984
+      watergrass_0: 507110579660749318
   spritePackingTag: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

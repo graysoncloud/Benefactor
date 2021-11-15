@@ -38,17 +38,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] streetObjects;
     public GameObject[] borderWalls;
 
-    public GameObject houseWallFront;
-    public GameObject houseWallFrontBar;
-    public GameObject houseWallRight;
-    public GameObject houseWallLeft;
-    public GameObject houseWallFrontRight;
-    public GameObject houseWallFrontLeft;
-    public GameObject houseWallBackRight;
-    public GameObject houseWallBackLeft;
-    public GameObject houseWallCornerLeft;
-    public GameObject houseWallCornerRight;
-
+    public GameObject wall;
     public GameObject roof;
     public GameObject floorTile;
     public GameObject basicDoor;
@@ -70,6 +60,8 @@ public class BoardManager : MonoBehaviour
     private List<Vector3> gridPositions = new List<Vector3>();
     private List<List<Node>> Grid;
     private List<List<Roof>> Roofs;
+    private List<List<Wall>> Walls;
+    private List<List<GameObject>> Floors;
     private Dictionary<String, String[]> roomTypes = new Dictionary<String, String[]>
     {
         {"Bar", new []{"Storage"} },
@@ -81,6 +73,9 @@ public class BoardManager : MonoBehaviour
     void InitializeList()
     {
         Roofs = new List<List<Roof>>();
+        Walls = new List<List<Wall>>();
+        Floors = new List<List<GameObject>>();
+
         gridPositions.Clear();
         for (int x = 0; x < columns; x++)
         {
@@ -120,8 +115,6 @@ public class BoardManager : MonoBehaviour
                 instance.transform.SetParent(boardHolder);
             }
         }
-
-        // Roofs = new List<List<Roof>>();
     }
 
     private void SpawnPlayers() {
@@ -314,12 +307,12 @@ public class BoardManager : MonoBehaviour
             if (tile == start)
             {
                 floor = null;
-                objectTile = (tile.x == bottomStartX) ? houseWallLeft : houseWallFrontLeft;
+                objectTile = wall;
             }
             else if (tile == new Vector2(stop.x, start.y))
             {
                 floor = null;
-                objectTile = (tile.x == bottomStopX) ? houseWallRight : houseWallFrontRight;
+                objectTile = wall;
             }
             else if (tile == new Vector2(start.x + 1, start.y + 1))
                 roofTile = true;
@@ -327,8 +320,7 @@ public class BoardManager : MonoBehaviour
                 roofTile = true;
             else if (tile.y == start.y)
             {
-                objectTile = type == "Bar" && ((bottomRoomDoor == -1 && location == "Main" && (tile.x - 1 == mainRoomDoor) || (mainRoomDoor - 1 == start.x - 1 && tile.x + 1 == mainRoomDoor)) || 
-                    (location == "Bottom" && (tile.x - 1 == bottomRoomDoor) || (bottomRoomDoor - 1 == bottomStartX - 1 && tile.x + 1 == bottomRoomDoor))) ? houseWallFrontBar : houseWallFront;
+                objectTile = wall;
                 if ((location == "Bottom" && bottomRoomDoor == tile.x) || (location == "Main" && mainRoomDoor == tile.x))
                 {
                     objectTile = (type != "Bar" && Random.Range(0, 3) == 0) ? keyDoor : basicDoor;
@@ -342,18 +334,13 @@ public class BoardManager : MonoBehaviour
                 else if (location == "Main")
                 {
                     if (tile.x == bottomStartX)
-                        objectTile = houseWallCornerLeft;
+                        objectTile = wall;
                     else if (tile.x == bottomStopX)
-                        objectTile = houseWallCornerRight;
+                        objectTile = wall;
                 }
                 if (location == "Main")
                 {
-                    if (tile.x == bottomStartX + 1)
-                        roofTile = true;
-                    else if (tile.x == bottomStopX - 1)
-                        roofTile = true;
-                    else if (tile.x > bottomStartX + 1 && tile.x < bottomStopX - 1)
-                        roofTile = true;
+                //    roofTile = true;
                 }
             }
             else if (tile.y == start.y + 1 && tile.x != start.x && tile.x != stop.x)
@@ -371,17 +358,17 @@ public class BoardManager : MonoBehaviour
             if (tile == stop)
             {
                 floor = null;
-                objectTile = houseWallBackRight;
+                objectTile = wall;
             }
             else if (tile == new Vector2(start.x, stop.y))
             {
-                objectTile = houseWallBackLeft;
+                objectTile = wall;
                 floor = null;
             }
             else if (tile.y == stop.y && tile.x > start.x && tile.x < stop.x)
             {
                 floor = null;
-                objectTile = houseWallFront;
+                objectTile = wall;
                 if (location == "Main")
                 {
                     if (tile.x == topRoomDoor)
@@ -400,12 +387,12 @@ public class BoardManager : MonoBehaviour
             if (tile.x == start.x)
             {
                 floor = null;
-                objectTile = houseWallLeft;
+                objectTile = wall;
             }
             else if (tile.x == stop.x)
             {
                 floor = null;
-                objectTile = houseWallRight;
+                objectTile = wall;
             }
             else if (tile.x == start.x + 1)
             {
@@ -434,8 +421,13 @@ public class BoardManager : MonoBehaviour
         }
         if (objectTile != null)
         {
-            Instantiate(objectTile, new Vector3(x, y, y), Quaternion.identity);
+            GameObject newObject = Instantiate(objectTile, new Vector3(x, y, y), Quaternion.identity);
             Grid[(int)x][(int)y] = new Node(new Vector2(x, y), true, 2);
+            Wall wallScript = newObject.GetComponent<Wall>();
+            if (wallScript != null) {
+                Walls[house].Add(wallScript);
+                wallScript.setWallIndex(house);
+            }
         }
         if (roofTile)
         {
@@ -444,8 +436,10 @@ public class BoardManager : MonoBehaviour
             roofScript.setRoofIndex(house);
             Roofs[house].Add(roofScript);
         }
-        if (floor != null)
-            Instantiate(floor, tile, Quaternion.identity);
+        if (floor != null) {
+            GameObject floorObject = Instantiate(floor, tile, Quaternion.identity);
+            Floors[house].Add(floorObject);
+        }
     }
 
     void LayoutRoom(String type, Vector2 start, Vector2 stop, String location, int house, int topRoomDoor, int bottomRoomDoor, int mainRoomDoor, int topStartX = -1, int topStopX = -1, int bottomStartX = -1, int bottomStopX = -1) //room location can be "Main", "Top", or "Bottom"
@@ -471,6 +465,8 @@ public class BoardManager : MonoBehaviour
         int length = type == "Bar" ? buildingWallLength.maximum : Random.Range(buildingWallLength.minimum, buildingWallLength.maximum);
         Vector2 position = RandomHousePosition(length);
         Roofs.Add(new List<Roof>());
+        Walls.Add(new List<Wall>());
+        Floors.Add(new List<GameObject>());
         if (position == new Vector2(-1, -1))
             return;
         Vector2 start = new Vector2(0, Random.Range(0, length / (type == "Bar" ? 3 : 2))) + position;
@@ -546,7 +542,7 @@ public class BoardManager : MonoBehaviour
         //         Debug.Log(roof);
         //     }
         // }
-        GameManager.instance.FinishSetup(Roofs);
+        GameManager.instance.FinishSetup(Roofs, Walls, Floors);
         return Grid;
     }
 

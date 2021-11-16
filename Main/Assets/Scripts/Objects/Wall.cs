@@ -31,8 +31,8 @@ public class Wall : InteractableObject
         bool isDown = false;
         bool isLeft = false;
         bool isRight = false;
-        bool isUpLeft = false;
-        bool isUpRight = false;
+        // bool isUpLeft = false;
+        // bool isUpRight = false;
         bool isDownLeft = false;
         bool isDownRight = false;
         bool isDownDownLeft = false;

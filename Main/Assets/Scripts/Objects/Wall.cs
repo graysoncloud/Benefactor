@@ -22,6 +22,7 @@ public class Wall : InteractableObject
     public Sprite side;
 
     private int wallIndex;
+    private bool isFront = false;
 
     // Start is called before the first frame update
     void Start()
@@ -65,7 +66,7 @@ public class Wall : InteractableObject
         else if (isUp && isDown && isRight)
             spriteRenderer.sprite = backUpDownLeft;
         else if (isUp && isLeft && isRight)
-            spriteRenderer.sprite = backUp;
+            spriteRenderer.sprite = isFront ? frontUp : backUp;
         else if (isDown && isLeft && isRight)
             spriteRenderer.sprite = backDown;
         else if (isDown && isRight)
@@ -73,16 +74,16 @@ public class Wall : InteractableObject
         else if (isDown && isLeft)
             spriteRenderer.sprite = backRight;
         else if (isUp && isRight)
-            spriteRenderer.sprite = backUpLeft;
+            spriteRenderer.sprite = isFront ? frontLeft : backUpLeft;
         else if (isUp && isLeft)
-            spriteRenderer.sprite = backUpRight;
+            spriteRenderer.sprite = isFront ? frontRight : backUpRight;
         else if (isRight && isLeft)
-            spriteRenderer.sprite = back;
+            spriteRenderer.sprite = isFront ? front : back;
         else if (isUp && isDown)
             spriteRenderer.sprite = side;
     }
 
-    public void setWallIndex(int index) {
-        wallIndex = index;
+    public void IsFront(bool inFront = true) {
+        isFront = inFront;
     }
 }

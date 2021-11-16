@@ -185,9 +185,9 @@ public class BoardManager : MonoBehaviour
             targetCount--;
             int[,] rooms = GenerateBuildingLayout();
 
-            Vector2Int bottomLeft = new Vector2Int(10,5);
+            Vector2Int center = new Vector2Int(15,10);
             int roomLength = Random.Range(roomLengthCount.minimum, roomLengthCount.maximum + 1);
-            LayoutBuilding(bottomLeft, rooms, roomLength);
+            LayoutBuilding(center, rooms, roomLength);
         }
     }
 
@@ -298,8 +298,10 @@ public class BoardManager : MonoBehaviour
         return merged;
     }
 
-    private void LayoutBuilding(Vector2Int bottomLeft, int[,] rooms, int roomLength)
+    private void LayoutBuilding(Vector2Int center, int[,] rooms, int roomLength)
     {
+        Vector2Int widthHeight = GetBuildingWidthHeight(rooms, roomLength);
+        Vector2Int bottomLeft = new Vector2Int(center.x - widthHeight.x/2, center.y - widthHeight.y/2);
         List<int> completed = new List<int>() { 0 };
         for (int x = 0; x < buildingRoomGrid.x; x++) {
             for (int y = 0; y < buildingRoomGrid.y; y++) {
@@ -311,6 +313,28 @@ public class BoardManager : MonoBehaviour
                 completed.Add(rooms[x,y]);
             }
         }
+    }
+
+    private Vector2Int GetBuildingWidthHeight(int[,] rooms, int roomLength)
+    {
+        int minX = buildingRoomGrid.x;
+        int maxX = 0;
+        int minY = buildingRoomGrid.y;
+        int maxY = 0;
+        for (int x = 0; x < buildingRoomGrid.x; x++) {
+            for (int y = 0; y < buildingRoomGrid.y; y++) {
+                Vector2Int coords = new Vector2Int(buildingRoomGrid.x, buildingRoomGrid.y);
+                if (rooms[x, y] > 0) {
+                    minX = Math.Min(minX, x);
+                    maxX = Math.Max(maxX, x);
+                    minY = Math.Min(maxX, y);
+                    maxY = Math.Max(minY, y);
+                }
+            }
+        }
+        int width = (maxX - minX) * roomLength - (maxX - minX);
+        int height = (maxY - minY) * roomLength - (maxY - minY);
+        return new Vector2Int(width, height);
     }
 
     private void LayoutRoom(Vector2Int bottomLeft, List<Vector2Int> mergedRoom, int roomLength)
@@ -357,10 +381,17 @@ public class BoardManager : MonoBehaviour
                         }
                         continue;
                     }
-                    if (down || y != 0)
+                    if (up || y != end.y - 1)
                         groundTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
-                    if ((!left && x == start.x) || (!right && x == end.x - 1) || (!up && y == end.y - 1) || (!down && y == start.y))
-                        Instantiate(wall, position, Quaternion.identity);
+                    if ((!left && x == start.x) || (!right && x == end.x - 1) || (!up && y == end.y - 1) || (!down && y == start.y)) {
+                        if (!down && y == start.y && (x == (start.x*2 + roomLength)/2 || x == (end.x*2 - roomLength)/2)) {
+                            Instantiate(basicDoor, position, Quaternion.identity);
+                        } else {
+                            GameObject newWall = Instantiate(wall, position, Quaternion.identity);
+                            if (!down && y == start.y)
+                                newWall.GetComponent<Wall>().IsFront();
+                        }
+                    }
                     gridPositions.Remove(position);
                 }
             }

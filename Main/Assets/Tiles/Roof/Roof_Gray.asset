@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
-  m_Name: Roof_Side
+  m_Name: Roof_Gray
   m_EditorClassIdentifier: 
   m_DefaultSprite: {fileID: -6618957134965814572, guid: 72095c2b8100bf149ab39d3f64848fc0,
     type: 3}

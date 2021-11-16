@@ -38,31 +38,31 @@ public class Wall : InteractableObject
         bool isDownDownLeft = false;
         bool isDownDownRight = false;
 
-        foreach (GameObject floor in GameManager.instance.Floors[wallIndex])
-        {
-            if ((Vector2) floor.transform.position == (Vector2) transform.position)
-                isSame = true;
-            if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(0, 1))
-                isUp = true;
-            if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(0, -1))
-                isDown = true;
-            if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, 0))
-                isRight = true;
-            if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, 0))
-                isLeft = true;
-            if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, 1))
-                isUpLeft = true;
-            if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, 1))
-                isUpRight = true;
-            if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, -1))
-                isDownLeft = true;
-            if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, -1))
-                isDownRight = true;
-            if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, -2))
-                isDownDownLeft = true;
-            if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, -2))
-                isDownDownRight = true;
-        }
+        // foreach (GameObject floor in GameManager.instance.Floors[wallIndex])
+        // {
+        //     if ((Vector2) floor.transform.position == (Vector2) transform.position)
+        //         isSame = true;
+        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(0, 1))
+        //         isUp = true;
+        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(0, -1))
+        //         isDown = true;
+        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, 0))
+        //         isRight = true;
+        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, 0))
+        //         isLeft = true;
+        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, 1))
+        //         isUpLeft = true;
+        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, 1))
+        //         isUpRight = true;
+        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, -1))
+        //         isDownLeft = true;
+        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, -1))
+        //         isDownRight = true;
+        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, -2))
+        //         isDownDownLeft = true;
+        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, -2))
+        //         isDownDownRight = true;
+        // }
 
         if (isUp && isDown)
             spriteRenderer.sprite = front;

@@ -11,9 +11,9 @@ using UnityEngine.SocialPlatforms;
 public class GameManager : MonoBehaviour
 {
     public List<List<Node>> Grid;
-    public List<List<Roof>> Roofs;
-    public List<List<Wall>> Walls;
-    public List<List<GameObject>> Floors;
+    // public List<List<Roof>> Roofs;
+    // public List<List<Wall>> Walls;
+    // public List<List<GameObject>> Floors;
 
     public int level = 0;
     public float levelStartDelay = 2f;
@@ -66,20 +66,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void FinishSetup(List<List<Roof>> roofs, List<List<Wall>> walls, List<List<GameObject>> floors) {
-        Roofs = roofs;
-        Walls = walls;
-        Floors = floors;
+    public void FinishSetup() {
+    // public void FinishSetup(List<List<Roof>> roofs, List<List<Wall>> walls, List<List<GameObject>> floors) {
+        // Roofs = roofs;
+        // Walls = walls;
+        // Floors = floors;
         doingSetup = false;
     }
 
     public void CheckRoofs() {
-        foreach (List<Roof> Roof in Roofs) {
-            if (Roof.Count == 0)
-                continue;
-            Debug.Log(Roof.First());
-            Roof.First().checkRoofs();
-        }
+        // foreach (List<Roof> Roof in Roofs) {
+        //     if (Roof.Count == 0)
+        //         continue;
+        //     Debug.Log(Roof.First());
+        //     Roof.First().checkRoofs();
+        // }
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -156,6 +157,7 @@ public class GameManager : MonoBehaviour
     {
         if (GetPlayableCharacters().Count == 0)
         {
+            Debug.Log("NO PLAYABLE CHARACTERS");
             if (playerStart)
                 playerTurn = false;
             else
@@ -167,6 +169,7 @@ public class GameManager : MonoBehaviour
 
         if (GetNonplayableCharacters().Count == 0)
         {
+            Debug.Log("NO ENEMIES");
             if (!playerStart)
                 playerTurn = true;
             else

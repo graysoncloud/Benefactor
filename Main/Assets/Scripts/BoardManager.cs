@@ -246,26 +246,12 @@ public class BoardManager : MonoBehaviour
                 {
                     if (rooms[coords.x, coords.y] > 0)
                         neighbor = true;
+                    Debug.Log("Room: (" + x + ", " + y + ") -> " + rooms[x, y] + "; Other: (" + coords.x + ", " + coords.y + ") -> " + rooms[coords.x, coords.y]);
                 }
             }
         }
         return neighbor;
     }
-
-    // private List<Vector2Int> GetNeighbors (int x, int y, int[,] rooms) {
-    //     List<Vector2Int> neighbors = new List<Vector2Int>();
-    //     for (int i = -1; i <= 1; i++) {
-    //         for (int j = -1; j <= 1; j++) {
-    //             Vector2Int coords = new Vector2Int(x + i, y + j);
-    //             if (((i == 0 && j != 0) || (j == 0 && i != 0)) && coords.x >= 0 && coords.x < buildingRoomGrid.x && coords.y >= 0 && coords.y < buildingRoomGrid.y)
-    //             {
-    //                 if (rooms[x,y] > 0 && rooms[coords.x, coords.y] != rooms[x,y])
-    //                     neighbors.Add(coords);
-    //             }
-    //         }
-    //     }
-    //     return neighbors;
-    // }
 
     private List<Vector2Int> GetUnmergedNeighbors (int x, int y, int[,] rooms) {
         List<Vector2Int> unmergedNeighbors = new List<Vector2Int>();
@@ -314,7 +300,7 @@ public class BoardManager : MonoBehaviour
 
     private void LayoutBuilding(Vector2Int bottomLeft, int[,] rooms, int roomLength)
     {
-        List<int> completed = new List<int>();
+        List<int> completed = new List<int>() { 0 };
         for (int x = 0; x < buildingRoomGrid.x; x++) {
             for (int y = 0; y < buildingRoomGrid.y; y++) {
                 if (completed.Contains(rooms[x,y]))

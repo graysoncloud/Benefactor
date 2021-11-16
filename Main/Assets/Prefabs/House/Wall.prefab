@@ -75,8 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 1183741245
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7726447682282358601, guid: 104f81bb64df4d345848ce4ead839f40,
-    type: 3}
+  m_Sprite: {fileID: -610229144, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -132,23 +131,23 @@ MonoBehaviour:
   damageable: 1
   repairable: 0
   leavesCorpse: 0
-  damagedSprite: {fileID: 7726447682282358601, guid: 104f81bb64df4d345848ce4ead839f40,
-    type: 3}
+  damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
   reputation: 0
-  front: {fileID: 7726447682282358601, guid: 104f81bb64df4d345848ce4ead839f40, type: 3}
-  left: {fileID: 3416553326990366869, guid: 104f81bb64df4d345848ce4ead839f40, type: 3}
-  right: {fileID: 7406941843746067170, guid: 104f81bb64df4d345848ce4ead839f40, type: 3}
-  frontLeft: {fileID: 4772826666308530076, guid: 104f81bb64df4d345848ce4ead839f40,
+  front: {fileID: -1335499793, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  frontLeft: {fileID: -1847647211, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  frontRight: {fileID: 1121036322, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  frontUp: {fileID: -2037735604, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  back: {fileID: -610229144, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  backLeft: {fileID: -200366622, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  backRight: {fileID: -1255369917, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  backUp: {fileID: 518650283, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  backDown: {fileID: -691603128, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  backUpLeft: {fileID: 1899295622, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  backUpRight: {fileID: 580944101, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  backUpDownLeft: {fileID: 666137232, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  backUpDownRight: {fileID: -1867864570, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  backUpDownLeftRight: {fileID: 1933204036, guid: badc89a8cbce6664e9d459b7fee29d69,
     type: 3}
-  frontRight: {fileID: 5272571809522784344, guid: 104f81bb64df4d345848ce4ead839f40,
-    type: 3}
-  backLeft: {fileID: -7229037912106761437, guid: 104f81bb64df4d345848ce4ead839f40,
-    type: 3}
-  backRight: {fileID: 278135595336851989, guid: 104f81bb64df4d345848ce4ead839f40,
-    type: 3}
-  cornerLeft: {fileID: 8210987299791612023, guid: 104f81bb64df4d345848ce4ead839f40,
-    type: 3}
-  cornerRight: {fileID: -2775604605821565932, guid: 104f81bb64df4d345848ce4ead839f40,
-    type: 3}
+  side: {fileID: -269522963, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}

@@ -6,14 +6,20 @@ using UnityEngine;
 public class Wall : InteractableObject
 {
     public Sprite front;
-    public Sprite left;
-    public Sprite right;
     public Sprite frontLeft;
     public Sprite frontRight;
+    public Sprite frontUp;
+    public Sprite back;
     public Sprite backLeft;
     public Sprite backRight;
-    public Sprite cornerLeft;
-    public Sprite cornerRight;
+    public Sprite backUp;
+    public Sprite backDown;
+    public Sprite backUpLeft;
+    public Sprite backUpRight;
+    public Sprite backUpDownLeft;
+    public Sprite backUpDownRight;
+    public Sprite backUpDownLeftRight;
+    public Sprite side;
 
     private int wallIndex;
 
@@ -26,64 +32,54 @@ public class Wall : InteractableObject
 
     void SetSprite()
     {
-        bool isSame = false;
         bool isUp = false;
         bool isDown = false;
         bool isLeft = false;
         bool isRight = false;
-        // bool isUpLeft = false;
-        // bool isUpRight = false;
-        bool isDownLeft = false;
-        bool isDownRight = false;
-        bool isDownDownLeft = false;
-        bool isDownDownRight = false;
+       
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(0, 1), 0.5f);
+            foreach (Collider2D hitCollider in hitColliders) {
+                if (hitCollider.GetComponent<Wall>() != null || hitCollider.GetComponent<Door>() != null)
+                    isUp = true;
+            }
+            hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(0, -1), 0.5f);
+            foreach (Collider2D hitCollider in hitColliders) {
+                if (hitCollider.GetComponent<Wall>() != null || hitCollider.GetComponent<Door>() != null)
+                    isDown = true;
+            }
+            hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(-1, 0), 0.5f);
+            foreach (Collider2D hitCollider in hitColliders) {
+                if (hitCollider.GetComponent<Wall>() != null || hitCollider.GetComponent<Door>() != null)
+                    isLeft = true;
+            }
+            hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(1, 0), 0.5f);
+            foreach (Collider2D hitCollider in hitColliders) {
+                if (hitCollider.GetComponent<Wall>() != null || hitCollider.GetComponent<Door>() != null)
+                    isRight = true;
+            }
 
-        // foreach (GameObject floor in GameManager.instance.Floors[wallIndex])
-        // {
-        //     if ((Vector2) floor.transform.position == (Vector2) transform.position)
-        //         isSame = true;
-        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(0, 1))
-        //         isUp = true;
-        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(0, -1))
-        //         isDown = true;
-        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, 0))
-        //         isRight = true;
-        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, 0))
-        //         isLeft = true;
-        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, 1))
-        //         isUpLeft = true;
-        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, 1))
-        //         isUpRight = true;
-        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, -1))
-        //         isDownLeft = true;
-        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, -1))
-        //         isDownRight = true;
-        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(-1, -2))
-        //         isDownDownLeft = true;
-        //     if ((Vector2) floor.transform.position == ((Vector2) transform.position) + new Vector2(1, -2))
-        //         isDownDownRight = true;
-        // }
-
-        if (isUp && isDown)
-            spriteRenderer.sprite = front;
-        else if (isSame && isUp && isRight && isDownRight)
-            spriteRenderer.sprite = cornerLeft;
-        else if (isSame && isUp && isLeft && isDownLeft)
-            spriteRenderer.sprite = cornerRight;
-        else if ((isUp && isSame) || isDown)
-            spriteRenderer.sprite = front;
-        else if (isRight && !isDownRight && !isDownDownRight)
-            spriteRenderer.sprite = frontLeft;
-        else if (isLeft && !isDownLeft && !isDownDownLeft)
-            spriteRenderer.sprite = frontRight;
-        else if (isRight)
-            spriteRenderer.sprite = left;
-        else if (isLeft)
-            spriteRenderer.sprite = right;
-        else if (isDownRight)
+        if (isUp && isDown && isLeft && isRight)
+            spriteRenderer.sprite = backUpDownLeftRight;
+        else if (isUp && isDown && isLeft)
+            spriteRenderer.sprite = backUpDownRight;
+        else if (isUp && isDown && isRight)
+            spriteRenderer.sprite = backUpDownLeft;
+        else if (isUp && isLeft && isRight)
+            spriteRenderer.sprite = backUp;
+        else if (isDown && isLeft && isRight)
+            spriteRenderer.sprite = backDown;
+        else if (isDown && isRight)
             spriteRenderer.sprite = backLeft;
-        else if (isDownLeft)
+        else if (isDown && isLeft)
             spriteRenderer.sprite = backRight;
+        else if (isUp && isRight)
+            spriteRenderer.sprite = backUpLeft;
+        else if (isUp && isLeft)
+            spriteRenderer.sprite = backUpRight;
+        else if (isRight && isLeft)
+            spriteRenderer.sprite = back;
+        else if (isUp && isDown)
+            spriteRenderer.sprite = side;
     }
 
     public void setWallIndex(int index) {

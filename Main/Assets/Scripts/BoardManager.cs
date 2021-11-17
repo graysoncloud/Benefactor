@@ -418,13 +418,14 @@ public class BoardManager : MonoBehaviour
         return true;
     }
 
-    private void LayoutBuilding(Vector2Int center, int[,] rooms, int roomLength)
+    private Vector2 LayoutBuilding(Vector2Int center, int[,] rooms, int roomLength)
     {
         Vector2Int widthHeight = GetBuildingWidthHeight(rooms, roomLength);
         Vector2Int minXY = GetBuildingMinXY(rooms, roomLength);
         Vector2Int bottomLeft = new Vector2Int(center.x - widthHeight.x/2, center.y - widthHeight.y/2);
         Debug.Log(widthHeight.x + ", " + widthHeight.y + " " + bottomLeft.x + ", " + bottomLeft.y + " " + (bottomLeft.x + widthHeight.x) + ", " + (bottomLeft.y + widthHeight.y));
         List<int> completed = new List<int>() { 0 };
+        Vector2Int placedFrontDoor = new Vector2Int(0,0);
 
         for (int x = 0; x < buildingRoomGrid.x; x++) {
             for (int y = 0; y < buildingRoomGrid.y; y++) {
@@ -432,13 +433,15 @@ public class BoardManager : MonoBehaviour
                     continue;
                 List<Vector2Int> mergedRoom = GetMergedNeighbors(x, y, rooms);
                 mergedRoom.Add(new Vector2Int(x,y));
-                LayoutRoom(bottomLeft, mergedRoom, roomLength, minXY);
+                placedFrontDoor = LayoutRoom(bottomLeft, mergedRoom, roomLength, minXY, placedFrontDoor);
                 completed.Add(rooms[x,y]);
             }
         }
+
+        return placedFrontDoor;
     }
 
-    private void LayoutRoom(Vector2Int bottomLeft, List<Vector2Int> mergedRoom, int roomLength, Vector2Int minXY)
+    private Vector2Int LayoutRoom(Vector2Int bottomLeft, List<Vector2Int> mergedRoom, int roomLength, Vector2Int minXY, Vector2Int placedFrontDoor)
     {
         foreach (Vector2Int cell in mergedRoom)
         {
@@ -487,11 +490,12 @@ public class BoardManager : MonoBehaviour
                     if (up || y != end.y - 1)
                         groundTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
                     if ((!left && x == start.x) || (!right && x == end.x - 1) || (!up && y == end.y - 1) || (!down && y == start.y)) {
-                        if (!down && y == start.y && (x == (start.x*2 + roomLength)/2 || x == (end.x*2 - roomLength)/2)) {
+                        if (placedFrontDoor == new Vector2Int(0,0) && gridPositions.Contains(position - new Vector3Int(0,1,1)) && !down && y == start.y && (x == (start.x*2 + roomLength)/2 || x == (end.x*2 - roomLength)/2)) {
                             Instantiate(basicDoor, position, Quaternion.identity);
+                            placedFrontDoor = new Vector2Int(position.x, position.y);
                         } else {
                             GameObject newWall = Instantiate(wall, position, Quaternion.identity);
-                            if (!down && y == start.y)
+                            if (gridPositions.Contains(position - new Vector3Int(0,1,1)) && !down && y == start.y)
                                 newWall.GetComponent<Wall>().IsFront();
                         }
                     }
@@ -499,6 +503,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+        return placedFrontDoor;
     }
 
     void BuildWall(Vector2Int start, Vector2Int stop)

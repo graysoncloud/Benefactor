@@ -91,8 +91,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3853c53c88e1ca84ea30c24c41c6fb3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 30
-  rows: 20
+  columns: 40
+  rows: 40
   objectCount:
     minimum: 10
     maximum: 20
@@ -100,14 +100,14 @@ MonoBehaviour:
     minimum: 5
     maximum: 10
   buildingCount:
-    minimum: 1
-    maximum: 1
+    minimum: 3
+    maximum: 8
   buildingRoomGrid: {x: 3, y: 2}
   roomLengthCount:
     minimum: 5
     maximum: 5
   buildingDistance:
-    minimum: 2
+    minimum: 3
     maximum: 10
   players:
   - {fileID: 5828532957960981727, guid: 9dfdcd00a8877bb4d8342c8be1806065, type: 3}

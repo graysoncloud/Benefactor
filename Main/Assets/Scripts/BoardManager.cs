@@ -34,6 +34,18 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public class Building
+    {
+        public Vector2Int center;
+        public Vector2Int widthHeight;
+
+        public Building(Vector2Int newCenter, Vector2Int newWidthHeight)
+        {
+            center = newCenter;
+            widthHeight = newWidthHeight;
+        }
+    }
+
     public int columns;
     public int rows;
     public Count objectCount;
@@ -180,14 +192,37 @@ public class BoardManager : MonoBehaviour
     private void SpawnBuildings()
     {
         int targetCount = Random.Range(buildingCount.minimum, buildingCount.maximum + 1);
+        List<Building> buildings = new List<Building>() { new Building(new Vector2Int(columns/2,rows/2), new Vector2Int(0,0)) };
 
         while (targetCount > 0) {
             targetCount--;
             int[,] rooms = GenerateBuildingLayout();
-
-            Vector2Int center = new Vector2Int(15,10);
             int roomLength = Random.Range(roomLengthCount.minimum, roomLengthCount.maximum + 1);
-            LayoutBuilding(center, rooms, roomLength);
+
+            bool placed = false;
+            for (int i = 0; i < buildings.Count; i++) {
+                for (int j = 0; j < 8; j++) {
+                    Vector2Int center = buildings[i].center;
+                    if (j == 1 || j == 2 || j == 3)
+                        center = center + new Vector2Int(buildings[i].widthHeight.x/2 + Random.Range(buildingDistance.minimum, buildingDistance.maximum), 0);
+                    else if (j == 5 || j == 6 || j == 7)
+                        center = center + new Vector2Int(0 - buildings[i].widthHeight.x/2 - Random.Range(buildingDistance.minimum, buildingDistance.maximum), 0);
+                    if (j == 7 || j == 0 || j == 1)
+                        center = center + new Vector2Int(0, buildings[i].widthHeight.y/2 + Random.Range(buildingDistance.minimum, buildingDistance.maximum));
+                    else if (j == 3 || j == 4 || j == 5)
+                        center = center + new Vector2Int(0, 0 - buildings[i].widthHeight.y/2 - Random.Range(buildingDistance.minimum, buildingDistance.maximum));
+                    placed = CheckBuilding(center, rooms, roomLength);
+                    if (placed) {
+                        LayoutBuilding(center, rooms, roomLength);
+                        buildings.Add(new Building(center, GetBuildingWidthHeight(rooms, roomLength)));
+                        if (buildings[0].widthHeight == new Vector2Int(0,0))
+                            buildings.RemoveAt(0);
+                        break;
+                    }
+                }
+                if (placed)
+                    break;
+            }
         }
     }
 
@@ -298,23 +333,6 @@ public class BoardManager : MonoBehaviour
         return merged;
     }
 
-    private void LayoutBuilding(Vector2Int center, int[,] rooms, int roomLength)
-    {
-        Vector2Int widthHeight = GetBuildingWidthHeight(rooms, roomLength);
-        Vector2Int bottomLeft = new Vector2Int(center.x - widthHeight.x/2, center.y - widthHeight.y/2);
-        List<int> completed = new List<int>() { 0 };
-        for (int x = 0; x < buildingRoomGrid.x; x++) {
-            for (int y = 0; y < buildingRoomGrid.y; y++) {
-                if (completed.Contains(rooms[x,y]))
-                    continue;
-                List<Vector2Int> mergedRoom = GetMergedNeighbors(x, y, rooms);
-                mergedRoom.Add(new Vector2Int(x,y));
-                LayoutRoom(bottomLeft, mergedRoom, roomLength);
-                completed.Add(rooms[x,y]);
-            }
-        }
-    }
-
     private Vector2Int GetBuildingWidthHeight(int[,] rooms, int roomLength)
     {
         int minX = buildingRoomGrid.x;
@@ -323,21 +341,104 @@ public class BoardManager : MonoBehaviour
         int maxY = 0;
         for (int x = 0; x < buildingRoomGrid.x; x++) {
             for (int y = 0; y < buildingRoomGrid.y; y++) {
-                Vector2Int coords = new Vector2Int(buildingRoomGrid.x, buildingRoomGrid.y);
                 if (rooms[x, y] > 0) {
                     minX = Math.Min(minX, x);
                     maxX = Math.Max(maxX, x);
-                    minY = Math.Min(maxX, y);
-                    maxY = Math.Max(minY, y);
+                    minY = Math.Min(minY, y);
+                    maxY = Math.Max(maxY, y);
                 }
             }
         }
-        int width = (maxX - minX) * roomLength - (maxX - minX);
-        int height = (maxY - minY) * roomLength - (maxY - minY);
+        int width = (maxX - minX + 1) * roomLength - (maxX - minX);
+        int height = (maxY - minY + 1) * roomLength - (maxY - minY);
         return new Vector2Int(width, height);
     }
 
-    private void LayoutRoom(Vector2Int bottomLeft, List<Vector2Int> mergedRoom, int roomLength)
+    private Vector2Int GetBuildingMinXY(int[,] rooms, int roomLength)
+    {
+        int minX = buildingRoomGrid.x;
+        int minY = buildingRoomGrid.y;
+        for (int x = 0; x < buildingRoomGrid.x; x++) {
+            for (int y = 0; y < buildingRoomGrid.y; y++) {
+                if (rooms[x, y] > 0) {
+                    minX = Math.Min(minX, x);
+                    minY = Math.Min(minY, y);
+                }
+            }
+        }
+        return new Vector2Int(minX, minY);
+    }
+
+    private bool CheckBuilding(Vector2Int center, int[,] rooms, int roomLength)
+    {
+        Vector2Int widthHeight = GetBuildingWidthHeight(rooms, roomLength);
+        Vector2Int minXY = GetBuildingMinXY(rooms, roomLength);
+        Vector2Int bottomLeft = new Vector2Int(center.x - widthHeight.x/2, center.y - widthHeight.y/2);
+        Debug.Log(widthHeight.x + ", " + widthHeight.y + " " + bottomLeft.x + ", " + bottomLeft.y + " " + (bottomLeft.x + widthHeight.x) + ", " + (bottomLeft.y + widthHeight.y));
+        List<int> completed = new List<int>() { 0 };
+
+        for (int x = 0; x < buildingRoomGrid.x; x++) {
+            for (int y = 0; y < buildingRoomGrid.y; y++) {
+                if (completed.Contains(rooms[x,y]))
+                    continue;
+                List<Vector2Int> mergedRoom = GetMergedNeighbors(x, y, rooms);
+                mergedRoom.Add(new Vector2Int(x,y));
+                if (!CheckRoom(bottomLeft, mergedRoom, roomLength, minXY))
+                    return false;
+                completed.Add(rooms[x,y]);
+            }
+        }
+
+        return true;
+    }
+
+    private bool CheckRoom(Vector2Int bottomLeft, List<Vector2Int> mergedRoom, int roomLength, Vector2Int minXY)
+    {
+        foreach (Vector2Int cell in mergedRoom)
+        {
+            Vector2Int newCell = cell - minXY;
+            Vector2Int start = new Vector2Int(bottomLeft.x + (newCell.x * roomLength), bottomLeft.y + (newCell.y * roomLength));
+            Vector2Int end = new Vector2Int(bottomLeft.x + ((newCell.x + 1) * roomLength), bottomLeft.y + ((newCell.y + 1) * roomLength));
+            Vector2Int offset = new Vector2Int(buildingRoomGrid.x/2 - newCell.x - 1, buildingRoomGrid.y/2 - newCell.y - 1);
+            Vector2Int spacing = new Vector2Int(buildingDistance.minimum, buildingDistance.minimum);
+            start = start + offset - spacing;
+            end = end + offset + spacing;
+            Debug.Log("Start: " + start + ", End: " + end);
+
+            for (int x = start.x; x < end.x; x++) {
+                for (int y = start.y; y < end.y; y++) {
+                    Vector3Int position = new Vector3Int(x, y, y);
+                    if (!gridPositions.Contains(position)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private void LayoutBuilding(Vector2Int center, int[,] rooms, int roomLength)
+    {
+        Vector2Int widthHeight = GetBuildingWidthHeight(rooms, roomLength);
+        Vector2Int minXY = GetBuildingMinXY(rooms, roomLength);
+        Vector2Int bottomLeft = new Vector2Int(center.x - widthHeight.x/2, center.y - widthHeight.y/2);
+        Debug.Log(widthHeight.x + ", " + widthHeight.y + " " + bottomLeft.x + ", " + bottomLeft.y + " " + (bottomLeft.x + widthHeight.x) + ", " + (bottomLeft.y + widthHeight.y));
+        List<int> completed = new List<int>() { 0 };
+
+        for (int x = 0; x < buildingRoomGrid.x; x++) {
+            for (int y = 0; y < buildingRoomGrid.y; y++) {
+                if (completed.Contains(rooms[x,y]))
+                    continue;
+                List<Vector2Int> mergedRoom = GetMergedNeighbors(x, y, rooms);
+                mergedRoom.Add(new Vector2Int(x,y));
+                LayoutRoom(bottomLeft, mergedRoom, roomLength, minXY);
+                completed.Add(rooms[x,y]);
+            }
+        }
+    }
+
+    private void LayoutRoom(Vector2Int bottomLeft, List<Vector2Int> mergedRoom, int roomLength, Vector2Int minXY)
     {
         foreach (Vector2Int cell in mergedRoom)
         {
@@ -358,12 +459,14 @@ public class BoardManager : MonoBehaviour
                     down = true;
             }
 
-            Vector2Int start = new Vector2Int(bottomLeft.x + (cell.x * roomLength), bottomLeft.y + (cell.y * roomLength));
-            Vector2Int end = new Vector2Int(bottomLeft.x + ((cell.x + 1) * roomLength), bottomLeft.y + ((cell.y + 1) * roomLength));
-            Vector2Int offset = new Vector2Int((int) buildingRoomGrid.x/2 - cell.x, (int) buildingRoomGrid.y/2 - cell.y);
+            Vector2Int newCell = cell - minXY;
+            Vector2Int start = new Vector2Int(bottomLeft.x + (newCell.x * roomLength), bottomLeft.y + (newCell.y * roomLength));
+            Vector2Int end = new Vector2Int(bottomLeft.x + ((newCell.x + 1) * roomLength), bottomLeft.y + ((newCell.y + 1) * roomLength));
+            Vector2Int offset = new Vector2Int(buildingRoomGrid.x/2 - newCell.x - 1, buildingRoomGrid.y/2 - newCell.y - 1);
             start = start + offset;
             end = end + offset;
             Debug.Log("Start: " + start + ", End: " + end);
+
             for (int x = start.x; x < end.x; x++) {
                 for (int y = start.y; y < end.y; y++) {
                     Vector3Int position = new Vector3Int(x, y, y);
@@ -425,11 +528,6 @@ public class BoardManager : MonoBehaviour
         Room[] rooms = buildings[type];
         return rooms[Random.Range(0, rooms.Length)].type;
     }
-
-    // Vector3 RandomHousePosition()
-    // {
-    //     return new Vector3(0,0,0);
-    // }
 
     void PlaceTable(Vector2 tile, Vector2 start, Vector2 stop)
     {

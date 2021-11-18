@@ -45,6 +45,24 @@ public class BoardManager : MonoBehaviour
             widthHeight = newWidthHeight;
         }
     }
+    
+    public class Roof
+    {
+        public List<Vector2Int> positions;
+        public Tilemap tiles;
+        public TilemapRenderer tileRenderer;
+
+        public Roof()
+        {
+            positions = new List<Vector2Int>();
+            GameObject roofObject = new GameObject("Roof");
+            tiles = roofObject.AddComponent<Tilemap>();
+            tiles.tileAnchor = new Vector3(0, -0.25f, 0);
+            tileRenderer = roofObject.AddComponent<TilemapRenderer>();
+            tileRenderer.sortingLayerName = "Roof";
+            tiles.transform.SetParent(GameManager.instance.GetComponent<Grid>().transform);
+        }
+    }
 
     public int columns;
     public int rows;
@@ -78,27 +96,30 @@ public class BoardManager : MonoBehaviour
     public GameObject stool;
     public GameObject stove;
 
+    public Grid tileGrid;
+    public Tilemap bottomTilemap;
     public Tilemap groundTilemap;
     // public Tilemap roofTilemap;
     public RuleTile dirtTile;
     public RuleTile grassTile;
     public RuleTile roofTile;
     public RuleTile floorTile;
+    
+    public List<Vector3Int> spawnPositions;
 
-    public Dictionary<String, Room[]> buildings;
-    public List<Vector3> spawnPositions;
-
-    private List<Vector3> gridPositions;
+    private List<Vector3Int> gridPositions;
     private List<List<Node>> Grid;
+    private Dictionary<String, Room[]> buildings;
+    private List<Roof> roofs;
 
     void InitializeList()
     {
-        gridPositions = new List<Vector3>();
+        gridPositions = new List<Vector3Int>();
         for (int x = 0; x < columns; x++)
         {
             for (int y = 0; y < rows; y++)
             {
-                gridPositions.Add(new Vector3(x, y, y));
+                gridPositions.Add(new Vector3Int(x, y, y));
             }
         }
     }
@@ -115,14 +136,14 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        // roofTilemap = new GameObject("Tilemap").AddComponent<Tilemap>();
-        // roofTilemap.transform.SetParent(tileGrid.gameObject.transform);
-        // roofTilemap.ClearAllTiles();
+        bottomTilemap.ClearAllTiles();
+        groundTilemap.ClearAllTiles();
+        roofs = new List<Roof>();
         for (int x = -1; x <= columns; x++)
         {
             for (int y = -1; y <= rows; y++)
             {
-                groundTilemap.SetTile(new Vector3Int(x, y, 0), grassTile);
+                bottomTilemap.SetTile(new Vector3Int(x, y, 0), dirtTile);
                 if (x >= 0 && x < columns && y >= 0 && y < rows)
                 {
                     Grid[x][y] = new Node(new Vector2(x, y), true, 1);
@@ -165,13 +186,20 @@ public class BoardManager : MonoBehaviour
     {
         for (int i = 0; i < gridPositions.Count; i++)
         {
-            Vector3 position = gridPositions[i];
+            Vector3Int position = gridPositions[i];
             double spawnChance = Math.Pow((Math.Max(position.x, columns - position.x) * Math.Max(position.y, rows - position.y)), 3) / Math.Pow((columns * rows), 3);
             if (Random.value < spawnChance)
             {
-                gridPositions.RemoveAt(i);
                 GameObject tileChoice = RandomObject(tileArray);
                 Instantiate(tileChoice, position, Quaternion.identity);
+                for (int x = -2; x <= 2; x++) {
+                    for (int y = -2; y <= 2; y++) {
+                        Vector3Int newPos = new Vector3Int(position.x + x, position.y + y, 0);
+                        if (newPos.x < 0 || newPos.x == columns || newPos.y < 0 || newPos.y == rows || gridPositions.Contains(new Vector3Int(newPos.x, newPos.y, newPos.y)))
+                            groundTilemap.SetTile(newPos, grassTile);
+                    }
+                }
+                gridPositions.RemoveAt(i);
             }
         }
     }
@@ -182,7 +210,7 @@ public class BoardManager : MonoBehaviour
         foreach (GameObject player in players) {
             if (i >= spawnPositions.Count)
                 return;
-            Vector3 position = spawnPositions[i];
+            Vector3Int position = spawnPositions[i];
             Instantiate(player, position, Quaternion.identity);
             gridPositions.Remove(position);
             i++;
@@ -420,6 +448,9 @@ public class BoardManager : MonoBehaviour
 
     private Vector2 LayoutBuilding(Vector2Int center, int[,] rooms, int roomLength)
     {
+        Roof roof = new Roof();
+        roofs.Add(roof);
+
         Vector2Int widthHeight = GetBuildingWidthHeight(rooms, roomLength);
         Vector2Int minXY = GetBuildingMinXY(rooms, roomLength);
         Vector2Int bottomLeft = new Vector2Int(center.x - widthHeight.x/2, center.y - widthHeight.y/2);
@@ -433,7 +464,7 @@ public class BoardManager : MonoBehaviour
                     continue;
                 List<Vector2Int> mergedRoom = GetMergedNeighbors(x, y, rooms);
                 mergedRoom.Add(new Vector2Int(x,y));
-                placedFrontDoor = LayoutRoom(bottomLeft, mergedRoom, roomLength, minXY, placedFrontDoor);
+                placedFrontDoor = LayoutRoom(bottomLeft, mergedRoom, roomLength, minXY, placedFrontDoor, roof);
                 completed.Add(rooms[x,y]);
             }
         }
@@ -441,7 +472,7 @@ public class BoardManager : MonoBehaviour
         return placedFrontDoor;
     }
 
-    private Vector2Int LayoutRoom(Vector2Int bottomLeft, List<Vector2Int> mergedRoom, int roomLength, Vector2Int minXY, Vector2Int placedFrontDoor)
+    private Vector2Int LayoutRoom(Vector2Int bottomLeft, List<Vector2Int> mergedRoom, int roomLength, Vector2Int minXY, Vector2Int placedFrontDoor, Roof roof)
     {
         foreach (Vector2Int cell in mergedRoom)
         {
@@ -500,6 +531,8 @@ public class BoardManager : MonoBehaviour
                         }
                     }
                     gridPositions.Remove(position);
+                    roof.positions.Add(new Vector2Int(x, y + 1));
+                    roof.tiles.SetTile(new Vector3Int(x, y + 1, 0), roofTile);
                 }
             }
         }

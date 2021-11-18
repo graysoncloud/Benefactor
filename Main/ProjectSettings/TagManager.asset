@@ -51,10 +51,13 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Floor
+  - name: Bottom
+    uniqueID: 255641335
+    locked: 0
+  - name: Ground
     uniqueID: 4158560753
     locked: 0
-  - name: Items
+  - name: Objects
     uniqueID: 1183741245
     locked: 0
   - name: Units

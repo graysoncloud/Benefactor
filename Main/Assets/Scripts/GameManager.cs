@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
     public void CheckRoofs() {
         foreach (BoardManager.Roof roof in boardScript.GetRoofs()) {
             bool overPlayableCharacter = false;
-            foreach (Player player in GetPlayableCharacters()) {
+            foreach (Player player in GetPlayableCharacters(true)) {
                 if (roof.positions.Contains(new Vector2Int((int) player.gameObject.transform.position.x, (int) player.gameObject.transform.position.y))) {
                     overPlayableCharacter = true;
                 }
@@ -214,12 +214,12 @@ public class GameManager : MonoBehaviour
         return GetPlayableCharacters().Contains(character);
     }
 
-    private List<Player> GetPlayableCharacters()
+    private List<Player> GetPlayableCharacters(bool ignoreGone = false)
     {
         List<Player> playableCharacters = new List<Player>();
         foreach (Player character in characters)
         {
-            if (character.playable && !character.hasGone)
+            if (character.playable && (ignoreGone || !character.hasGone))
             {
                 playableCharacters.Add(character);
             }

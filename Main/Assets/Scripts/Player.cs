@@ -384,24 +384,6 @@ public class Player : Character
         CheckRoof();
     }
 
-    // protected override void CheckForRoof(Vector2 position)
-    // {
-    //     Debug.Log("Checking for roof!");
-    //     boxCollider = GetComponent<BoxCollider2D>();
-    //     boxCollider.enabled = false;
-    //     Collider2D[] hitColliders = Physics2D.OverlapCircleAll(position, 0.1f);
-    //     boxCollider.enabled = true;
-    //     foreach (Collider2D hitCollider in hitColliders)
-    //     {
-    //         Roof roof = hitCollider.gameObject.GetComponent<Roof>();
-    //         if (roof != null)
-    //         {
-    //             Debug.Log(roof);
-    //             roof.checkRoofs();
-    //         }
-    //     }
-    // }
-
     protected override IEnumerator EndTurn()
     {
         menuManager.HideBackButton();

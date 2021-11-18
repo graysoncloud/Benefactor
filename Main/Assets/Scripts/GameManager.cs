@@ -11,9 +11,6 @@ using UnityEngine.SocialPlatforms;
 public class GameManager : MonoBehaviour
 {
     public List<List<Node>> Grid;
-    // public List<List<Roof>> Roofs;
-    // public List<List<Wall>> Walls;
-    // public List<List<GameObject>> Floors;
 
     public int level = 0;
     public float levelStartDelay = 2f;
@@ -67,20 +64,19 @@ public class GameManager : MonoBehaviour
     }
 
     public void FinishSetup() {
-    // public void FinishSetup(List<List<Roof>> roofs, List<List<Wall>> walls, List<List<GameObject>> floors) {
-        // Roofs = roofs;
-        // Walls = walls;
-        // Floors = floors;
         doingSetup = false;
     }
 
     public void CheckRoofs() {
-        // foreach (List<Roof> Roof in Roofs) {
-        //     if (Roof.Count == 0)
-        //         continue;
-        //     Debug.Log(Roof.First());
-        //     Roof.First().checkRoofs();
-        // }
+        foreach (BoardManager.Roof roof in boardScript.GetRoofs()) {
+            bool overPlayableCharacter = false;
+            foreach (Player player in GetPlayableCharacters()) {
+                if (roof.positions.Contains(new Vector2Int((int) player.gameObject.transform.position.x, (int) player.gameObject.transform.position.y))) {
+                    overPlayableCharacter = true;
+                }
+            }
+            roof.tileRenderer.enabled = !overPlayableCharacter;
+        }
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)

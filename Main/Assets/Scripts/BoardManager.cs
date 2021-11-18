@@ -689,4 +689,8 @@ public class BoardManager : MonoBehaviour
         GameManager.instance.FinishSetup();
         return Grid;
     }
+
+    public List<Roof> GetRoofs() {
+        return roofs;
+    }
 }

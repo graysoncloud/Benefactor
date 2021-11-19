@@ -89,7 +89,6 @@ namespace AStarSharp
                 OpenList.Remove(current);
                 ClosedList.Add(current);
                 adjacencies = GetAdjacentNodes(current);
-
  
                 foreach(Node n in adjacencies)
                 {
@@ -101,7 +100,7 @@ namespace AStarSharp
                         {
                             n.Parent = current;
                             n.DistanceToTarget = Math.Abs(n.Position.x - end.Position.x) + Math.Abs(n.Position.y - end.Position.y);
-                            n.Cost = (n.Weight == -1 ? 2 : n.Weight) + n.Parent.Cost; //-1 signifies a door
+                            n.Cost = (n.Weight == -1 ? 2 : (n.Weight == -2 ? 0 : n.Weight)) + n.Parent.Cost; //-1 signifies a door, -2 signifies existing path
                             OpenList.Add(n);
                             OpenList = OpenList.OrderBy(node => node.F).ToList<Node>();
                         }

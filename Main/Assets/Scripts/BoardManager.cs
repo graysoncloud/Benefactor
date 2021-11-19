@@ -55,12 +55,9 @@ public class BoardManager : MonoBehaviour
         public Roof()
         {
             positions = new List<Vector2Int>();
-            GameObject roofObject = new GameObject("Roof");
-            tiles = roofObject.AddComponent<Tilemap>();
-            tiles.tileAnchor = new Vector3(0, -0.25f, 0);
-            tileRenderer = roofObject.AddComponent<TilemapRenderer>();
-            tileRenderer.sortingLayerName = "Roof";
-            tiles.transform.SetParent(GameManager.instance.GetComponent<Grid>().transform);
+            GameObject roofObject = BoardManager.CreateTilemap("Roof", new Vector3(0, -0.25f, 0));
+            tiles = roofObject.GetComponent<Tilemap>();
+            tileRenderer = roofObject.GetComponent<TilemapRenderer>();
         }
     }
 
@@ -72,6 +69,7 @@ public class BoardManager : MonoBehaviour
     public Vector2Int buildingRoomGrid;
     public Count roomLengthCount;
     public Count buildingDistance;
+    public Count pathRadius;
 
     public GameObject[] players;
     public GameObject[] enemies;
@@ -80,7 +78,6 @@ public class BoardManager : MonoBehaviour
     public GameObject[] streetObjects;
 
     public GameObject wall;
-    // public GameObject roof;
     public GameObject basicDoor;
     public GameObject keyDoor;
     public GameObject triggerDoor;
@@ -88,29 +85,28 @@ public class BoardManager : MonoBehaviour
     public GameObject[] shelves;
     public GameObject[] bar;
     public GameObject table;
-    public GameObject chairFront;
-    public GameObject chairBack;
-    public GameObject chairLeft;
-    public GameObject chairRight;
+    public GameObject chair;
     public GameObject bed;
     public GameObject stool;
     public GameObject stove;
 
-    public Grid tileGrid;
-    public Tilemap bottomTilemap;
-    public Tilemap groundTilemap;
-    // public Tilemap roofTilemap;
     public RuleTile dirtTile;
     public RuleTile grassTile;
     public RuleTile roofTile;
     public RuleTile floorTile;
+    public RuleTile pathTile;
     
-    public List<Vector3Int> spawnPositions;
+    public List<Vector2Int> spawnPositions;
 
     private List<Vector3Int> gridPositions;
     private List<List<Node>> Grid;
     private Dictionary<String, Room[]> buildings;
     private List<Roof> roofs;
+    private List<Vector2Int> pathPositions;
+    private Tilemap bottomTilemap;
+    private Tilemap grassTilemap;
+    private Tilemap overGroundTilemap;
+    private Tilemap floorTilemap;
 
     void InitializeList()
     {
@@ -127,29 +123,34 @@ public class BoardManager : MonoBehaviour
     private void BoardSetup()
     {
         Grid = new List<List<Node>>();
-        for (int i = 0; i < columns; i++)
-        {
-            Grid.Add(new List<Node>());
-            for (int j = 0; j < rows; j++)
-            {
-                Grid[i].Add(null);
-            }
-        }
-
-        bottomTilemap.ClearAllTiles();
-        groundTilemap.ClearAllTiles();
+        bottomTilemap = CreateTilemap("Bottom").GetComponent<Tilemap>();
+        grassTilemap = CreateTilemap("Grass").GetComponent<Tilemap>();
+        overGroundTilemap = CreateTilemap("OverGround").GetComponent<Tilemap>();
+        floorTilemap = CreateTilemap("Floor").GetComponent<Tilemap>();
         roofs = new List<Roof>();
+        pathPositions = new List<Vector2Int>();
         for (int x = -1; x <= columns; x++)
         {
+            Grid.Add(new List<Node>());
             for (int y = -1; y <= rows; y++)
             {
                 bottomTilemap.SetTile(new Vector3Int(x, y, 0), dirtTile);
                 if (x >= 0 && x < columns && y >= 0 && y < rows)
                 {
-                    Grid[x][y] = new Node(new Vector2(x, y), true, 1);
+                    Grid[x].Add(new Node(new Vector2(x, y), true, 1));
                 }
             }
         }
+    }
+
+    private static GameObject CreateTilemap(String name, Vector3 tileAnchor = default(Vector3)) {
+        GameObject newObject = new GameObject(name);
+        Tilemap tiles = newObject.AddComponent<Tilemap>();
+        tiles.tileAnchor = tileAnchor;
+        TilemapRenderer tileRenderer = newObject.AddComponent<TilemapRenderer>();
+        tileRenderer.sortingLayerName = name;
+        tiles.transform.SetParent(GameManager.instance.GetComponent<Grid>().transform);
+        return newObject;
     }
 
     Node GetNode(Vector2 tile)
@@ -192,13 +193,7 @@ public class BoardManager : MonoBehaviour
             {
                 GameObject tileChoice = RandomObject(tileArray);
                 Instantiate(tileChoice, position, Quaternion.identity);
-                for (int x = -2; x <= 2; x++) {
-                    for (int y = -2; y <= 2; y++) {
-                        Vector3Int newPos = new Vector3Int(position.x + x, position.y + y, 0);
-                        if (newPos.x < 0 || newPos.x == columns || newPos.y < 0 || newPos.y == rows || gridPositions.Contains(new Vector3Int(newPos.x, newPos.y, newPos.y)))
-                            groundTilemap.SetTile(newPos, grassTile);
-                    }
-                }
+                PlaceTiles(grassTilemap, grassTile, (Vector2Int) position, 2);
                 gridPositions.RemoveAt(i);
             }
         }
@@ -210,9 +205,11 @@ public class BoardManager : MonoBehaviour
         foreach (GameObject player in players) {
             if (i >= spawnPositions.Count)
                 return;
-            Vector3Int position = spawnPositions[i];
+            Vector3Int position = new Vector3Int(spawnPositions[i].x, spawnPositions[i].y, spawnPositions[i].y);
             Instantiate(player, position, Quaternion.identity);
+            PlaceTiles(grassTilemap, grassTile, (Vector2Int) position, 2);
             gridPositions.Remove(position);
+            pathPositions.Add(spawnPositions[i]);
             i++;
         }
     }
@@ -232,16 +229,16 @@ public class BoardManager : MonoBehaviour
                 for (int j = 0; j < 8; j++) {
                     Vector2Int center = buildings[i].center;
                     if (j == 1 || j == 2 || j == 3)
-                        center = center + new Vector2Int(buildings[i].widthHeight.x/2 + Random.Range(buildingDistance.minimum, buildingDistance.maximum), 0);
+                        center = center + new Vector2Int(buildings[i].widthHeight.x/2 + Random.Range(buildingDistance.minimum, buildingDistance.maximum + 1), 0);
                     else if (j == 5 || j == 6 || j == 7)
-                        center = center + new Vector2Int(0 - buildings[i].widthHeight.x/2 - Random.Range(buildingDistance.minimum, buildingDistance.maximum), 0);
+                        center = center + new Vector2Int(0 - buildings[i].widthHeight.x/2 - Random.Range(buildingDistance.minimum, buildingDistance.maximum + 1), 0);
                     if (j == 7 || j == 0 || j == 1)
-                        center = center + new Vector2Int(0, buildings[i].widthHeight.y/2 + Random.Range(buildingDistance.minimum, buildingDistance.maximum));
+                        center = center + new Vector2Int(0, buildings[i].widthHeight.y/2 + Random.Range(buildingDistance.minimum, buildingDistance.maximum + 1));
                     else if (j == 3 || j == 4 || j == 5)
-                        center = center + new Vector2Int(0, 0 - buildings[i].widthHeight.y/2 - Random.Range(buildingDistance.minimum, buildingDistance.maximum));
+                        center = center + new Vector2Int(0, 0 - buildings[i].widthHeight.y/2 - Random.Range(buildingDistance.minimum, buildingDistance.maximum + 1));
                     placed = CheckBuilding(center, rooms, roomLength);
                     if (placed) {
-                        LayoutBuilding(center, rooms, roomLength);
+                        pathPositions.Add(LayoutBuilding(center, rooms, roomLength));
                         buildings.Add(new Building(center, GetBuildingWidthHeight(rooms, roomLength)));
                         if (buildings[0].widthHeight == new Vector2Int(0,0))
                             buildings.RemoveAt(0);
@@ -446,7 +443,7 @@ public class BoardManager : MonoBehaviour
         return true;
     }
 
-    private Vector2 LayoutBuilding(Vector2Int center, int[,] rooms, int roomLength)
+    private Vector2Int LayoutBuilding(Vector2Int center, int[,] rooms, int roomLength)
     {
         Roof roof = new Roof();
         roofs.Add(roof);
@@ -519,7 +516,7 @@ public class BoardManager : MonoBehaviour
                         continue;
                     }
                     if (up || y != end.y - 1)
-                        groundTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
+                        floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
                     if ((!left && x == start.x) || (!right && x == end.x - 1) || (!up && y == end.y - 1) || (!down && y == start.y)) {
                         if (placedFrontDoor == new Vector2Int(0,0) && gridPositions.Contains(position - new Vector3Int(0,1,1)) && !down && y == start.y && (x == (start.x*2 + roomLength)/2 || x == (end.x*2 - roomLength)/2)) {
                             Instantiate(basicDoor, position, Quaternion.identity);
@@ -531,6 +528,7 @@ public class BoardManager : MonoBehaviour
                         }
                     }
                     gridPositions.Remove(position);
+                    Grid[position.x][position.y] = new Node(new Vector2(position.x, position.y), true, 2);
                     roof.positions.Add(new Vector2Int(x, y + 1));
                     roof.tiles.SetTile(new Vector3Int(x, y + 1, 0), roofTile);
                 }
@@ -539,7 +537,54 @@ public class BoardManager : MonoBehaviour
         return placedFrontDoor;
     }
 
-    void BuildWall(Vector2Int start, Vector2Int stop)
+    private void SpawnPaths()
+    {
+        Dictionary<Vector2Int, List<Vector2Int>> paths = new Dictionary<Vector2Int, List<Vector2Int>>();
+        foreach (Vector2Int position in pathPositions) {
+            List<Vector2Int> toTarget = new List<Vector2Int>();
+            foreach (Vector2Int pos in pathPositions) {
+                if (position != pos)
+                    toTarget.Add(pos);
+            }
+            paths[position] = toTarget;
+        }
+
+        List<List<Node>> pathGrid = new List<List<Node>>();
+        for (int x = 0; x < columns; x++) {
+            pathGrid.Add(new List<Node>());
+            for (int y = 0; y < rows; y++) {
+                pathGrid[x].Add(new Node(new Vector2(x, y), Grid[x][y].Weight == 0, Grid[x][y].Weight > 1 ? 10 : 5));
+            }
+        }
+        Astar astar = new Astar(pathGrid);
+
+        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+        List<Vector2Int> targets = new List<Vector2Int>();
+        while (pathPositions.Count > 0) {
+            Vector2Int start = pathPositions[0];
+            targets = paths[start];
+            pathPositions.Remove(start);
+            while (targets.Count > 0) {
+                Vector2Int end = targets[0];
+                targets.RemoveAt(0);
+                Stack<Node> path = astar.FindPath(start, end, false);
+                if (path == null)
+                    continue;
+                foreach (Node node in path) {
+                    Vector2Int newPos = new Vector2Int((int) node.Position.x, (int) node.Position.y);
+                    if (newPos != start && newPos != end && !visited.Contains(newPos)) {
+                        int radius = Random.Range(pathRadius.minimum, pathRadius.maximum + 1);
+                        PlaceTiles(overGroundTilemap, pathTile, newPos, radius, false);
+                        pathGrid[(int) node.Position.x][(int) node.Position.y] = new Node(new Vector2(newPos.x, newPos.y), true, -2);
+                        visited.Add(newPos);
+                    }
+                }
+                astar = new Astar(pathGrid);
+            }
+        }
+    }
+
+    void BuildWall(Wall wall, Vector2Int start, Vector2Int stop)
     {
         if (start.y == stop.y)
         {
@@ -567,111 +612,35 @@ public class BoardManager : MonoBehaviour
         return rooms[Random.Range(0, rooms.Length)].type;
     }
 
-    void PlaceTable(Vector2 tile, Vector2 start, Vector2 stop)
+    void PlaceTable(Vector2Int coords)
     {
-        Instantiate(table, new Vector3(tile.x, tile.y, tile.y), Quaternion.identity);
-        Grid[(int)tile.x][(int)tile.y] = new Node(tile, true, 2);
-        if (tile.y + 1 != stop.y && Random.Range(0, 2) == 0 && GetNode(new Vector2(tile.x, tile.y + 1)).Weight == 1)
-        { Instantiate((Random.Range(0, 5) == 0) ? RandomObject(enemies) : chairFront, new Vector3(tile.x, tile.y + 1, tile.y + 1), Quaternion.identity);
-            Grid[(int)tile.x][(int)tile.y + 1] = new Node(tile, true, 2); }
-        if (tile.y != start.y && Random.Range(0, 2) == 0 && GetNode(new Vector2(tile.x, tile.y - 1)).Weight == 1)
-        { Instantiate((Random.Range(0, 5) == 0) ? RandomObject(enemies) : chairBack, new Vector3(tile.x, tile.y - 1, tile.y - 1), Quaternion.identity);
-            Grid[(int)tile.x][(int)tile.y - 1] = new Node(tile, true, 2); }
-        if (tile.x - 1 != start.x && Random.Range(0, 2) == 0 && GetNode(new Vector2(tile.x - 1, tile.y)).Weight == 1)
-        { Instantiate((Random.Range(0, 5) == 0) ? RandomObject(enemies) : chairLeft, new Vector3(tile.x - 1, tile.y, tile.y), Quaternion.identity);
-            Grid[(int)tile.x - 1][(int)tile.y] = new Node(tile, true, 2); }
-        if (tile.x + 1 != stop.x && Random.Range(0, 2) == 0 && GetNode(new Vector2(tile.x + 1, tile.y)).Weight == 1)
-        { Instantiate((Random.Range(0, 5) == 0) ? RandomObject(enemies) : chairRight, new Vector3(tile.x + 1, tile.y, tile.y), Quaternion.identity);
-            Grid[(int)tile.x + 1][(int)tile.y] = new Node(tile, true, 2); }
+        Vector3Int position = new Vector3Int(coords.x, coords.y, coords.y);
+        Instantiate(table, position, Quaternion.identity);
+        Vector3Int chairPosition = position + new Vector3Int(1,0,0);
+        if (gridPositions.Contains(chairPosition))
+            Instantiate(chair, chairPosition, Quaternion.identity);
+        chairPosition = position + new Vector3Int(-1,0,0);
+        if (gridPositions.Contains(chairPosition))
+            Instantiate(chair, chairPosition, Quaternion.identity);
+        chairPosition = position + new Vector3Int(0,1,1);
+        if (gridPositions.Contains(chairPosition))
+            Instantiate(chair, chairPosition, Quaternion.identity);
+        chairPosition = position + new Vector3Int(0,-1,-1);
+        if (gridPositions.Contains(chairPosition))
+            Instantiate(chair, chairPosition, Quaternion.identity);
     }
 
-    void PlaceObject(String type, Vector2 tile, Vector2 start, Vector2 stop, int topRoomDoor = -1)
+    void PlaceTiles(Tilemap tilemap, RuleTile tile, Vector2Int position, int radius, bool checkSpace = true)
     {
-        GameObject objectTile = null;
-        switch (type)
-        {
-            case "House":
-                switch (Random.Range(0, 2))
-                {
-                    case 0:
-                        objectTile = RandomObject(storage);
-                        break;
-                    case 1:
-                        PlaceTable(tile, start, stop);
-                        break;
-                    default:
-                        break;
+        for (int x = 1 - radius; x <= radius - 1; x++) {
+            for (int y = 1 - radius; y <= radius - 1; y++) {
+                Vector3Int newPos = new Vector3Int(position.x + x, position.y + y, 0);
+                if ((Random.Range(0,2) == 0 || (x == 0 && y == 0) || checkSpace) && (!checkSpace || newPos.x < 0 || newPos.x == columns || newPos.y < 0 || newPos.y == rows || gridPositions.Contains(new Vector3Int(newPos.x, newPos.y, newPos.y))))
+                    tilemap.SetTile(newPos, tile);
+                    if (!checkSpace && gridPositions.Contains(new Vector3Int(newPos.x, newPos.y, newPos.y)))
+                        gridPositions.Remove(new Vector3Int(newPos.x, newPos.y, newPos.y));
                 }
-                break;
-            case "Bar":
-                if (tile.y == stop.y - 1 && tile.x != topRoomDoor)
-                    objectTile = RandomObject(shelves);
-                else if (tile.y == stop.y - 3 && tile.x > start.x + 1)
-                    objectTile = RandomObject(bar);
-                else if (tile.y == stop.y - 4 && tile.x > start.x + 1)
-                    objectTile = (Random.Range(0, 3) == 0) ? RandomObject(enemies) : stool;
-                else if (tile.y < stop.y - 5)
-                    if (Random.Range(0, 5) == 0) { PlaceTable(tile, start, new Vector2(stop.x, stop.y - 5)); }
-                break;
-            case "Entry":
-                switch (Random.Range(0, 2))
-                {
-                    case 0:
-                        objectTile = RandomObject(storage);
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case "Storage":
-                switch (Random.Range(0, 2))
-                {
-                    case 0:
-                        objectTile = RandomObject(storage);
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case "Bedroom":
-                switch (Random.Range(0, 3))
-                {
-                    case 0:
-                        objectTile = RandomObject(storage);
-                        break;
-                    case 1:
-                        PlaceTable(tile, start, stop);
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case "Center":
-                switch (Random.Range(0, 10))
-                {
-                    case 0:
-                        PlaceTable(tile, start, stop);
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            default:
-                break;
         }
-        if (objectTile != null)
-        {
-            Instantiate(objectTile, new Vector3(tile.x, tile.y, tile.y), Quaternion.identity);
-            Grid[(int)tile.x][(int)tile.y] = new Node(tile, true, 2);
-        }
-    }
-
-    void PlaceTiles()
-    {
-        // if (isRoof)
-        //     roofTilemap.SetTile(coords, roofTile);
-        // if (isFloor)
-        //     groundTilemap.SetTile(coords, floorTile);
     }
 
     public List<List<Node>> SetupScene(int level)
@@ -680,12 +649,11 @@ public class BoardManager : MonoBehaviour
         InitializeList();
         SpawnPlayers();
         SpawnBuildings();
+        SpawnPaths();
         LayoutObjectAtCorners(trees);
         LayoutObjectAtRandom(natureObjects, objectCount.minimum, objectCount.maximum/2);
         // LayoutObjectAtRandom(streetObjects, objectCount.minimum, objectCount.maximum/2);
         LayoutObjectAtRandom(enemies, enemyCount.minimum, enemyCount.maximum);
-        groundTilemap.RefreshAllTiles();
-        // roofTilemap.RefreshAllTiles();
         GameManager.instance.FinishSetup();
         return Grid;
     }

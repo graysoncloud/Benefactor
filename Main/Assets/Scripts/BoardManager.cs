@@ -61,6 +61,21 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public class Connections
+    {
+        public bool up;
+        public bool down;
+        public bool left;
+        public bool right;
+
+        public Connections(bool isUp, bool isDown, bool isLeft, bool isRight) {
+            up = isUp;
+            down = isDown;
+            left = isLeft;
+            right = isRight;
+        }
+    }
+
     public int columns;
     public int rows;
     public Count objectCount;
@@ -193,7 +208,7 @@ public class BoardManager : MonoBehaviour
             {
                 GameObject tileChoice = RandomObject(tileArray);
                 Instantiate(tileChoice, position, Quaternion.identity);
-                PlaceTiles(grassTilemap, grassTile, (Vector2Int) position, 2);
+                PlaceTiles(grassTilemap, grassTile, (Vector2Int) position, 3);
                 gridPositions.RemoveAt(i);
             }
         }
@@ -207,7 +222,7 @@ public class BoardManager : MonoBehaviour
                 return;
             Vector3Int position = new Vector3Int(spawnPositions[i].x, spawnPositions[i].y, spawnPositions[i].y);
             Instantiate(player, position, Quaternion.identity);
-            PlaceTiles(grassTilemap, grassTile, (Vector2Int) position, 2);
+            PlaceTiles(grassTilemap, grassTile, (Vector2Int) position, 3);
             gridPositions.Remove(position);
             pathPositions.Add(spawnPositions[i]);
             i++;
@@ -253,43 +268,25 @@ public class BoardManager : MonoBehaviour
 
     private int[,] GenerateBuildingLayout()
     {
-        bool failed = true;
-        int[,] rooms = new int[0,0];
-        while (failed == true)
-        {
-            rooms = new int[buildingRoomGrid.x, buildingRoomGrid.y];
+        int room = 1;
+        int[,] rooms = new int[buildingRoomGrid.x, buildingRoomGrid.y];
+        Vector2Int next = new Vector2Int(Random.Range(0, buildingRoomGrid.x), Random.Range(0, buildingRoomGrid.y));
+        rooms[next.x, next.y] = room;
 
-            int i = 1;
-            for (int x = 0; x < buildingRoomGrid.x; x++) {
-                for (int y = 0; y < buildingRoomGrid.y ; y++) {
-                    if (Random.Range(0, 3) == 0) {
-                        rooms[x, y] = i;
-                        i++;
-                    }
-                }
-            }
+        List<Vector2Int> added = new List<Vector2Int>();
+        List<Vector2Int> directions = new List<Vector2Int>() { new Vector2Int(0,1), new Vector2Int(0,-1), new Vector2Int(1,0), new Vector2Int(-1,0) };
 
-            for (int x = 0; x < buildingRoomGrid.x; x++) {
-                for (int y = 0; y < buildingRoomGrid.y ; y++) {
-                    if (rooms[x,y] == 0)
-                        continue;
-                    if (!RoomHasNeighbor(x, y, rooms))
-                        rooms[x,y] = 0;
-                    else {
-                        List<Vector2Int> unmergedNeighbors = GetUnmergedNeighbors(x, y, rooms);
-                        foreach (Vector2Int neighbor in unmergedNeighbors) {
-                            if (Random.Range(0, 2) > 0) {
-                                rooms[neighbor.x, neighbor.y] = rooms[x, y];
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (int x = 0; x < buildingRoomGrid.x; x++) {
-                for (int y = 0; y < buildingRoomGrid.y ; y++) {
-                    if (rooms[x, y] > 0)
-                        failed = false;
+        for (int i = 0; i < buildingRoomGrid.x * buildingRoomGrid.y; i++) {
+            added.Add(next);
+            Vector2Int randomRoom = added[Random.Range(0, added.Count)];
+            next = randomRoom + directions[Random.Range(0, directions.Count)];
+            if (!added.Contains(next) && next.x >= 0 && next.x < buildingRoomGrid.x && next.y >= 0 && next.y < buildingRoomGrid.y) {
+                bool merge = Random.Range(0, 2) == 0;
+                if (!merge) {
+                    room++;
+                    rooms[next.x, next.y] = room;
+                } else {
+                    rooms[next.x, next.y] = rooms[randomRoom.x, randomRoom.y];
                 }
             }
         }
@@ -520,7 +517,8 @@ public class BoardManager : MonoBehaviour
                     if ((!left && x == start.x) || (!right && x == end.x - 1) || (!up && y == end.y - 1) || (!down && y == start.y)) {
                         if (placedFrontDoor == new Vector2Int(0,0) && gridPositions.Contains(position - new Vector3Int(0,1,1)) && !down && y == start.y && (x == (start.x*2 + roomLength)/2 || x == (end.x*2 - roomLength)/2)) {
                             Instantiate(basicDoor, position, Quaternion.identity);
-                            placedFrontDoor = new Vector2Int(position.x, position.y);
+                            placedFrontDoor = new Vector2Int(position.x, position.y - 1);
+                            gridPositions.Remove(position - new Vector3Int(0, 1, 1));
                         } else {
                             GameObject newWall = Instantiate(wall, position, Quaternion.identity);
                             if (gridPositions.Contains(position - new Vector3Int(0,1,1)) && !down && y == start.y)
@@ -567,14 +565,25 @@ public class BoardManager : MonoBehaviour
             while (targets.Count > 0) {
                 Vector2Int end = targets[0];
                 targets.RemoveAt(0);
-                Stack<Node> path = astar.FindPath(start, end, false);
-                if (path == null)
+                Stack<Node> stack = astar.FindPath(start, end, false);
+                List<Node> path = new List<Node>();
+                if (stack == null)
                     continue;
-                foreach (Node node in path) {
+                else
+                    path = stack.ToList();
+                for (int i = 0; i < path.Count; i++) {
+                    Node node = path[i];
                     Vector2Int newPos = new Vector2Int((int) node.Position.x, (int) node.Position.y);
                     if (newPos != start && newPos != end && !visited.Contains(newPos)) {
                         int radius = Random.Range(pathRadius.minimum, pathRadius.maximum + 1);
-                        PlaceTiles(overGroundTilemap, pathTile, newPos, radius, false);
+                        Vector2Int prevPos = (i == 0) ? new Vector2Int(-2,-2) : new Vector2Int((int) path[i - 1].Position.x, (int) path[i - 1].Position.y);
+                        Vector2Int nextPos = (i == path.Count - 1) ? new Vector2Int(-2,-2) : new Vector2Int((int) path[i + 1].Position.x, (int) path[i + 1].Position.y);
+                        Connections connections = new Connections(
+                            newPos + new Vector2Int(0,1) == prevPos || newPos + new Vector2Int(0,1) == nextPos,
+                            newPos + new Vector2Int(0,-1) == prevPos || newPos + new Vector2Int(0,-1) == nextPos,
+                            newPos + new Vector2Int(-1,0) == prevPos || newPos + new Vector2Int(-1,0) == nextPos,
+                            newPos + new Vector2Int(1,0) == prevPos || newPos + new Vector2Int(1,0) == nextPos);
+                        PlaceTiles(overGroundTilemap, pathTile, newPos, radius, true, connections);
                         pathGrid[(int) node.Position.x][(int) node.Position.y] = new Node(new Vector2(newPos.x, newPos.y), true, -2);
                         visited.Add(newPos);
                     }
@@ -630,16 +639,30 @@ public class BoardManager : MonoBehaviour
             Instantiate(chair, chairPosition, Quaternion.identity);
     }
 
-    void PlaceTiles(Tilemap tilemap, RuleTile tile, Vector2Int position, int radius, bool checkSpace = true)
+    void PlaceTiles(Tilemap tilemap, RuleTile tile, Vector2Int position, int radius, bool path = false, Connections connections = null)
     {
         for (int x = 1 - radius; x <= radius - 1; x++) {
             for (int y = 1 - radius; y <= radius - 1; y++) {
                 Vector3Int newPos = new Vector3Int(position.x + x, position.y + y, 0);
-                if ((Random.Range(0,2) == 0 || (x == 0 && y == 0) || checkSpace) && (!checkSpace || newPos.x < 0 || newPos.x == columns || newPos.y < 0 || newPos.y == rows || gridPositions.Contains(new Vector3Int(newPos.x, newPos.y, newPos.y))))
+                Vector3Int newPosGrid = new Vector3Int(newPos.x, newPos.y, newPos.y);
+
+                bool center = x == 0 && y == 0;
+                bool up = x == 0 && y > 0;
+                bool down = x == 0 && y < 0;
+                bool left = x < 0 && y == 0;
+                bool right = x > 0 && y == 0;
+                bool connected = center || ((connections == null) ? false :
+                    (up && connections.up) || (down && connections.down) || (left && connections.left) || (right && connections.right));
+
+                if (path && !connected && gridPositions.Contains(newPosGrid) && Random.Range(0,20) == 0)
+                    Instantiate(RandomObject(streetObjects), newPosGrid, Quaternion.identity);
+                
+                if ((!path || connected || Random.Range(0,2) == 0)) {
                     tilemap.SetTile(newPos, tile);
-                    if (!checkSpace && gridPositions.Contains(new Vector3Int(newPos.x, newPos.y, newPos.y)))
-                        gridPositions.Remove(new Vector3Int(newPos.x, newPos.y, newPos.y));
+                    if (path && gridPositions.Contains(newPosGrid))
+                        gridPositions.Remove(newPosGrid);
                 }
+            }
         }
     }
 

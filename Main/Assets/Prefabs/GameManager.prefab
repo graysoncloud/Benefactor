@@ -111,7 +111,7 @@ MonoBehaviour:
     maximum: 10
   pathRadius:
     minimum: 2
-    maximum: 3
+    maximum: 2
   players:
   - {fileID: 5828532957960981727, guid: 9dfdcd00a8877bb4d8342c8be1806065, type: 3}
   - {fileID: 5828532957960981727, guid: d05ede304b84bb74e996003457a52929, type: 3}
@@ -153,7 +153,7 @@ MonoBehaviour:
   grassTile: {fileID: 11400000, guid: 6e3cd8e19dd5f3d40b26895ebfa30c9c, type: 2}
   roofTile: {fileID: 11400000, guid: 7e1d95070c8833446adadbfb4f8a1cc7, type: 2}
   floorTile: {fileID: 11400000, guid: e6c2a63b349f42b4b8e159ef0e65d2ce, type: 2}
-  pathTile: {fileID: 11400000, guid: eff8fae1bd386144692d84641ad7cd3e, type: 2}
+  pathTile: {fileID: 11400000, guid: 967e3e82305713d4dae77cab2fca7216, type: 2}
   spawnPositions:
   - {x: 15, y: 0}
   - {x: 16, y: 0}

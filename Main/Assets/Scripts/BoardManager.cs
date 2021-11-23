@@ -682,7 +682,7 @@ public class BoardManager : MonoBehaviour
             for (int y = 1 - radius; y <= radius - 1; y++) {
                 Vector3Int newPos = new Vector3Int(position.x + x, position.y + y, 0);
                 Vector3Int newPosGrid = new Vector3Int(newPos.x, newPos.y, newPos.y);
-                if ((!pond && (newPos.x < -1 || newPos.x > columns || newPos.y < -1 || newPos.y > rows)) || (pond && (newPos.x < 0 || newPos.x >= columns || newPos.y < 0 || newPos.y >= rows)))
+                if (newPos.x < -1 || newPos.x > columns || newPos.y < -1 || newPos.y > rows)
                     continue;
 
                 bool center = x == 0 && y == 0;
@@ -698,10 +698,22 @@ public class BoardManager : MonoBehaviour
                 
                 if ((!path || connected || Random.Range(0,3) > 0) && (!pond || 0.01 > (Math.Pow((Math.Max(x, 0 - x) * Math.Max(y, 0 - y)), 2) / Math.Pow((2*radius * 2*radius), 2)))) {
                     tilemap.SetTile(newPos, tile);
-                    if (pond)
+                    if (pond && newPos.x >= 0 && newPos.x < columns && newPos.y >= 0 && newPos.y < rows)
                         Grid[newPos.x][newPos.y] = new Node(new Vector2(newPos.x, newPos.y), false);
-                    if (!path && gridPositions.Contains(newPosGrid) && ((pond && Random.Range(0,5) == 0) || (!center && Random.Range(0,30) == 0)))
-                        plantTilemap.SetTile(newPos, pond ? waterFloraTile : Random.Range(0,5) > 0 ? flowerTile : mushroomTile);
+                    if (!path && gridPositions.Contains(newPosGrid) && ((pond && Random.Range(0,3) == 0) || (!center && Random.Range(0,30) == 0)))
+                        if (pond) {
+                            bool onEdge = x == 1 - radius || x == radius - 1 || y == 1 - radius || y == radius - 1;
+                            for (int i = -1; i <= 1; i++) {
+                                for (int j = -1; j <= 1; j++) {
+                                    if (0.01 <= (Math.Pow((Math.Max(x + i, 0 - x - i) * Math.Max(y + j, 0 - y - j)), 2) / Math.Pow((2*radius * 2*radius), 2)))
+                                        onEdge = true;
+                                }
+                            }
+                            if (!onEdge)
+                                plantTilemap.SetTile(newPos, waterFloraTile);
+                        } else {
+                            plantTilemap.SetTile(newPos, Random.Range(0,5) > 0 ? flowerTile : mushroomTile);
+                        }
                     if ((path || pond) && gridPositions.Contains(newPosGrid))
                         gridPositions.Remove(newPosGrid);
                 }

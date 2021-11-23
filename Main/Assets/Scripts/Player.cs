@@ -97,7 +97,8 @@ public class Player : Character
 
     protected void GetPaths(Vector2 next, Vector2[] path, int remainingMoves) //update with better alg/queue?
     {
-        if (Array.Exists(path, element => element == next)) { return; }
+        // Debug.Log(next.x + ", " + next.y + "; " + GameManager.instance.Grid[(int) next.x][(int) next.y].Walkable);
+        if (Array.Exists(path, element => element == next) || next.x < 0 || next.x >= GameManager.instance.Grid.Count || next.y < 0 || next.y >= GameManager.instance.Grid[0].Count || (next != (Vector2) gameObject.transform.position && !GameManager.instance.Grid[(int) next.x][(int) next.y].Walkable)) { return; }
         Vector2 previous = ((path.Length == 0) ? (Vector2)transform.position : path[path.Length - 1]);
         boxCollider.enabled = false;
         RaycastHit2D[] hits = Physics2D.LinecastAll(previous, next, Collisions);

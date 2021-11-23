@@ -61,6 +61,9 @@ TagManager:
   - name: OverGround
     uniqueID: 2381167429
     locked: 0
+  - name: Plants
+    uniqueID: 4251046099
+    locked: 0
   - name: Floor
     uniqueID: 2400453149
     locked: 0

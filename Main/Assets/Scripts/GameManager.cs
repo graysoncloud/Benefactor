@@ -108,7 +108,6 @@ public class GameManager : MonoBehaviour
 
         characters.Clear();
         Grid = boardScript.SetupScene(level);
-        // Roofs = boardScript.GetRoofs();
         round = 0;
     }
 

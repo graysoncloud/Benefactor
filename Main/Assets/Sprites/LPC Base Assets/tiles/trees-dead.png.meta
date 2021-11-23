@@ -1,0 +1,1311 @@
+fileFormatVersion: 2
+guid: 42ea853142bff6a41a9646135056c041
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: trees-dead_0
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 963
+        width: 43
+        height: 50
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7209cd252f92c342a4445e759c87020
+      internalID: -1932960672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_1
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 960
+        width: 52
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06ff898847449bd40adf0ebda0373cf8
+      internalID: 498747358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_2
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 964
+        width: 55
+        height: 58
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b34c78e913371c341aaf0ae98b03c27d
+      internalID: -740631469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_3
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 963
+        width: 48
+        height: 54
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2df497d6bffbf2542929c2ee6a587530
+      internalID: -349606683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 928
+        width: 64
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cb79ecd964407e41ba1aaf10814de5d
+      internalID: -1442464577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_5
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 928
+        width: 128
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37ebc839802cc3345818dcd8695d3691
+      internalID: -1658451384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_6
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 932
+        width: 83
+        height: 92
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cad480d497c709844bb1dbc835cd6b64
+      internalID: -1096046238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_7
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 936
+        width: 64
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1780eab5f6d8b5a47a89809c5e58ac54
+      internalID: -110032308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_8
+      rect:
+        serializedVersion: 2
+        x: 751
+        y: 1005
+        width: 6
+        height: 4
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46a4a0118f2764c4d89634faa1839142
+      internalID: 1770662951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_9
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 928
+        width: 27
+        height: 23
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a9e67afc30ae594298cfbceb1ce3ac5
+      internalID: -629480878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_10
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 928
+        width: 31
+        height: 23
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cdb0421a22d4bc4990dfff4e407245b
+      internalID: 816973680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_11
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 928
+        width: 27
+        height: 23
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 292b1e53ccb0b4b4cbacbfa0a6689514
+      internalID: 7423424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_12
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 937
+        width: 11
+        height: 23
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e7403e758692124aadf53e666f912db
+      internalID: 1588212246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_13
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 934
+        width: 16
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 840f123e19e572d4f9958a1f6a95710e
+      internalID: -768469484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_14
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 932
+        width: 22
+        height: 28
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2f09cebb631ba4408912d7cccf51130
+      internalID: 1901471784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_15
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 931
+        width: 27
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85c9940601d07cb45a4e4d0b1512e1c7
+      internalID: 1748666584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_16
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 928
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77515b50f246b764a8a5c96c6b081751
+      internalID: -1644277264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_17
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 800
+        width: 112
+        height: 133
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f03d217bffa4294e8cc9a8aa3132af6
+      internalID: -360211773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_18
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 930
+        width: 47
+        height: 65
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86b2f5802e4d5a944b41abd2b43d7e88
+      internalID: -30255531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_19
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 805
+        width: 58
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0643a04b73b9d824db82e19720bc51d3
+      internalID: -1385849636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_20
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 800
+        width: 64
+        height: 117
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c5afaede3f198e45860c77a9695d749
+      internalID: -56464661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_21
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 800
+        width: 87
+        height: 91
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ac1e294daf7de6468b69839f5e225c5
+      internalID: 174135953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_22
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 814
+        width: 85
+        height: 81
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52878d61c62aa5a49be4a0066a99b06a
+      internalID: -2117510666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_23
+      rect:
+        serializedVersion: 2
+        x: 322
+        y: 800
+        width: 95
+        height: 91
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fc994729695e204da2340798755d1ea
+      internalID: -570891466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_24
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 808
+        width: 96
+        height: 120
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d532c3a0877ee7419ff95063b6c7a5f
+      internalID: -578335802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_25
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 686
+        width: 37
+        height: 109
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6703ac9bafd0ac940a3510a5f2864cb9
+      internalID: -1395262549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_26
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 674
+        width: 86
+        height: 107
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1bd047837cd316f42983f34394c42cdd
+      internalID: 706606377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_27
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 672
+        width: 84
+        height: 122
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb2cfdbc4337bc3468caf534ecb5f7e0
+      internalID: 1983751415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_28
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 672
+        width: 103
+        height: 121
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c3a518a6670c2046abce2c81b86920c
+      internalID: -413137241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_29
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 673
+        width: 93
+        height: 122
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13c8d7ba19140834da58154a942cd72c
+      internalID: 2128860756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_30
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 674
+        width: 96
+        height: 125
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 154fca99361283843a22e4a311c82d47
+      internalID: -1982081520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_31
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 673
+        width: 123
+        height: 125
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa057261501fc5d419946eb1e442b5e4
+      internalID: 1603202348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_32
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 672
+        width: 112
+        height: 113
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99d0e89e2030ab04b8e5e1b91a09d37e
+      internalID: 593239281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_33
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 780
+        width: 8
+        height: 7
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56c06ab9d5ddab449a89929498dfb4d1
+      internalID: -1007701464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_34
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 520
+        width: 57
+        height: 140
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b3e09e29b336a14b9c63fb8d6cd7733
+      internalID: 1445605911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_35
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 521
+        width: 61
+        height: 150
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed5af222a3c3cc0418e2a67974fc51ce
+      internalID: 609709998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_36
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 532
+        width: 76
+        height: 99
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cc0ed608059f7e43afe30c2d2eb0f18
+      internalID: 635196632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_37
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 576
+        width: 76
+        height: 40
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2a808709e8f8934598ad9861db098e7
+      internalID: 2130750501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_38
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 513
+        width: 95
+        height: 140
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bcce85a2e5a760a429a18f7bfacbc63b
+      internalID: -116632532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_39
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 521
+        width: 94
+        height: 150
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02f33ca76eef1fc49a5ae3db9f50bcb4
+      internalID: -519430526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_40
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 530
+        width: 123
+        height: 134
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16cbb21cf16948a419613a2b4fb61a4c
+      internalID: -965014293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_41
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 516
+        width: 142
+        height: 119
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e892cbd08f67d6e45b44c5cb2058446d
+      internalID: 284651877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_42
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 513
+        width: 127
+        height: 143
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a9887aada4cb3b43a2449106201d703
+      internalID: 518278369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_43
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 321
+        width: 139
+        height: 148
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6016fd0224e03f46a38c3007bd8bb7e
+      internalID: 1365590573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_44
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 329
+        width: 128
+        height: 156
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 252c426e0f6c6f443b83932c469bdb79
+      internalID: 174787529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_45
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 324
+        width: 165
+        height: 188
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d95c70fe3aed19748acc65fa034ab575
+      internalID: -607495102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_46
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 320
+        width: 170
+        height: 189
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e2efd6a9906af043a5f0f92705acfab
+      internalID: -582895409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_47
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 320
+        width: 160
+        height: 189
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45af28966508c2c4b9de48cc7acdcaa2
+      internalID: 571180442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_48
+      rect:
+        serializedVersion: 2
+        x: 835
+        y: 321
+        width: 155
+        height: 170
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bdebba3366fae4499720bb26e706cd2
+      internalID: -703660559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_49
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 129
+        width: 106
+        height: 183
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c29a878602fba7a40adb2d7390615586
+      internalID: -563394987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_50
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 129
+        width: 92
+        height: 150
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82ba2ef140a38784ba4d0a2b19aff417
+      internalID: 1823412442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_51
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 6
+        width: 271
+        height: 314
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d5fe109644538b47bb9f272036b1ad2
+      internalID: -128071752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_52
+      rect:
+        serializedVersion: 2
+        x: 551
+        y: 8
+        width: 242
+        height: 298
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d27ab78eae1b9cf458865ef8dfb0abd9
+      internalID: -706445273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-dead_53
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 932
+        width: 66
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86827ff0398dace4da3e023766283b06
+      internalID: 1661871852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      trees-dead_11: 7423424
+      trees-dead_6: -1096046238
+      trees-dead_44: 174787529
+      trees-dead_27: 1983751415
+      trees-dead_15: 1748666584
+      trees-dead_30: -1982081520
+      trees-dead_18: -30255531
+      trees-dead_36: 635196632
+      trees-dead_22: -2117510666
+      trees-dead_32: 593239281
+      trees-dead_49: -563394987
+      trees-dead_50: 1823412442
+      trees-dead_0: -1932960672
+      trees-dead_47: 571180442
+      trees-dead_48: -703660559
+      trees-dead_23: -570891466
+      trees-dead_20: -56464661
+      trees-dead_1: 498747358
+      trees-dead_39: -519430526
+      trees-dead_43: 1365590573
+      trees-dead_45: -607495102
+      trees-dead_2: -740631469
+      trees-dead_37: 2130750501
+      trees-dead_9: -629480878
+      trees-dead_17: -360211773
+      trees-dead_25: -1395262549
+      trees-dead_16: -1644277264
+      trees-dead_33: -1007701464
+      trees-dead_3: -349606683
+      trees-dead_14: 1901471784
+      trees-dead_19: -1385849636
+      trees-dead_10: 816973680
+      trees-dead_46: -582895409
+      trees-dead_40: -965014293
+      trees-dead_8: 1770662951
+      trees-dead_41: 284651877
+      trees-dead_13: -768469484
+      trees-dead_31: 1603202348
+      trees-dead_24: -578335802
+      trees-dead_52: -706445273
+      trees-dead_42: 518278369
+      trees-dead_38: -116632532
+      trees-dead_35: 609709998
+      trees-dead_53: 1277357732
+      trees-dead_5: -1658451384
+      trees-dead_34: 1445605911
+      trees-dead_12: 1588212246
+      trees-dead_26: 706606377
+      trees-dead_28: -413137241
+      trees-dead_51: -128071752
+      trees-dead_21: 174135953
+      trees-dead_29: 2128860756
+      trees-dead_7: -110032308
+      trees-dead_4: -1442464577
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -85,6 +85,7 @@ public class BoardManager : MonoBehaviour
     public Count roomLengthCount;
     public Count buildingDistance;
     public Count pathRadius;
+    public Count pondRadius;
 
     public GameObject[] players;
     public GameObject[] enemies;
@@ -110,6 +111,10 @@ public class BoardManager : MonoBehaviour
     public RuleTile roofTile;
     public RuleTile floorTile;
     public RuleTile pathTile;
+    public RuleTile waterTile;
+    public RuleTile flowerTile;
+    public RuleTile mushroomTile;
+    public RuleTile waterFloraTile;
     
     public List<Vector2Int> spawnPositions;
 
@@ -121,6 +126,7 @@ public class BoardManager : MonoBehaviour
     private Tilemap bottomTilemap;
     private Tilemap grassTilemap;
     private Tilemap overGroundTilemap;
+    private Tilemap plantTilemap;
     private Tilemap floorTilemap;
 
     void InitializeList()
@@ -141,6 +147,7 @@ public class BoardManager : MonoBehaviour
         bottomTilemap = CreateTilemap("Bottom").GetComponent<Tilemap>();
         grassTilemap = CreateTilemap("Grass").GetComponent<Tilemap>();
         overGroundTilemap = CreateTilemap("OverGround").GetComponent<Tilemap>();
+        plantTilemap = CreateTilemap("Plants").GetComponent<Tilemap>();
         floorTilemap = CreateTilemap("Floor").GetComponent<Tilemap>();
         roofs = new List<Roof>();
         pathPositions = new List<Vector2Int>();
@@ -286,7 +293,11 @@ public class BoardManager : MonoBehaviour
                     room++;
                     rooms[next.x, next.y] = room;
                 } else {
-                    rooms[next.x, next.y] = rooms[randomRoom.x, randomRoom.y];
+                    try {
+                        rooms[next.x, next.y] = rooms[randomRoom.x, randomRoom.y];
+                    } catch {
+                        Debug.Log(next.x + ", " + next.y + " | " + randomRoom.x + ", " + randomRoom.y);
+                    }
                 }
             }
         }
@@ -458,7 +469,7 @@ public class BoardManager : MonoBehaviour
                     continue;
                 List<Vector2Int> mergedRoom = GetMergedNeighbors(x, y, rooms);
                 mergedRoom.Add(new Vector2Int(x,y));
-                placedFrontDoor = LayoutRoom(bottomLeft, mergedRoom, roomLength, minXY, placedFrontDoor, roof);
+                placedFrontDoor = LayoutRoom(bottomLeft, rooms, mergedRoom, roomLength, minXY, placedFrontDoor, roof);
                 completed.Add(rooms[x,y]);
             }
         }
@@ -466,25 +477,38 @@ public class BoardManager : MonoBehaviour
         return placedFrontDoor;
     }
 
-    private Vector2Int LayoutRoom(Vector2Int bottomLeft, List<Vector2Int> mergedRoom, int roomLength, Vector2Int minXY, Vector2Int placedFrontDoor, Roof roof)
+    private Vector2Int LayoutRoom(Vector2Int bottomLeft, int[,] rooms, List<Vector2Int> mergedRoom, int roomLength, Vector2Int minXY, Vector2Int placedFrontDoor, Roof roof)
     {
         foreach (Vector2Int cell in mergedRoom)
         {
-            bool left = false;
-            bool right = false;
-            bool up = false;
-            bool down = false;
-
+            Connections cells = new Connections(false, false, false, false);
             foreach (Vector2Int other in mergedRoom)
             {
                 if (cell + new Vector2Int(-1, 0) == other)
-                    left = true;
+                    cells.left = true;
                 if (cell + new Vector2Int(1, 0) == other)
-                    right = true;
+                    cells.right = true;
                 if (cell + new Vector2Int(0, 1) == other)
-                    up = true;
+                    cells.up = true;
                 if (cell + new Vector2Int(0, -1) == other)
-                    down = true;
+                    cells.down = true;
+            }
+
+            Connections otherRooms = new Connections(false, false, false, false);
+            for (int x = 0; x < buildingRoomGrid.x; x++) {
+                for (int y = 0; y < buildingRoomGrid.y; y++) {
+                    if (rooms[x,y] == 0)
+                        continue;
+                    Vector2Int other = new Vector2Int(x, y);
+                    if (cell + new Vector2Int(-1, 0) == other)
+                        otherRooms.left = true;
+                    if (cell + new Vector2Int(1, 0) == other)
+                        otherRooms.right = true;
+                    if (cell + new Vector2Int(0, 1) == other)
+                        otherRooms.up = true;
+                    if (cell + new Vector2Int(0, -1) == other)
+                        otherRooms.down = true;
+                }
             }
 
             Vector2Int newCell = cell - minXY;
@@ -493,7 +517,7 @@ public class BoardManager : MonoBehaviour
             Vector2Int offset = new Vector2Int(buildingRoomGrid.x/2 - newCell.x - 1, buildingRoomGrid.y/2 - newCell.y - 1);
             start = start + offset;
             end = end + offset;
-            Debug.Log("Start: " + start + ", End: " + end);
+            // Debug.Log("Start: " + start + ", End: " + end);
 
             for (int x = start.x; x < end.x; x++) {
                 for (int y = start.y; y < end.y; y++) {
@@ -512,16 +536,16 @@ public class BoardManager : MonoBehaviour
                         }
                         continue;
                     }
-                    if (up || y != end.y - 1)
+                    if (otherRooms.up || cells.up || y != end.y - 1)
                         floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
-                    if ((!left && x == start.x) || (!right && x == end.x - 1) || (!up && y == end.y - 1) || (!down && y == start.y)) {
-                        if (placedFrontDoor == new Vector2Int(0,0) && gridPositions.Contains(position - new Vector3Int(0,1,1)) && !down && y == start.y && (x == (start.x*2 + roomLength)/2 || x == (end.x*2 - roomLength)/2)) {
+                    if ((!cells.left && x == start.x) || (!cells.right && x == end.x - 1) || (!cells.up && y == end.y - 1) || (!cells.down && y == start.y)) {
+                        if (placedFrontDoor == new Vector2Int(0,0) && gridPositions.Contains(position - new Vector3Int(0,1,1)) && !otherRooms.down && y == start.y && (x == (start.x*2 + roomLength)/2 || x == (end.x*2 - roomLength)/2)) {
                             Instantiate(basicDoor, position, Quaternion.identity);
                             placedFrontDoor = new Vector2Int(position.x, position.y - 1);
                             gridPositions.Remove(position - new Vector3Int(0, 1, 1));
                         } else {
                             GameObject newWall = Instantiate(wall, position, Quaternion.identity);
-                            if (gridPositions.Contains(position - new Vector3Int(0,1,1)) && !down && y == start.y)
+                            if (gridPositions.Contains(position - new Vector3Int(0,1,1)) && !otherRooms.down && y == start.y)
                                 newWall.GetComponent<Wall>().IsFront();
                         }
                     }
@@ -615,6 +639,19 @@ public class BoardManager : MonoBehaviour
             }
     }
 
+    void SpawnPonds()
+    {
+        for (int i = 0; i < gridPositions.Count; i++)
+        {
+            Vector3Int position = gridPositions[i];
+            double spawnChance = Math.Pow((Math.Max(position.x, columns - position.x) * Math.Max(position.y, rows - position.y)), 3) / Math.Pow((columns * rows), 3);
+            if (Random.value*50 < spawnChance)
+            {
+                PlaceTiles(overGroundTilemap, waterTile, (Vector2Int) position, Random.Range(pondRadius.minimum, pondRadius.maximum + 1), false, null, true);
+            }
+        }
+    }
+
     String GetRoomType(String type)
     {
         Room[] rooms = buildings[type];
@@ -639,12 +676,14 @@ public class BoardManager : MonoBehaviour
             Instantiate(chair, chairPosition, Quaternion.identity);
     }
 
-    void PlaceTiles(Tilemap tilemap, RuleTile tile, Vector2Int position, int radius, bool path = false, Connections connections = null)
+    void PlaceTiles(Tilemap tilemap, RuleTile tile, Vector2Int position, int radius, bool path = false, Connections connections = null, bool pond = false)
     {
         for (int x = 1 - radius; x <= radius - 1; x++) {
             for (int y = 1 - radius; y <= radius - 1; y++) {
                 Vector3Int newPos = new Vector3Int(position.x + x, position.y + y, 0);
                 Vector3Int newPosGrid = new Vector3Int(newPos.x, newPos.y, newPos.y);
+                if ((!pond && (newPos.x < -1 || newPos.x > columns || newPos.y < -1 || newPos.y > rows)) || (pond && (newPos.x < 0 || newPos.x >= columns || newPos.y < 0 || newPos.y >= rows)))
+                    continue;
 
                 bool center = x == 0 && y == 0;
                 bool up = x == 0 && y > 0;
@@ -657,9 +696,13 @@ public class BoardManager : MonoBehaviour
                 if (path && !connected && gridPositions.Contains(newPosGrid) && Random.Range(0,20) == 0)
                     Instantiate(RandomObject(streetObjects), newPosGrid, Quaternion.identity);
                 
-                if ((!path || connected || Random.Range(0,2) == 0)) {
+                if ((!path || connected || Random.Range(0,3) > 0) && (!pond || 0.01 > (Math.Pow((Math.Max(x, 0 - x) * Math.Max(y, 0 - y)), 2) / Math.Pow((2*radius * 2*radius), 2)))) {
                     tilemap.SetTile(newPos, tile);
-                    if (path && gridPositions.Contains(newPosGrid))
+                    if (pond)
+                        Grid[newPos.x][newPos.y] = new Node(new Vector2(newPos.x, newPos.y), false);
+                    if (!path && gridPositions.Contains(newPosGrid) && ((pond && Random.Range(0,5) == 0) || (!center && Random.Range(0,30) == 0)))
+                        plantTilemap.SetTile(newPos, pond ? waterFloraTile : Random.Range(0,5) > 0 ? flowerTile : mushroomTile);
+                    if ((path || pond) && gridPositions.Contains(newPosGrid))
                         gridPositions.Remove(newPosGrid);
                 }
             }
@@ -673,9 +716,9 @@ public class BoardManager : MonoBehaviour
         SpawnPlayers();
         SpawnBuildings();
         SpawnPaths();
+        SpawnPonds();
         LayoutObjectAtCorners(trees);
-        LayoutObjectAtRandom(natureObjects, objectCount.minimum, objectCount.maximum/2);
-        // LayoutObjectAtRandom(streetObjects, objectCount.minimum, objectCount.maximum/2);
+        LayoutObjectAtRandom(natureObjects, objectCount.minimum, objectCount.maximum);
         LayoutObjectAtRandom(enemies, enemyCount.minimum, enemyCount.maximum);
         GameManager.instance.FinishSetup();
         return Grid;

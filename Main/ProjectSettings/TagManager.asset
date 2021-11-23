@@ -15,6 +15,7 @@ TagManager:
   - Chair
   - Character
   - Table
+  - Indicator
   layers:
   - Default
   - TransparentFX
@@ -75,6 +76,9 @@ TagManager:
     locked: 0
   - name: Roof
     uniqueID: 2007457449
+    locked: 0
+  - name: Leaves
+    uniqueID: 3580511559
     locked: 0
   - name: Indicators
     uniqueID: 3866128679

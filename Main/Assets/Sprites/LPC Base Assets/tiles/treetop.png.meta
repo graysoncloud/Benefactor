@@ -254,9 +254,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 4
-        y: 9
+        y: 8
         width: 85
-        height: 114
+        height: 115
       alignment: 9
       pivot: {x: 0.5, y: 0.135}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -291,6 +291,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: treetop_4
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 8
+        width: 85
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2037ad415c4a59542841edcab8750c2b
+      internalID: -1123976426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: treetop_5
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 32
+        width: 85
+        height: 91
+      alignment: 9
+      pivot: {x: 0.5, y: -0.13186814}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ce8011fe0399c44ba7947a1e6bd2480
+      internalID: -614391893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -303,8 +345,10 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       treetop_0: -4849719822153787251
+      treetop_5: -614391893
       treetop_3: 7506719289454322073
       treetop_2: 1806590598938579021
+      treetop_4: -1123976426
       treetop_1: -3222322254821047183
   spritePackingTag: 
   pSDRemoveMatte: 0

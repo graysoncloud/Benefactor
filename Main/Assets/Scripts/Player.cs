@@ -105,11 +105,8 @@ public class Player : Character
         boxCollider.enabled = true;
         foreach (RaycastHit2D hit in hits)
         {
-            if (hit.transform != null)
-            {
-                if (hit.transform.gameObject.tag != "Roof" && hit.transform.gameObject.tag != "Damaging" && hit.transform.gameObject.tag != "Chair" && (hit.transform.gameObject.tag != "Door" || !hit.transform.gameObject.GetComponent<Door>().IsOpen()))
-                    return;
-            }
+            if (hit.transform != null && hit.transform.gameObject.GetComponent<InteractableObject>() != null && !hit.transform.gameObject.GetComponent<InteractableObject>().walkOver)
+                return;
         }
 
         Vector2[] newPath = new Vector2[path.Length + 1];

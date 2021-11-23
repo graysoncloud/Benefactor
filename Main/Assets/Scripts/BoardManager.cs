@@ -696,15 +696,21 @@ public class BoardManager : MonoBehaviour
                 if (path && !connected && gridPositions.Contains(newPosGrid) && Random.Range(0,20) == 0)
                     Instantiate(RandomObject(streetObjects), newPosGrid, Quaternion.identity);
                 
-                if ((!path || connected || Random.Range(0,3) > 0) && (!pond || 0.01 > (Math.Pow((Math.Max(x, 0 - x) * Math.Max(y, 0 - y)), 2) / Math.Pow((2*radius * 2*radius), 2)))) {
+                List<Vector3Int> added = new List<Vector3Int>();
+                if ((path || !pond || gridPositions.Contains(newPosGrid) || newPos.x < 0 || newPos.x >= columns || newPos.y < 0 || newPos.y >= rows) && (!path || connected || Random.Range(0,3) > 0) && (!pond || 0.01 > (Math.Pow((Math.Max(x, 0 - x) * Math.Max(y, 0 - y)), 2) / Math.Pow((2*radius * 2*radius), 2)))) {
                     tilemap.SetTile(newPos, tile);
-                    if (pond && newPos.x >= 0 && newPos.x < columns && newPos.y >= 0 && newPos.y < rows)
+                    added.Add(newPosGrid);
+                    if (pond && newPos.x >= 0 && newPos.x < columns && newPos.y >= 0 && newPos.y < rows) {
                         Grid[newPos.x][newPos.y] = new Node(new Vector2(newPos.x, newPos.y), false);
+                        grassTilemap.SetTile(newPos, grassTile);
+                    }
                     if (!path && gridPositions.Contains(newPosGrid) && ((pond && Random.Range(0,3) == 0) || (!center && Random.Range(0,30) == 0)))
                         if (pond) {
                             bool onEdge = x == 1 - radius || x == radius - 1 || y == 1 - radius || y == radius - 1;
                             for (int i = -1; i <= 1; i++) {
                                 for (int j = -1; j <= 1; j++) {
+                                    Vector3Int neighbor = new Vector3Int(newPos.x + i, newPos.y + j, newPos.y + j);
+                                    // Debug.Log(neighbor.x + ", " + neighbor.y + "; " + added.Contains(neighbor) + " " + gridPositions.Contains(neighbor) + " " + (!added.Contains(neighbor) && !gridPositions.Contains(neighbor)));
                                     if (0.01 <= (Math.Pow((Math.Max(x + i, 0 - x - i) * Math.Max(y + j, 0 - y - j)), 2) / Math.Pow((2*radius * 2*radius), 2)))
                                         onEdge = true;
                                 }

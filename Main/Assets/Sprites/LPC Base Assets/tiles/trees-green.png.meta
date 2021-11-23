@@ -1134,6 +1134,90 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: trees-green_49
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 681
+        width: 50
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a09de8322840794aa67276d038d5602
+      internalID: -1239856434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-green_50
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 697
+        width: 50
+        height: 95
+      alignment: 9
+      pivot: {x: 0.5, y: -0.08421053}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c5084762b456d44680f8810d3da3995
+      internalID: -18815776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-green_51
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 832
+        width: 95
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: -0.17045455}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af238dbc8ef64084b8cfbdb7cd7f985d
+      internalID: -846840807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-green_52
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 802
+        width: 95
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f5508ee5b7944f40b343223129ba3c4
+      internalID: 912956008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1154,6 +1238,7 @@ TextureImporter:
       trees-green_20: -943444171
       trees-green_1: -26166923
       trees-green_42: -1490492035
+      trees-green_51: -846840807
       trees-green_3: -2111447840
       trees-green_14: -283613611
       trees-green_5: -1934902015
@@ -1173,9 +1258,11 @@ TextureImporter:
       trees-green_45: 1331040462
       trees-green_43: -1405013988
       trees-green_27: -447046387
+      trees-green_49: -1239856434
       trees-green_28: -1046981164
       trees-green_12: 1372690676
       trees-green_44: 1585988780
+      trees-green_52: 912956008
       trees-green_9: -1411275479
       trees-green_34: -837324419
       trees-green_7: -179043597
@@ -1183,6 +1270,7 @@ TextureImporter:
       trees-green_48: 31499466
       trees-green_30: 685635
       trees-green_21: 2104084453
+      trees-green_50: -18815776
       trees-green_15: 1365244057
       trees-green_35: 294404244
       trees-green_41: -633007405

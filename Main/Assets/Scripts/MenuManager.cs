@@ -144,7 +144,8 @@ public class MenuManager : MonoBehaviour
     public void ShowPlayerStats(InteractableObject target)
     {
         Character character = target.GetComponent<Character>();
-        portrait.GetComponent<Image>().sprite = (character != null) ? character.portrait : target.GetComponent<SpriteRenderer>().sprite;
+        Tree tree = target.GetComponent<Tree>();
+        portrait.GetComponent<Image>().sprite = (character != null) ? character.portrait : (tree != null) ? tree.overview : target.GetComponent<SpriteRenderer>().sprite;
         characterName.GetComponent<Text>().text = (character != null) ? character.name : target.name
             .Replace("(Clone)", "").Replace("1", "").Replace("2", "").Replace("3", "").Replace("4", "")
             .Replace("5", "").Replace("6", "").Replace("7", "").Replace("8", "").Replace("9", "").Replace("0", "");

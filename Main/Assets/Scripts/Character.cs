@@ -665,10 +665,6 @@ public class Character : InteractableObject
 
         // animator.SetTrigger("enemyAttack");
 
-        if (toAttack.GetHealth() <= 0)
-        {
-            rationale -= (toAttack.GetReputation() * 0.1);
-        }
         else
         {
             Character character = toAttack.gameObject.GetComponent<Character>();

@@ -88,7 +88,7 @@ public class Chair : InteractableObject
 
     protected override void UpdatePosition()
     {
-        GameManager.instance.UpdateNode(transform.position, true, 0);
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y + offset);
+        base.UpdatePosition();
     }
 }

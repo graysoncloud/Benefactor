@@ -10,10 +10,10 @@ public class InteractableObject : MonoBehaviour
     public bool damageable;
     public bool repairable;
     public bool leavesCorpse; // Corpse refers to inanimate objects as well- a destroyed lever is a "corpse"
+    public bool walkOver;
     public Sprite damagedSprite;
     public Sprite corpseSprite;
     public GameObject fire;
-    public int reputation;
 
     protected SpriteRenderer spriteRenderer;
     protected double health;
@@ -92,11 +92,6 @@ public class InteractableObject : MonoBehaviour
         return health < maxHealth;
     }
 
-    public virtual int GetReputation()
-    {
-        return reputation;
-    }
-
     public virtual SortedSet<String> GetActions()
     {
         receiveActions.Clear();
@@ -122,6 +117,6 @@ public class InteractableObject : MonoBehaviour
 
     protected virtual void UpdatePosition()
     {
-        GameManager.instance.UpdateNode(transform.position, damageable, (float)health);
+        GameManager.instance.UpdateNode(transform.position, damageable, walkOver ? 0 : (float)health);
     }
 }

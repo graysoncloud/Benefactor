@@ -1134,6 +1134,90 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: trees-orange_49
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 697
+        width: 50
+        height: 95
+      alignment: 9
+      pivot: {x: 0.5, y: -0.08421053}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a2d02a2355530041a63f0dda3f36fef
+      internalID: 1269946389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-orange_50
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 681
+        width: 50
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ae82feb1984a0e45931b86889330036
+      internalID: -975435030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-orange_51
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 802
+        width: 95
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91c7476ccd42f7042a25720a184d1839
+      internalID: 1752344890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trees-orange_52
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 832
+        width: 95
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: -0.17045455}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60f07f8d5a8b17e4fafc70e276b2c201
+      internalID: 390993831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1154,7 +1238,9 @@ TextureImporter:
       trees-orange_14: -1455606899
       trees-orange_10: -363716348
       trees-orange_36: 748898383
+      trees-orange_51: 1752344890
       trees-orange_18: 101336295
+      trees-orange_50: -975435030
       trees-orange_29: -932243097
       trees-orange_46: -663312682
       trees-orange_23: 713310029
@@ -1182,6 +1268,8 @@ TextureImporter:
       trees-orange_8: -1031583396
       trees-orange_16: -1574239223
       trees-orange_7: 1311779586
+      trees-orange_52: 390993831
+      trees-orange_49: 1269946389
       trees-orange_45: -1303400141
       trees-orange_13: -1991163085
       trees-orange_35: -1645157711

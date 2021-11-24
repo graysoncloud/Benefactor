@@ -31,6 +31,7 @@ public class Door : InteractableObject
     void Open()
     {
         open = true;
+        walkOver = true;
         animator.SetBool("Open", true);
         ErasePosition();
     }
@@ -38,6 +39,7 @@ public class Door : InteractableObject
     void Close()
     {
         open = false;
+        walkOver = false;
         animator.SetBool("Open", false);
         UpdatePosition();
     }

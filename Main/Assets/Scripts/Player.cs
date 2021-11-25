@@ -221,7 +221,7 @@ public class Player : Character
             return;
         }
 
-        menuManager.ShowInventory(type, inventory, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
+        menuManager.ShowPlayerInventory(type, inventory, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
         gettingItem = true;
         Debug.Log("Player waiting for item input");
     }
@@ -234,7 +234,7 @@ public class Player : Character
             if (storage != null)
             {
                 storage.Remove(item);
-                menuManager.ShowInventory("", inventory, 0, storage.items);
+                menuManager.ShowOtherInventory("", inventory, 0, storage.items);
             }
             else
             {
@@ -247,14 +247,15 @@ public class Player : Character
                     return;
                 }
                 character.Remove(item);
-                menuManager.ShowInventory("", inventory, 0, character.inventory);
+                menuManager.ShowOtherInventory("", inventory, 0, character.inventory);
             }
             Pickup(item);
+            menuManager.ShowPlayerInventory("", inventory, 0, inventory);
             return;
         }
         
         gettingItem = false;
-        menuManager.HideInventory();
+        menuManager.HideInventories();
         base.ChooseItem(item);
     }
 
@@ -264,7 +265,8 @@ public class Player : Character
         GameManager.instance.CameraTarget(toLoot.gameObject);
         Storage storage = toLoot.gameObject.GetComponent<Storage>();
         storage.Open();
-        menuManager.ShowInventory("", inventory, 0, storage.items);
+        menuManager.ShowPlayerInventory("", inventory, 0, inventory);
+        menuManager.ShowOtherInventory("", inventory, 0, storage.items);
     }
 
     protected override void Steal(InteractableObject toStealFrom)
@@ -273,7 +275,8 @@ public class Player : Character
         this.weightStolen = 0;
         GameManager.instance.CameraTarget(toStealFrom.gameObject);
         Character character = toStealFrom.gameObject.GetComponent<Character>();
-        menuManager.ShowInventory("", inventory, 0, character.inventory);
+        menuManager.ShowPlayerInventory("", inventory, 0, inventory);
+        menuManager.ShowOtherInventory("", inventory, 0, character.inventory);
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)
@@ -329,7 +332,7 @@ public class Player : Character
             Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
             if (storage != null)
                 storage.Close();
-            menuManager.HideInventory();
+            menuManager.HideInventories();
             menuManager.HideBackButton();
             StartCoroutine(NextStep());
             return;
@@ -365,7 +368,7 @@ public class Player : Character
         }
         else if (gettingItem)
         {
-            menuManager.HideInventory();
+            menuManager.HideInventories();
             gettingItem = false;
         }
         StartCoroutine(NextStep());

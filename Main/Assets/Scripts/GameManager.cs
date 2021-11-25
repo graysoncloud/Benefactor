@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public List<List<Node>> Grid;
 
     public int level = 0;
-    public float levelStartDelay = 2f;
+    public float levelStartDelay;
     public float turnDelay;
     public static GameManager instance = null;
 
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
             gettingNextCharacter = GameObject.Find("MouseManager").GetComponent<MouseManager>().GetNextCharacter(GetPlayableCharacters());
             if (!gettingNextCharacter)
             {
-                StartTurn();
+                StartCoroutine(StartTurn());
             }
         }
 
@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
         int i = new System.Random().Next(nonplayableCharacters.Count);
         activeCharacter = nonplayableCharacters[i];
 
-        StartTurn();
+        StartCoroutine(StartTurn(true));
     }
 
     public IEnumerator NextTurn()
@@ -178,16 +178,18 @@ public class GameManager : MonoBehaviour
         {
             PlayerSelectCharacter();
         } else {
-            yield return new WaitForSeconds(turnDelay);
+            //yield return new WaitForSeconds(turnDelay);
             AISelectCharacter();
         }
     }
 
-    private void StartTurn()
+    private IEnumerator StartTurn(bool delay = false)
     {
         Debug.Log("Active Character: " + activeCharacter);
         CameraTarget(activeCharacter.gameObject);
         GameObject.Find("Main Camera").GetComponent<FollowPlayer>().FollowTarget();
+        if (delay)
+            yield return new WaitForSeconds(turnDelay);
         activeCharacter.StartTurn();
     }
 

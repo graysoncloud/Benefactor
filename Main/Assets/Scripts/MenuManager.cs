@@ -11,9 +11,10 @@ using UnityEditor;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject inventoryUI;
-    public Transform itemsParent;
-    public InventorySlot[] slots;
+    public GameObject playerInventory;
+    public GameObject otherInventory;
+    public InventorySlot[] playerSlots;
+    public InventorySlot[] otherSlots;
     public GameObject playerStats;
     public GameObject portrait;
     public Text characterName;
@@ -34,12 +35,6 @@ public class MenuManager : MonoBehaviour
 
     void Awake()
     {
-        // portrait = GameObject.Find("StatsPortrait");
-        // characterName = GameObject.Find("StatsCharacterName"); //.GetComponent<Text>();
-        // healthText = GameObject.Find("StatsHealthText").GetComponent<Text>();
-        // healthText.text = "Health: " + health;
-        
-        // actionMenu = GameObject.Find("ActionPanel").GetComponent<CanvasGroup>();
         actionButtons = new Dictionary<String, GameObject>();
         actionButtons.Add("Attack", GameObject.Find("AttackButton"));
         actionButtons.Add("Talk", GameObject.Find("TalkButton"));
@@ -52,16 +47,14 @@ public class MenuManager : MonoBehaviour
         actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
 
-        // inventoryUI = GameObject.Find("InventoryParent");
-        inventoryUI.transform.position = new Vector2(Screen.width / 2, Screen.height / 4);
-        // itemsParent = GameObject.Find("Inventory").GetComponent<Transform>();
-        slots = itemsParent.GetComponentsInChildren<InventorySlot>();
-        HideInventory();
+        playerInventory.transform.position = new Vector2(Screen.width / 2, Screen.height / 4);
+        otherInventory.transform.position = new Vector2(Screen.width / 2, Screen.height / 4);
+        playerSlots = playerInventory.GetComponentsInChildren<InventorySlot>();
+        otherSlots = otherInventory.GetComponentsInChildren<InventorySlot>();
+        HideInventories();
 
-        // playerStats = GameObject.Find("PlayerStats");
         HidePlayerStats();
 
-        // backButton = GameObject.Find("BackButton");
         backButton.transform.position = new Vector2(Screen.width*0.9f, Screen.height*0.1f);
         HideBackButton();
 
@@ -113,7 +106,7 @@ public class MenuManager : MonoBehaviour
         return inventory.FindAll(e => e.type == type);
     }
 
-    public void ShowInventory(String type, List<HoldableObject> inventory, int range = 0, List<HoldableObject> items = null)
+    public void ShowPlayerInventory(String type, List<HoldableObject> inventory, int range = 0, List<HoldableObject> items = null)
     {
         if (items == null)
             items = SortedInventory(type, inventory);
@@ -122,23 +115,50 @@ public class MenuManager : MonoBehaviour
         {
             if (items != null && (range == 0 || items[i].range >= range))
             {
-                slots[j].AddItem(items[i]);
+                playerSlots[j].AddItem(items[i]);
                 j++;
             }
         }
-        while (j < slots.Length)
+        while (j < playerSlots.Length)
         {
-            slots[j].ClearSlot();
+            playerSlots[j].ClearSlot();
             j++;
         }
 
-        inventoryUI.SetActive(true);
+        //playerInventory.GetComponent<RectTransform>().transform.localPosition = new Vector2(0, 0);
+        playerInventory.SetActive(true);
+        ShowBackButton();
+    }
+    public void ShowOtherInventory(String type, List<HoldableObject> inventory, int range = 0, List<HoldableObject> items = null)
+    {
+        if (items == null)
+            items = SortedInventory(type, inventory);
+        int j = 0;
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items != null && (range == 0 || items[i].range >= range))
+            {
+                otherSlots[j].AddItem(items[i]);
+                j++;
+            }
+        }
+        while (j < otherSlots.Length)
+        {
+            otherSlots[j].ClearSlot();
+            j++;
+        }
+
+        playerInventory.GetComponent<RectTransform>().transform.localPosition = new Vector2(-120, 0);
+        otherInventory.GetComponent<RectTransform>().transform.localPosition = new Vector2(120, 0);
+        otherInventory.SetActive(true);
         ShowBackButton();
     }
 
-    public void HideInventory()
+    public void HideInventories()
     {
-        inventoryUI.SetActive(false);
+        playerInventory.SetActive(false);
+        otherInventory.SetActive(false);
+        playerInventory.GetComponent<RectTransform>().transform.localPosition = new Vector2(0, 0);
     }
 
     public void ShowPlayerStats(InteractableObject target)

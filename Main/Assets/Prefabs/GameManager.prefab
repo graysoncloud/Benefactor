@@ -190,8 +190,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 0
-  levelStartDelay: 2
-  turnDelay: 0.5
+  levelStartDelay: 0
+  turnDelay: 1
   characters: []
   gettingNextCharacter: 0
   activeCharacter: {fileID: 0}

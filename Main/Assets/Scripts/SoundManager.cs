@@ -14,6 +14,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip buttonPressed;
 
     public AudioClip takeDamage;
+    public AudioClip leftFoot;
+    public AudioClip rightFoot;
 
     // Start is called before the first frame update
     void Awake()
@@ -50,8 +52,15 @@ public class SoundManager : MonoBehaviour
 
     public void TakeDamage()
     {
-        Debug.Log("PLAYING TAKE DAMAGE");
         efxSource.clip = takeDamage;
+        efxSource.Play();
+    }
+    public IEnumerator Walk(float moveTime)
+    {
+        efxSource.clip = leftFoot;
+        efxSource.Play();
+        yield return new WaitForSeconds(moveTime/2);
+        efxSource.clip = rightFoot;
         efxSource.Play();
     }
 

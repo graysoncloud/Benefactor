@@ -2305,6 +2305,8 @@ MonoBehaviour:
   highPitchRange: 1.05
   buttonPressed: {fileID: 8300000, guid: dfb8a62b08929ce4fbb23230c114f8c0, type: 3}
   takeDamage: {fileID: 8300000, guid: ec80af43e49783643ae2563919592bb9, type: 3}
+  leftFoot: {fileID: 8300000, guid: f051fb10926c33d4f96e23499034cae5, type: 3}
+  rightFoot: {fileID: 8300000, guid: 3d21edc21083c6940adc172e7ece0dfd, type: 3}
 --- !u!82 &640524295
 AudioSource:
   m_ObjectHideFlags: 0

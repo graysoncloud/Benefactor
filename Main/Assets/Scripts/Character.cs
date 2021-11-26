@@ -273,6 +273,7 @@ public class Character : InteractableObject
 
     protected IEnumerator SmoothMovement(Vector2 end)
     {
+        StartCoroutine(SoundManager.instance.Walk(moveTime));
         float sqrRemainingDistance = ((Vector2)transform.position - end).sqrMagnitude;
         while (sqrRemainingDistance > float.Epsilon)
         {

@@ -2303,6 +2303,12 @@ MonoBehaviour:
   musicSource: {fileID: 640524295}
   lowPitchRange: 0.95
   highPitchRange: 1.05
+  zones:
+  - {fileID: 8300000, guid: a83c597dbd250f5468709e4ba39189bc, type: 3}
+  - {fileID: 8300000, guid: fcdf28d11c41e3341bd5dd5562976365, type: 3}
+  - {fileID: 8300000, guid: 81db9ece1eb28ca4cb97281899fc7bc5, type: 3}
+  - {fileID: 8300000, guid: 65b762293e27cd147b53bf1f79eed591, type: 3}
+  - {fileID: 8300000, guid: 02b46c38d5ce689449fe3ac9da6521c0, type: 3}
   buttonPressed: {fileID: 8300000, guid: dfb8a62b08929ce4fbb23230c114f8c0, type: 3}
   takeDamage: {fileID: 8300000, guid: ec80af43e49783643ae2563919592bb9, type: 3}
   leftFoot: {fileID: 8300000, guid: f051fb10926c33d4f96e23499034cae5, type: 3}
@@ -2317,9 +2323,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8fea4f1d0f3498142a29c713a8edbb96, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 81db9ece1eb28ca4cb97281899fc7bc5, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0

@@ -11,6 +11,8 @@ public class SoundManager : MonoBehaviour
     public float lowPitchRange = .95f;
     public float highPitchRange = 1.05f;
 
+    public AudioClip[] zones;
+
     public AudioClip buttonPressed;
 
     public AudioClip takeDamage;
@@ -42,6 +44,12 @@ public class SoundManager : MonoBehaviour
         efxSource.pitch = randomPitch;
         efxSource.clip = clips[randomIndex];
         efxSource.Play();
+    }
+
+    public void PlayMusic(int zone)
+    {
+        musicSource.clip = zones[zone - 1];
+        musicSource.Play();
     }
 
     public void ButtonPress()

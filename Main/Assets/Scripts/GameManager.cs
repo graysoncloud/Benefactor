@@ -109,6 +109,7 @@ public class GameManager : MonoBehaviour
         characters.Clear();
         Grid = boardScript.SetupScene(level);
         round = 0;
+        SoundManager.instance.PlayMusic(1);
     }
 
     private void HideLevelImage()

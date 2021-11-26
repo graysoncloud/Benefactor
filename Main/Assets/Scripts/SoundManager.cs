@@ -11,7 +11,9 @@ public class SoundManager : MonoBehaviour
     public float lowPitchRange = .95f;
     public float highPitchRange = 1.05f;
 
+    public AudioClip buttonPressed;
 
+    public AudioClip takeDamage;
 
     // Start is called before the first frame update
     void Awake()
@@ -37,6 +39,19 @@ public class SoundManager : MonoBehaviour
 
         efxSource.pitch = randomPitch;
         efxSource.clip = clips[randomIndex];
+        efxSource.Play();
+    }
+
+    public void ButtonPress()
+    {
+        efxSource.clip = buttonPressed;
+        efxSource.Play();
+    }
+
+    public void TakeDamage()
+    {
+        Debug.Log("PLAYING TAKE DAMAGE");
+        efxSource.clip = takeDamage;
         efxSource.Play();
     }
 

@@ -85,6 +85,7 @@ public class Character : InteractableObject
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
+        //inverseMoveTime = 1 / moveTime;
         objectives = new List<Objective>();
         paths = new Dictionary<Vector2, Vector2[]>();
         actableObjects = new Dictionary<String, List<InteractableObject>>();
@@ -109,9 +110,10 @@ public class Character : InteractableObject
         StartCoroutine(NextStep());
     }
 
-    protected virtual IEnumerator NextStep()
+    protected virtual IEnumerator NextStep(bool delay = false)
     {
-        // yield return new WaitForSeconds(actionDelay);
+        if (delay)
+            yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
 
@@ -274,7 +276,7 @@ public class Character : InteractableObject
         float sqrRemainingDistance = ((Vector2)transform.position - end).sqrMagnitude;
         while (sqrRemainingDistance > float.Epsilon)
         {
-            Vector2 newPosition = Vector2.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime * 10);
+            Vector2 newPosition = Vector2.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime);
             rb2D.MovePosition(newPosition);
             sqrRemainingDistance = ((Vector2)transform.position - end).sqrMagnitude;
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
@@ -505,11 +507,11 @@ public class Character : InteractableObject
         {
             case "Weapon":
                 Attack(currentObjective.target, item);
-                StartCoroutine(NextStep());
+                StartCoroutine(NextStep(true));
                 break;
             case "Medicine":
                 Heal(currentObjective.target, item);
-                StartCoroutine(NextStep());
+                StartCoroutine(NextStep(true));
                 break;
             case "Key":
                 Unlock(currentObjective.target, item);
@@ -647,7 +649,7 @@ public class Character : InteractableObject
     {
         GameManager.instance.CameraTarget(toAttack.gameObject);
 
-        toAttack.TakeDamage(weapon.amount * (weapon.range == 1 ? strength : 1) * (rationale / 50));
+        StartCoroutine(toAttack.TakeDamage(weapon.amount * (weapon.range == 1 ? strength : 1) * (rationale / 50)));
 
         // Check for subdued
         if (toAttack.GetHealth() / toAttack.maxHealth < subduedRatio)
@@ -739,7 +741,7 @@ public class Character : InteractableObject
         Collider2D hitCollider = Physics2D.OverlapCircle((Vector2)transform.position, 0.1f);
         boxCollider.enabled = true;
         if (!end && hitCollider != null && hitCollider.gameObject.tag == "Damaging")
-            TakeDamage(hitCollider.gameObject.GetComponent<Damaging>().damagePerTurn);
+            StartCoroutine(TakeDamage(hitCollider.gameObject.GetComponent<Damaging>().damagePerTurn));
         CheckRoof();
     }
 

@@ -159,11 +159,15 @@ MonoBehaviour:
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
+  healthBar: {fileID: -3089663232832473053, guid: 9796aa1dfd0ae534ea62b22b00df3157,
+    type: 3}
+  soundManager: {fileID: 5515076114971423924, guid: 5a89557ea0ac4dd40b89861508ed4073,
+    type: 3}
   playable: 1
   portrait: {fileID: 4713117647238611514, guid: 3be1647184907a34fb2a1ad7c89180f8,
     type: 3}
   name: Big Brother
-  moveTime: 0.3
+  moveTime: 0.1
   totalMoves: 5
   talkingRange: 5
   totalActions: 1

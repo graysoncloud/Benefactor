@@ -296,7 +296,7 @@ public class BoardManager : MonoBehaviour
                     try {
                         rooms[next.x, next.y] = rooms[randomRoom.x, randomRoom.y];
                     } catch {
-                        Debug.Log(next.x + ", " + next.y + " | " + randomRoom.x + ", " + randomRoom.y);
+                        //Debug.Log(next.x + ", " + next.y + " | " + randomRoom.x + ", " + randomRoom.y);
                     }
                 }
             }
@@ -314,7 +314,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (rooms[coords.x, coords.y] > 0)
                         neighbor = true;
-                    Debug.Log("Room: (" + x + ", " + y + ") -> " + rooms[x, y] + "; Other: (" + coords.x + ", " + coords.y + ") -> " + rooms[coords.x, coords.y]);
+                    //Debug.Log("Room: (" + x + ", " + y + ") -> " + rooms[x, y] + "; Other: (" + coords.x + ", " + coords.y + ") -> " + rooms[coords.x, coords.y]);
                 }
             }
         }
@@ -407,7 +407,7 @@ public class BoardManager : MonoBehaviour
         Vector2Int widthHeight = GetBuildingWidthHeight(rooms, roomLength);
         Vector2Int minXY = GetBuildingMinXY(rooms, roomLength);
         Vector2Int bottomLeft = new Vector2Int(center.x - widthHeight.x/2, center.y - widthHeight.y/2);
-        Debug.Log(widthHeight.x + ", " + widthHeight.y + " " + bottomLeft.x + ", " + bottomLeft.y + " " + (bottomLeft.x + widthHeight.x) + ", " + (bottomLeft.y + widthHeight.y));
+        //Debug.Log(widthHeight.x + ", " + widthHeight.y + " " + bottomLeft.x + ", " + bottomLeft.y + " " + (bottomLeft.x + widthHeight.x) + ", " + (bottomLeft.y + widthHeight.y));
         List<int> completed = new List<int>() { 0 };
 
         for (int x = 0; x < buildingRoomGrid.x; x++) {
@@ -436,7 +436,7 @@ public class BoardManager : MonoBehaviour
             Vector2Int spacing = new Vector2Int(buildingDistance.minimum, buildingDistance.minimum);
             start = start + offset - spacing;
             end = end + offset + spacing;
-            Debug.Log("Start: " + start + ", End: " + end);
+            //Debug.Log("Start: " + start + ", End: " + end);
 
             for (int x = start.x; x < end.x; x++) {
                 for (int y = start.y; y < end.y; y++) {
@@ -459,7 +459,7 @@ public class BoardManager : MonoBehaviour
         Vector2Int widthHeight = GetBuildingWidthHeight(rooms, roomLength);
         Vector2Int minXY = GetBuildingMinXY(rooms, roomLength);
         Vector2Int bottomLeft = new Vector2Int(center.x - widthHeight.x/2, center.y - widthHeight.y/2);
-        Debug.Log(widthHeight.x + ", " + widthHeight.y + " " + bottomLeft.x + ", " + bottomLeft.y + " " + (bottomLeft.x + widthHeight.x) + ", " + (bottomLeft.y + widthHeight.y));
+        //Debug.Log(widthHeight.x + ", " + widthHeight.y + " " + bottomLeft.x + ", " + bottomLeft.y + " " + (bottomLeft.x + widthHeight.x) + ", " + (bottomLeft.y + widthHeight.y));
         List<int> completed = new List<int>() { 0 };
         Vector2Int placedFrontDoor = new Vector2Int(0,0);
 

@@ -55,7 +55,7 @@ public class Player : Character
         }
     }
 
-    protected override IEnumerator NextStep()
+    protected override IEnumerator NextStep(bool delay = false)
     {
         if (!playable) {
             yield return base.NextStep();
@@ -65,7 +65,8 @@ public class Player : Character
         if (GameManager.instance.dialogueInProgress)
             yield return new WaitUntil(() => GameManager.instance.dialogueInProgress == false);
 
-        // yield return new WaitForSeconds(actionDelay);
+        if (delay)
+            yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
         if ((movesLeft != totalMoves || actionsLeft != totalActions) && lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
@@ -302,20 +303,6 @@ public class Player : Character
         {
             GameManager.instance.GameOver();
         }
-    }
-
-    public override void TakeDamage (double loss)
-    {
-        base.TakeDamage(loss);
-        // menuManager.UpdateHealth(health);
-        // animator.SetTrigger("playerHit");
-        CheckIfGameOver();
-    }
-
-    public override void Heal (double amount)
-    {
-        base.Heal(amount);
-        // menuManager.UpdateHealth(health);
     }
 
     protected override void TalkTo(InteractableObject toTalkTo)

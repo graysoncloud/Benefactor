@@ -125,7 +125,6 @@ public class MenuManager : MonoBehaviour
             j++;
         }
 
-        //playerInventory.GetComponent<RectTransform>().transform.localPosition = new Vector2(0, 0);
         playerInventory.SetActive(true);
         ShowBackButton();
     }

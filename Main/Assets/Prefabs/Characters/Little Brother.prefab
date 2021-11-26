@@ -159,11 +159,13 @@ MonoBehaviour:
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
+  healthBar: {fileID: -3089663232832473053, guid: 9796aa1dfd0ae534ea62b22b00df3157,
+    type: 3}
   playable: 1
   portrait: {fileID: -8609881113391994360, guid: 2ae95c326515d634892e2254650e9d9a,
     type: 3}
   name: Little Brother
-  moveTime: 0.3
+  moveTime: 0.1
   totalMoves: 5
   talkingRange: 5
   totalActions: 1

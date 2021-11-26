@@ -135,5 +135,7 @@ MonoBehaviour:
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
+  healthBar: {fileID: -3089663232832473053, guid: 9796aa1dfd0ae534ea62b22b00df3157,
+    type: 3}
   leaves: {fileID: -8989559677569179950, guid: 035f0286cad6c834d823aafb3652c45f, type: 3}
   overview: {fileID: 2104084453, guid: 75a773153a522834eb52c2ea88159503, type: 3}

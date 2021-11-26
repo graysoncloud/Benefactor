@@ -14,6 +14,7 @@ public class InteractableObject : MonoBehaviour
     public Sprite damagedSprite;
     public Sprite corpseSprite;
     public GameObject fire;
+    public HealthBar healthBar;
 
     protected SpriteRenderer spriteRenderer;
     protected double health;
@@ -29,6 +30,7 @@ public class InteractableObject : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
         health = maxHealth;
+        healthBar = Instantiate(healthBar, transform.position, Quaternion.identity);
         //leavesCorpse = false;
         isCorpse = false;
         receiveActions = new SortedSet<String>();
@@ -42,12 +44,14 @@ public class InteractableObject : MonoBehaviour
      * 
      * @param damage How much health the action takes away
      */
-    public virtual void TakeDamage(double damage)
+    public virtual IEnumerator TakeDamage(double damage)
     {
-        if (!damageable) return;
-
-        spriteRenderer.sprite = damagedSprite;
+        if (!damageable) yield break;
+        if (damagedSprite != null)
+            spriteRenderer.sprite = damagedSprite;
         health = Math.Max(health - damage, 0);
+        SoundManager.instance.TakeDamage();
+        yield return StartCoroutine(UpdateHealthBar());
 
         if (health <= 0)
         {
@@ -75,10 +79,11 @@ public class InteractableObject : MonoBehaviour
         Debug.Log(this + " took " + damage + " damage");
     }
 
-    public virtual void Heal(double amount)
+    public void Heal(double amount)
     {
         if (!damageable) return;
         health = Math.Min(health + amount, maxHealth);
+        StartCoroutine(UpdateHealthBar());
         UpdatePosition();
     }
 
@@ -118,5 +123,11 @@ public class InteractableObject : MonoBehaviour
     protected virtual void UpdatePosition()
     {
         GameManager.instance.UpdateNode(transform.position, damageable, walkOver ? 0 : (float)health);
+    }
+
+    protected IEnumerator UpdateHealthBar()
+    {
+        Debug.Log("Updating Health");
+        yield return StartCoroutine(healthBar.UpdateHealth((int)health, (int)maxHealth, transform.position));
     }
 }

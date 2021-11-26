@@ -198,6 +198,8 @@ MonoBehaviour:
   dialogueInProgress: 0
   round: 0
   playerStart: 1
+  soundManager: {fileID: 6659658067695073621, guid: 5a89557ea0ac4dd40b89861508ed4073,
+    type: 3}
 --- !u!156049354 &8936469483842678999
 Grid:
   m_ObjectHideFlags: 0

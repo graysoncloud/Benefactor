@@ -132,11 +132,13 @@ MonoBehaviour:
   damageable: 1
   repairable: 0
   leavesCorpse: 0
-  walkOver: 1
+  walkOver: 0
   damagedSprite: {fileID: 0}
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
-  front: {fileID: 0}
-  back: {fileID: 0}
-  left: {fileID: 0}
-  right: {fileID: 0}
+  healthBar: {fileID: -3089663232832473053, guid: 9796aa1dfd0ae534ea62b22b00df3157,
+    type: 3}
+  front: {fileID: 2587689986122019587, guid: e66137d2d8f553644a2cdbfcedf43dce, type: 3}
+  back: {fileID: 1648346839519097038, guid: e66137d2d8f553644a2cdbfcedf43dce, type: 3}
+  left: {fileID: -5222508409296595901, guid: e66137d2d8f553644a2cdbfcedf43dce, type: 3}
+  right: {fileID: 6374672493093521189, guid: e66137d2d8f553644a2cdbfcedf43dce, type: 3}

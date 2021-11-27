@@ -127,7 +127,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 826e66afc6548ce4396b167ad9c6bfa3, type: 3}
   type: Weapon
   name: Play Bow
-  uses: 20
+  uses: 30
   amount: 2
   range: 3
   blastRadius: 0

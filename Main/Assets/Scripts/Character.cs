@@ -93,6 +93,11 @@ public class Character : InteractableObject
         allies.Add(this);
         enemies = new List<InteractableObject>();
 
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            inventory[i] = Instantiate(inventory[i]);
+        }
+
         base.Start();
     }
 

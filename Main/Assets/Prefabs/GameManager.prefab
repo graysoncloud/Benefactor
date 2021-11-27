@@ -98,7 +98,7 @@ MonoBehaviour:
     maximum: 20
   enemyCount:
     minimum: 4
-    maximum: 7
+    maximum: 4
   buildingCount:
     minimum: 3
     maximum: 8

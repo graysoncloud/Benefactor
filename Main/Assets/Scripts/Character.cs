@@ -85,7 +85,6 @@ public class Character : InteractableObject
 
         animator = GetComponent<Animator>();
         inverseMoveTime = 1 / moveTime;
-        //inverseMoveTime = 1 / moveTime;
         objectives = new List<Objective>();
         paths = new Dictionary<Vector2, Vector2[]>();
         actableObjects = new Dictionary<String, List<InteractableObject>>();
@@ -94,8 +93,6 @@ public class Character : InteractableObject
         allies.Add(this);
         enemies = new List<InteractableObject>();
 
-        // For testing purposes- should be moved to custom classes for NPCs
-        maxHealth = 10;
         base.Start();
     }
 

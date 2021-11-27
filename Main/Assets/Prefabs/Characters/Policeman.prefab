@@ -171,7 +171,7 @@ MonoBehaviour:
   Collisions:
     serializedVersion: 2
     m_Bits: 256
-  maxHealth: 2
+  maxHealth: 4
   damageable: 1
   repairable: 1
   leavesCorpse: 0

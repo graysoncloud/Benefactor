@@ -176,6 +176,15 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator NextTurn()
     {
+        if (GetNonplayableCharacters(true).Count == 0)
+        {
+            LevelOver(true);
+            yield break;
+        } else if (GetPlayableCharacters(true).Count == 0) {
+            LevelOver(false);
+            yield break;
+        }
+
         if (GetPlayableCharacters().Count == 0)
         {
             if (playerStart)
@@ -186,7 +195,7 @@ public class GameManager : MonoBehaviour
                 yield break;
             }
         }
-
+        
         if (GetNonplayableCharacters().Count == 0)
         {
             if (!playerStart)
@@ -253,12 +262,12 @@ public class GameManager : MonoBehaviour
         return playableCharacters;
     }
 
-    private List<Player> GetNonplayableCharacters()
+    private List<Player> GetNonplayableCharacters(bool ignoreGone = false)
     {
         List<Player> nonplayableCharacters = new List<Player>();
         foreach (Player character in characters)
         {
-            if (!character.playable && !character.hasGone)
+            if (!character.playable && (ignoreGone || !character.hasGone))
             //if (!character.playable && !character.hasGone && character.currentObjective != null && character.objectives.Count > 0)
             {
                 nonplayableCharacters.Add(character);
@@ -266,6 +275,14 @@ public class GameManager : MonoBehaviour
         }
 
         return nonplayableCharacters;
+    }
+
+    private void LevelOver(bool won)
+    {
+        objectiveText.text = won ? "Objective Complete" : "Objective Failed";
+        objectiveText.alignment = TextAnchor.MiddleCenter;
+        objectiveText.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        objectiveText.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
     }
 
     public void RemoveDeadCharacters()

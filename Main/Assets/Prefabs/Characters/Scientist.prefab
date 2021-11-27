@@ -165,13 +165,15 @@ MonoBehaviour:
   portrait: {fileID: 2423972551562549796, guid: a54246bf0c985bb4089f676138635e02,
     type: 3}
   name: Scientist
-  moveTime: 0.1
+  moveTime: 0.15
   totalMoves: 3
   talkingRange: 1
   totalActions: 1
   actionDelay: 0.5
   strength: 1
-  rationale: 100
+  accuracy: 0
+  dexterity: 0
+  agility: 0
   isTurn: 0
   hasGone: 0
   isMoving: 0

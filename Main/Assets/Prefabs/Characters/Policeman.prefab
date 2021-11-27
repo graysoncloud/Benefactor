@@ -185,13 +185,15 @@ MonoBehaviour:
   portrait: {fileID: 6715957911979874120, guid: 6a7677d8416a9614fa61186e719ed76f,
     type: 3}
   name: Policeman
-  moveTime: 0.1
+  moveTime: 0.15
   totalMoves: 4
   talkingRange: 1
   totalActions: 1
   actionDelay: 0.5
   strength: 1
-  rationale: 100
+  accuracy: 0
+  dexterity: 0
+  agility: 0
   isTurn: 0
   hasGone: 0
   isMoving: 0

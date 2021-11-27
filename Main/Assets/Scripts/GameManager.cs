@@ -84,6 +84,8 @@ public class GameManager : MonoBehaviour
             }
         }
         GetPlayableCharacters(true)[0].Enemy(GetNonplayableCharacters()[0]);
+        doingSetup = false;
+        SoundManager.instance.PlayMusic(1);
     }
 
     public void CheckRoofs() {
@@ -125,22 +127,21 @@ public class GameManager : MonoBehaviour
         objectiveText.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
         objectiveText.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
         objectiveText.gameObject.SetActive(true);
-        Invoke("MoveObjectiveText", levelStartDelay);
+        //Invoke("UpdateObjectiveText", levelStartDelay);
         Invoke("SetAlliances", levelStartDelay);
 
         characters.Clear();
         Grid = boardScript.SetupScene(level);
         round = 0;
-        SoundManager.instance.PlayMusic(1);
+        SoundManager.instance.Startup();
     }
 
-    private void MoveObjectiveText()
+    private void UpdateObjectiveText()
     {
-        //objectiveText.gameObject.SetActive(false);
+        objectiveText.text = "Enemies Remaining: " + GetNonplayableCharacters(true).Count;
         objectiveText.alignment = TextAnchor.MiddleRight;
         objectiveText.GetComponent<RectTransform>().localScale = new Vector3(0.5f, 0.5f, 1);
         objectiveText.GetComponent<RectTransform>().localPosition = new Vector3(450, 260, 0);
-        doingSetup = false;
     }
 
     public void GameOver()
@@ -176,6 +177,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator NextTurn()
     {
+        UpdateObjectiveText();
         if (GetNonplayableCharacters(true).Count == 0)
         {
             LevelOver(true);
@@ -283,6 +285,7 @@ public class GameManager : MonoBehaviour
         objectiveText.alignment = TextAnchor.MiddleCenter;
         objectiveText.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
         objectiveText.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+        SoundManager.instance.Finish(won);
     }
 
     public void RemoveDeadCharacters()

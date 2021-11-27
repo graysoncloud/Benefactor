@@ -165,13 +165,15 @@ MonoBehaviour:
   portrait: {fileID: 4713117647238611514, guid: 3be1647184907a34fb2a1ad7c89180f8,
     type: 3}
   name: Big Brother
-  moveTime: 0.1
+  moveTime: 0.15
   totalMoves: 5
   talkingRange: 1
   totalActions: 1
   actionDelay: 0.5
   strength: 1
-  rationale: 100
+  accuracy: 0
+  dexterity: 0
+  agility: 0
   isTurn: 0
   hasGone: 0
   isMoving: 0

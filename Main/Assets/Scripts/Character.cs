@@ -283,7 +283,7 @@ public class Character : InteractableObject
         float sqrRemainingDistance = ((Vector2)transform.position - end).sqrMagnitude;
         while (sqrRemainingDistance > float.Epsilon)
         {
-            Vector2 newPosition = Vector2.MoveTowards(rb2D.position, end, inverseMoveTime * Time.deltaTime);
+            Vector2 newPosition = Vector2.MoveTowards(rb2D.position, end, inverseMoveTime * Time.fixedDeltaTime);
             rb2D.MovePosition(newPosition);
             sqrRemainingDistance = ((Vector2)transform.position - end).sqrMagnitude;
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);

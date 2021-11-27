@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 0
-  levelStartDelay: 1
+  levelStartDelay: 1.5
   turnDelay: 1
   characters: []
   gettingNextCharacter: 0

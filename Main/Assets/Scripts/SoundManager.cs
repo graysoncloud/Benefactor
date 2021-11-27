@@ -12,6 +12,10 @@ public class SoundManager : MonoBehaviour
     public float highPitchRange = 1.05f;
 
     public AudioClip[] zones;
+    public AudioClip startup;
+    public AudioClip startupBoss;
+    public AudioClip win;
+    public AudioClip lose;
 
     public AudioClip buttonPressed;
 
@@ -50,6 +54,19 @@ public class SoundManager : MonoBehaviour
     {
         musicSource.clip = zones[zone - 1];
         musicSource.Play();
+    }
+
+    public void Startup(bool boss = false)
+    {
+        efxSource.clip = boss ? startupBoss : startup;
+        efxSource.Play();
+    }
+
+    public void Finish(bool won = false)
+    {
+        musicSource.Stop();
+        efxSource.clip = won ? win : lose;
+        efxSource.Play();
     }
 
     public void ButtonPress()

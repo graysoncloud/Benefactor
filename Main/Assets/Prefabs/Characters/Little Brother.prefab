@@ -179,7 +179,8 @@ MonoBehaviour:
   subdued: 0
   pathToObjective: []
   inventory:
-  - {fileID: -5498856414594888391, guid: 70791d2237bfa6f4fb33643eaed4084d, type: 3}
+  - {fileID: -5498856414594888391, guid: ae876cd8e3a9f8c4c9af44a00acef1e0, type: 3}
+  - {fileID: 2648351601887277121, guid: d7223e9ce65c5ff40a98ff9432da0fcf, type: 3}
   gettingMove: 0
   gettingAction: 0
   gettingTarget: 0

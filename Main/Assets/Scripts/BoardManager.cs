@@ -153,7 +153,8 @@ public class BoardManager : MonoBehaviour
         pathPositions = new List<Vector2Int>();
         for (int x = -1; x <= columns; x++)
         {
-            Grid.Add(new List<Node>());
+            if (x >= 0 && x < columns)
+                Grid.Add(new List<Node>());
             for (int y = -1; y <= rows; y++)
             {
                 bottomTilemap.SetTile(new Vector3Int(x, y, 0), dirtTile);
@@ -551,7 +552,7 @@ public class BoardManager : MonoBehaviour
                     }
                     gridPositions.Remove(position);
                     Grid[position.x][position.y] = new Node(new Vector2(position.x, position.y), true, 2);
-                    roof.positions.Add(new Vector2Int(x, y + 1));
+                    roof.positions.Add(new Vector2Int(x, y));
                     roof.tiles.SetTile(new Vector3Int(x, y + 1, 0), roofTile);
                 }
             }
@@ -738,7 +739,6 @@ public class BoardManager : MonoBehaviour
         LayoutObjectAtCorners(trees);
         LayoutObjectAtRandom(natureObjects, objectCount.minimum, objectCount.maximum);
         LayoutObjectAtRandom(enemies, enemyCount.minimum, enemyCount.maximum);
-        GameManager.instance.FinishSetup();
         return Grid;
     }
 

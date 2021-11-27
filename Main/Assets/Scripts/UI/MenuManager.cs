@@ -44,6 +44,7 @@ public class MenuManager : MonoBehaviour
         actionButtons.Add("Lever", GameObject.Find("LeverButton"));
         actionButtons.Add("Loot", GameObject.Find("LootButton"));
         actionButtons.Add("Steal", GameObject.Find("StealButton"));
+        actionButtons.Add("Trade", GameObject.Find("TradeButton"));
         actionButtons.Add("Wait", GameObject.Find("WaitButton"));
         HideActionMenu();
 

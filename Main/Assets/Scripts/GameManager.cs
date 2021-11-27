@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public float turnDelay;
     public static GameManager instance = null;
 
-    private Text levelText;
+    private Text objectiveText;
     private GameObject levelImage;
     private BoardManager boardScript;
     public List<Player> characters;
@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     public int round;
     private bool playerTurn;
     public bool playerStart;
+    public List<String> objectives;
+    public int objective;
 
     // Start is called before the first frame update
     void Awake()
@@ -63,8 +65,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void FinishSetup() {
-        doingSetup = false;
+    private void SetAlliances() {
+        //temporary while there are no "neutral" CPUs
+        foreach (Character character in GetPlayableCharacters(true))
+        {
+            foreach (Character other in GetPlayableCharacters(true))
+            {
+                if (character != other)
+                    character.Ally(other);
+            }
+        }
+        foreach (Character character in GetNonplayableCharacters())
+        {
+            foreach (Character other in GetNonplayableCharacters())
+            {
+                if (character != other)
+                    character.Ally(other);
+            }
+        }
+        GetPlayableCharacters(true)[0].Enemy(GetNonplayableCharacters()[0]);
     }
 
     public void CheckRoofs() {
@@ -99,12 +118,15 @@ public class GameManager : MonoBehaviour
     {
         doingSetup = true;
 
-        levelImage = GameObject.Find("LevelImage"); 
-        levelText = GameObject.Find("LevelText").GetComponent<Text>();
-        // levelText.text = "Day " + level;
-        levelText.text = "Demo Sandbox";
-        levelImage.SetActive(true);
-        Invoke("HideLevelImage", levelStartDelay);
+        //levelImage = GameObject.Find("LevelImage"); 
+        objectiveText = GameObject.Find("ObjectiveText").GetComponent<Text>();
+        objectiveText.text = objectives[objective];
+        objectiveText.alignment = TextAnchor.MiddleCenter;
+        objectiveText.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        objectiveText.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+        objectiveText.gameObject.SetActive(true);
+        Invoke("MoveObjectiveText", levelStartDelay);
+        Invoke("SetAlliances", levelStartDelay);
 
         characters.Clear();
         Grid = boardScript.SetupScene(level);
@@ -112,16 +134,19 @@ public class GameManager : MonoBehaviour
         SoundManager.instance.PlayMusic(1);
     }
 
-    private void HideLevelImage()
+    private void MoveObjectiveText()
     {
-        levelImage.SetActive(false);
+        //objectiveText.gameObject.SetActive(false);
+        objectiveText.alignment = TextAnchor.MiddleRight;
+        objectiveText.GetComponent<RectTransform>().localScale = new Vector3(0.5f, 0.5f, 1);
+        objectiveText.GetComponent<RectTransform>().localPosition = new Vector3(450, 260, 0);
         doingSetup = false;
     }
 
     public void GameOver()
     {
-        levelText.text = "After " +  level + " days, you perished.";
-        levelImage.SetActive(true);
+        objectiveText.text = "Game Over";
+        objectiveText.gameObject.SetActive(true);
         enabled = false;
     }
 
@@ -153,7 +178,6 @@ public class GameManager : MonoBehaviour
     {
         if (GetPlayableCharacters().Count == 0)
         {
-            Debug.Log("NO PLAYABLE CHARACTERS");
             if (playerStart)
                 playerTurn = false;
             else
@@ -165,7 +189,6 @@ public class GameManager : MonoBehaviour
 
         if (GetNonplayableCharacters().Count == 0)
         {
-            Debug.Log("NO ENEMIES");
             if (!playerStart)
                 playerTurn = true;
             else

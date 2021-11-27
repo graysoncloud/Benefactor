@@ -12,6 +12,7 @@ public class Tree : InteractableObject
     {
         base.Start();
         leaves = Instantiate(leaves, transform.position, Quaternion.identity);
+        leaves.SetTree(this);
     }
 
     protected override void ErasePosition()

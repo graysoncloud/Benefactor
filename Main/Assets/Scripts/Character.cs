@@ -96,7 +96,6 @@ public class Character : InteractableObject
 
         // For testing purposes- should be moved to custom classes for NPCs
         maxHealth = 10;
-
         base.Start();
     }
 
@@ -359,6 +358,8 @@ public class Character : InteractableObject
         GetObjectsToActOn("Loot", 1);
 
         GetObjectsToActOn("Steal", 1);
+
+        GetObjectsToActOn("Trade", 1);
     }
 
     protected void GetAttackRange()
@@ -400,15 +401,14 @@ public class Character : InteractableObject
                 }
                 else if (hitObject.tag == "Character")
                 {
-                    if (!playable)
-                    {
-                        if (action == "Heal")
-                            safe = allies.Contains(hitObject); //only heal allies
-                        else if (action == "Attack")
-                            safe = enemies.Contains(hitObject); //only attack enemies
-                    }
-                    if (action == "Steal")
-                        safe = hitCollider.GetComponent<Character>().inventory.Count > 0 & (!enemies.Contains(hitObject) || hitObject.GetComponent<Character>().subdued);
+                    if (action == "Heal")
+                        safe = allies.Contains(hitObject); //only heal allies
+                    else if (action == "Attack")
+                        safe = enemies.Contains(hitObject); //only attack enemies
+                    else if (action == "Steal")
+                        safe = hitCollider.GetComponent<Character>().inventory.Count > 0 && enemies.Contains(hitObject.GetComponent<Player>()); //|| hitObject.GetComponent<Character>().subdued);
+                    else if (action == "Trade")
+                        safe = hitCollider.GetComponent<Character>().inventory.Count > 0 && allies.Contains(hitObject.GetComponent<Player>()); //|| hitObject.GetComponent<Character>().subdued);
                 }
                 if (safe)
                     objects.Add(hitObject);
@@ -431,8 +431,8 @@ public class Character : InteractableObject
 
     virtual protected void Act()
     {
-        actionsLeft--;
-        UpdateState();
+        //actionsLeft--;
+        //UpdateState();
         List<InteractableObject> objects;
         actableObjects.TryGetValue(currentObjective.action, out objects);
 
@@ -453,12 +453,16 @@ public class Character : InteractableObject
             case "Talk":
                 if (objects != null && objects.Contains(currentObjective.target))
                     TalkTo(currentObjective.target);
+                actionsLeft--;
+                UpdateState();
                 StartCoroutine(NextStep());
                 currentObjective = null;
                 break;
             case "Door":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
+                actionsLeft--;
+                UpdateState();
                 StartCoroutine(NextStep());
                 currentObjective = null;
                 break;
@@ -471,6 +475,8 @@ public class Character : InteractableObject
             case "Lever":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
+                actionsLeft--;
+                UpdateState();
                 StartCoroutine(NextStep());
                 currentObjective = null;
                 break;
@@ -479,6 +485,10 @@ public class Character : InteractableObject
                     Loot(currentObjective.target);
                 break;
             case "Steal":
+                if (objects != null && objects.Contains(currentObjective.target))
+                    Steal(currentObjective.target);
+                break;
+            case "Trade":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Steal(currentObjective.target);
                 break;
@@ -504,23 +514,27 @@ public class Character : InteractableObject
 
     public virtual void ChooseItem(HoldableObject item)
     {
+        actionsLeft--;
+        UpdateState();
         switch (item.type)
         {
             case "Weapon":
                 Attack(currentObjective.target, item);
+                currentObjective = null;
                 StartCoroutine(NextStep(true));
                 break;
             case "Medicine":
                 Heal(currentObjective.target, item);
+                currentObjective = null;
                 StartCoroutine(NextStep(true));
                 break;
             case "Key":
                 Unlock(currentObjective.target, item);
+                currentObjective = null;
                 break;
             default:
                 break;
         }
-        currentObjective = null;
     }
 
     protected virtual void Toggle(InteractableObject toToggle)
@@ -579,7 +593,7 @@ public class Character : InteractableObject
     protected virtual void Steal(InteractableObject toStealFrom)
     {
         GameManager.instance.CameraTarget(toStealFrom.gameObject);
-        Character character = toStealFrom.gameObject.GetComponent<Character>();
+        Player character = toStealFrom.gameObject.GetComponent<Player>();
         this.weightStolen = 0;
 
         foreach (HoldableObject item in character.inventory)
@@ -598,9 +612,9 @@ public class Character : InteractableObject
         currentObjective = null;
     }
 
-    protected bool CaughtStealing(Character character)
+    protected bool CaughtStealing(Player character)
     {
-        return character.subdued ? false : UnityEngine.Random.Range(0, 10) < this.weightStolen;
+        return character.subdued || allies.Contains(character) ? false : UnityEngine.Random.Range(0, 10) < this.weightStolen;
     }
 
     protected virtual IEnumerator EndTurn()
@@ -692,30 +706,40 @@ public class Character : InteractableObject
         currentObjective = null; //TEMP
     }
 
-    public void Ally(Character character)
+    public void Ally(Character character, bool updateTeam = true)
     {
         enemies.Remove(character);
         allies.Add(character);
         foreach (Character ally in allies)
         {
-            if (ally != character && !ally.allies.Contains(character))
-                ally.Ally(character);
+            if (ally != character && !ally.GetAllies().Contains(character))
+                ally.Ally(character, false);
         }
-        if (!character.allies.Contains(this))
+        if (!character.GetAllies().Contains(this))
             character.Ally(this);
     }
 
-    public void Enemy(Character character)
+    public void Enemy(Character character, bool updateTeam = true)
     {
         allies.Remove(character);
         enemies.Add(character);
         foreach (Character ally in allies)
         {
-            if (ally != character &&  !ally.enemies.Contains(character))
-                ally.Enemy(character);
+            if (ally != character && !ally.GetEnemies().Contains(character))
+                ally.Enemy(character, false);
         }
-        if (!character.enemies.Contains(this))
+        if (!character.GetEnemies().Contains(this))
             character.Enemy(this);
+    }
+
+    public List<InteractableObject> GetAllies()
+    {
+        return allies;
+    }
+
+    public List<InteractableObject> GetEnemies()
+    {
+        return enemies;
     }
 
     protected virtual void TalkTo(InteractableObject toTalkTo)
@@ -732,6 +756,7 @@ public class Character : InteractableObject
         // Should be able to steal from allies. Not sure if that part works yet.
         // if (subdued || allies.Contains(GameObject.FindObjectOfType<Player>().GetComponent<InteractableObject>()))
         receiveActions.Add("Steal"); // I do checks in GetActions() for relationships btwn any two characters, not just regarding player
+        receiveActions.Add("Trade");
 
         return receiveActions;
     }

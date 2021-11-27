@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Leaves : MonoBehaviour
 {
-    private int overlap;
+    private bool overlap;
     private float alpha;
     private float targetAlpha;
     protected SpriteRenderer spriteRenderer;
     protected BoxCollider2D boxCollider;
+    protected Tree tree;
 
     void Start()
     {
-        overlap = 0;
+        overlap = false;
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider = GetComponent<BoxCollider2D>();
         alpha = 1f;
@@ -22,7 +23,7 @@ public class Leaves : MonoBehaviour
     void Update() {
         if (alpha != targetAlpha) {
             alpha += 3f * Time.deltaTime * ((alpha < targetAlpha) ? 1 : -1);
-            if (alpha > targetAlpha - 0.001f && alpha < targetAlpha + 0.001f)
+            if (alpha > targetAlpha - 0.1f && alpha < targetAlpha + 0.1f)
                 alpha = targetAlpha;
             UpdateAlpha();
         }
@@ -35,9 +36,9 @@ public class Leaves : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Character" || collision.gameObject.tag == "Indicator")
+        if (collision.gameObject.tag == "Character")
         {
-            overlap++;
+            overlap = true;
         }
         CheckOverlap();
     }
@@ -45,23 +46,29 @@ public class Leaves : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Character" || collision.gameObject.tag == "Indicator")
+        if (collision.gameObject.tag == "Character")
         {
-            overlap--;
+            overlap = false;
         }
         CheckOverlap();
     }
 
     void CheckOverlap()
     {
-        targetAlpha = (overlap > 0) ? 0.25f : 1f;
+        targetAlpha = (overlap) ? 0.25f : 1f;
     }
 
     void UpdateAlpha() {
         try {
             Color color = spriteRenderer.material.color;
             color.a = alpha;
-            spriteRenderer.material.color = color; 
+            spriteRenderer.material.color = color;
+            tree.GetComponent<SpriteRenderer>().material.color = color;
         } catch {}
+    }
+
+    public void SetTree(Tree newTree)
+    {
+        tree = newTree;
     }
 }

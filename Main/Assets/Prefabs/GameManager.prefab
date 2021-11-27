@@ -97,8 +97,8 @@ MonoBehaviour:
     minimum: 10
     maximum: 20
   enemyCount:
-    minimum: 5
-    maximum: 10
+    minimum: 4
+    maximum: 7
   buildingCount:
     minimum: 3
     maximum: 8
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 0
-  levelStartDelay: 0
+  levelStartDelay: 1
   turnDelay: 1
   characters: []
   gettingNextCharacter: 0
@@ -198,8 +198,9 @@ MonoBehaviour:
   dialogueInProgress: 0
   round: 0
   playerStart: 1
-  soundManager: {fileID: 6659658067695073621, guid: 5a89557ea0ac4dd40b89861508ed4073,
-    type: 3}
+  objectives:
+  - Defeat All Enemies
+  objective: 0
 --- !u!156049354 &8936469483842678999
 Grid:
   m_ObjectHideFlags: 0

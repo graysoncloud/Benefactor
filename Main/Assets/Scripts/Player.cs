@@ -16,19 +16,21 @@ public class Player : Character
     public bool looting;
     private MenuManager menuManager;
     private MouseManager mouseManager;
+    private bool backButton;
 
     // Start is called before the first frame update
     protected override void Start()
     {
-        base.Start();
+        GameManager.instance.AddCharacterToList(this);
 
         gettingMove = false;
         gettingTarget = false;
         looting = false;
+        backButton = false;
         menuManager = GameObject.Find("MenuManager").GetComponent<MenuManager>();
         mouseManager = GameObject.Find("MouseManager").GetComponent<MouseManager>();
 
-        GameManager.instance.AddCharacterToList(this);
+        base.Start();
     }
 
     // Update is called once per frame
@@ -58,7 +60,8 @@ public class Player : Character
     protected override IEnumerator NextStep(bool delay = false)
     {
         if (!playable) {
-            yield return base.NextStep();
+            StartCoroutine(base.NextStep());
+            yield break;
         }
 
         // Prevents the rest of the players turn from happening until dialogue is resolved (hopefully)
@@ -73,7 +76,6 @@ public class Player : Character
             menuManager.HideBackButton();
         else
             menuManager.ShowBackButton();
-
         UpdateObjectives();
         GetPaths();
         yield return new WaitForSeconds(moveTime);
@@ -145,7 +147,7 @@ public class Player : Character
             return;
         }
 
-        if (paths.Count == 1)
+        if (paths.Count == 1 && !backButton)
         {
             paths.TryGetValue(transform.position, out pathToObjective);
             StartCoroutine(SelectedPath());
@@ -154,6 +156,7 @@ public class Player : Character
         {
             menuManager.ShowPaths(paths);
             gettingMove = true;
+            backButton = false;
             Debug.Log("Player waiting for move input");
         }
     }
@@ -163,6 +166,7 @@ public class Player : Character
         if (pathToObjective.Length > 1)
         {
             pathToObjective = pathToObjective.Skip(1).ToArray();
+            menuManager.HideBackButton();
             yield return StartCoroutine(FollowPath());
             StartCoroutine(NextStep());
         }
@@ -236,22 +240,31 @@ public class Player : Character
             {
                 storage.Remove(item);
                 menuManager.ShowOtherInventory("", inventory, 0, storage.items);
+                Pickup(item);
             }
             else
             {
                 weightStolen += item.weight;
-                Character character = currentObjective.target.gameObject.GetComponent<Character>();
+                Player character = currentObjective.target.gameObject.GetComponent<Player>();
                 if (CaughtStealing(character))
                 {
                     character.Enemy(this);
                     Back();
                     return;
                 }
-                character.Remove(item);
+                if (inventory.Contains(item)) {
+                    Remove(item);
+                    character.Pickup(item);
+                }
+                else {
+                    character.Remove(item);
+                    Pickup(item);
+                }
                 menuManager.ShowOtherInventory("", inventory, 0, character.inventory);
             }
-            Pickup(item);
             menuManager.ShowPlayerInventory("", inventory, 0, inventory);
+            actionsLeft--;
+            UpdateState();
             return;
         }
         
@@ -275,7 +288,7 @@ public class Player : Character
         looting = true;
         this.weightStolen = 0;
         GameManager.instance.CameraTarget(toStealFrom.gameObject);
-        Character character = toStealFrom.gameObject.GetComponent<Character>();
+        Player character = toStealFrom.gameObject.GetComponent<Player>();
         menuManager.ShowPlayerInventory("", inventory, 0, inventory);
         menuManager.ShowOtherInventory("", inventory, 0, character.inventory);
     }
@@ -313,6 +326,7 @@ public class Player : Character
 
     public void Back()
     {
+        backButton = true;
         if (looting)
         {
             looting = false;

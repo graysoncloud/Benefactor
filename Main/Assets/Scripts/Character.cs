@@ -153,6 +153,7 @@ public class Character : InteractableObject
 
     protected virtual void UpdateObjectives()
     {
+        currentObjective = null; //temp fix?
         if (currentObjective != null && currentObjective.action == "Wait")
             currentObjective = null;
         Objective healClosest = new Objective(GetClosest(allies), "Heal");
@@ -193,6 +194,8 @@ public class Character : InteractableObject
 
         foreach (InteractableObject o in objects)
         {
+            if (o.GetHealth() <= 0)
+                continue;
             float distance = GetDistance(o);
             if (distance < minDistance)
             {
@@ -452,16 +455,16 @@ public class Character : InteractableObject
                     TalkTo(currentObjective.target);
                 actionsLeft--;
                 UpdateState();
-                StartCoroutine(NextStep());
                 currentObjective = null;
+                StartCoroutine(NextStep());
                 break;
             case "Door":
                 if (objects != null && objects.Contains(currentObjective.target))
                     Toggle(currentObjective.target);
                 actionsLeft--;
                 UpdateState();
-                StartCoroutine(NextStep());
                 currentObjective = null;
+                StartCoroutine(NextStep());
                 break;
             case "Unlock":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -474,8 +477,8 @@ public class Character : InteractableObject
                     Toggle(currentObjective.target);
                 actionsLeft--;
                 UpdateState();
-                StartCoroutine(NextStep());
                 currentObjective = null;
+                StartCoroutine(NextStep());
                 break;
             case "Loot":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -517,17 +520,14 @@ public class Character : InteractableObject
         {
             case "Weapon":
                 Attack(currentObjective.target, item);
-                currentObjective = null;
                 StartCoroutine(NextStep(true));
                 break;
             case "Medicine":
                 Heal(currentObjective.target, item);
-                currentObjective = null;
                 StartCoroutine(NextStep(true));
                 break;
             case "Key":
                 Unlock(currentObjective.target, item);
-                currentObjective = null;
                 break;
             default:
                 break;
@@ -583,8 +583,8 @@ public class Character : InteractableObject
 
         storage.Close();
 
-        StartCoroutine(NextStep());
         currentObjective = null;
+        StartCoroutine(NextStep());
     }
 
     protected virtual void Steal(InteractableObject toStealFrom)
@@ -605,8 +605,8 @@ public class Character : InteractableObject
             character.Remove(item);
         }
 
-        StartCoroutine(NextStep());
         currentObjective = null;
+        StartCoroutine(NextStep());
     }
 
     protected bool CaughtStealing(Player character)
@@ -661,7 +661,7 @@ public class Character : InteractableObject
     {
         GameManager.instance.CameraTarget(toAttack.gameObject);
 
-        StartCoroutine(toAttack.TakeDamage(weapon.amount * (weapon.range == 1 ? strength : 1) * (rationale / 50)));
+        StartCoroutine(toAttack.TakeDamage(weapon.amount * (weapon.range == 1 ? strength : 1)));
 
         // Check for subdued
         if (toAttack.GetHealth() / toAttack.maxHealth < subduedRatio)
@@ -692,7 +692,7 @@ public class Character : InteractableObject
     {
         GameManager.instance.CameraTarget(toHeal.gameObject);
 
-        toHeal.Heal(medicine.amount * (rationale / 50));
+        toHeal.Heal(medicine.amount);
 
         Remove(medicine);
 

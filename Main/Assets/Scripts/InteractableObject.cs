@@ -83,6 +83,7 @@ public class InteractableObject : MonoBehaviour
     {
         if (!damageable) return;
         health = Math.Min(health + amount, maxHealth);
+        SoundManager.instance.Heal();
         StartCoroutine(UpdateHealthBar());
         UpdatePosition();
     }

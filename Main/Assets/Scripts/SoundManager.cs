@@ -20,6 +20,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip buttonPressed;
 
     public AudioClip takeDamage;
+    public AudioClip heal;
     public AudioClip leftFoot;
     public AudioClip rightFoot;
 
@@ -78,6 +79,11 @@ public class SoundManager : MonoBehaviour
     public void TakeDamage()
     {
         efxSource.clip = takeDamage;
+        efxSource.Play();
+    }
+    public void Heal()
+    {
+        efxSource.clip = heal;
         efxSource.Play();
     }
     public IEnumerator Walk(float moveTime)

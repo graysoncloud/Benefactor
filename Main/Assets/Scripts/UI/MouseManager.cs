@@ -11,12 +11,18 @@ using UnityEngine.SocialPlatforms;
 public class MouseManager : MonoBehaviour
 {
     Vector2 currentMouseCoords;
-    MenuManager menuManager;
+    public static MouseManager instance = null;
 
     void Awake()
     {
+        if (instance == null)
+            instance = this;
+        else if (instance != this)
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
+
         currentMouseCoords = new Vector2{};
-        menuManager = GameObject.Find("MenuManager").GetComponent<MenuManager>();
     }
 
     public bool GetNextCharacter(List<Player> characters)
@@ -27,18 +33,18 @@ public class MouseManager : MonoBehaviour
         {
             if ((Vector2)character.transform.position == currentMouseCoords)
             {
-                menuManager.HighlightPath(new Vector2[] { currentMouseCoords });
+                MenuManager.instance.HighlightPath(new Vector2[] { currentMouseCoords });
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     GameManager.instance.activeCharacter = character;
                     GameManager.instance.CameraTarget(character.gameObject);
-                    menuManager.HideIndicators();
+                    MenuManager.instance.HideIndicators();
                     return false;
                 }
             }
             else
-                menuManager.UnhighlightPath(new Vector2[] { character.transform.position });
+                MenuManager.instance.UnhighlightPath(new Vector2[] { character.transform.position });
         }
 
         return true;
@@ -51,17 +57,17 @@ public class MouseManager : MonoBehaviour
         if (paths.ContainsKey(currentMouseCoords))
         {
             paths.TryGetValue(currentMouseCoords, out character.pathToObjective);
-            menuManager.HighlightPath(character.pathToObjective);
+            MenuManager.instance.HighlightPath(character.pathToObjective);
 
             if (Input.GetMouseButtonDown(0))
             {
-                menuManager.HideIndicators();
+                MenuManager.instance.HideIndicators();
                 return false;
             }
         }
         else
         {
-            menuManager.UnhighlightPaths();
+            MenuManager.instance.UnhighlightPaths();
         }
 
         return true;
@@ -75,18 +81,18 @@ public class MouseManager : MonoBehaviour
         {
             if ((Vector2)o.transform.position == currentMouseCoords)
             {
-                menuManager.HighlightPath(new Vector2[] { currentMouseCoords });
+                MenuManager.instance.HighlightPath(new Vector2[] { currentMouseCoords });
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     character.currentObjective.target = o;
                     GameManager.instance.CameraTarget(o.gameObject);
-                    menuManager.HideIndicators();
+                    MenuManager.instance.HideIndicators();
                     return false;
                 }
             }
             else
-                menuManager.UnhighlightPath(new Vector2[] { o.transform.position });
+                MenuManager.instance.UnhighlightPath(new Vector2[] { o.transform.position });
         }
 
         return true;
@@ -98,9 +104,9 @@ public class MouseManager : MonoBehaviour
         Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
         Vector2 coords = new Vector2((int)(mouseWorldPosition.x + 0.5), (int)(mouseWorldPosition.y + 0.5));
         if (currentMouseCoords != coords) {
-            menuManager.HideMouseIndicator();
+            MenuManager.instance.HideMouseIndicator();
             currentMouseCoords = coords;
-            menuManager.ShowMouseIndicator(currentMouseCoords);
+            MenuManager.instance.ShowMouseIndicator(currentMouseCoords);
         }
         return coords;
     }

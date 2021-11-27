@@ -11,6 +11,8 @@ using UnityEditor;
 
 public class MenuManager : MonoBehaviour
 {
+    public static MenuManager instance = null;
+
     public GameObject playerInventory;
     public GameObject otherInventory;
     public InventorySlot[] playerSlots;
@@ -35,6 +37,13 @@ public class MenuManager : MonoBehaviour
 
     void Awake()
     {
+        if (instance == null)
+            instance = this;
+        else if (instance != this)
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
+
         actionButtons = new Dictionary<String, GameObject>();
         actionButtons.Add("Attack", GameObject.Find("AttackButton"));
         actionButtons.Add("Talk", GameObject.Find("TalkButton"));
@@ -107,7 +116,7 @@ public class MenuManager : MonoBehaviour
         return inventory.FindAll(e => e.type == type);
     }
 
-    public void ShowPlayerInventory(String type, List<HoldableObject> inventory, int range = 0, List<HoldableObject> items = null)
+    public void ShowPlayerInventory(String type, List<HoldableObject> inventory, int range = 0, List<HoldableObject> items = null, String name = null)
     {
         if (items == null)
             items = SortedInventory(type, inventory);
@@ -126,10 +135,12 @@ public class MenuManager : MonoBehaviour
             j++;
         }
 
+        playerInventory.GetComponentsInChildren<Text>()[0].text = name != null ? name : type;
         playerInventory.SetActive(true);
         ShowBackButton();
+        instance.HidePlayerStats();
     }
-    public void ShowOtherInventory(String type, List<HoldableObject> inventory, int range = 0, List<HoldableObject> items = null)
+    public void ShowOtherInventory(String type, List<HoldableObject> inventory, int range = 0, List<HoldableObject> items = null, String name = null)
     {
         if (items == null)
             items = SortedInventory(type, inventory);
@@ -148,10 +159,12 @@ public class MenuManager : MonoBehaviour
             j++;
         }
 
+        otherInventory.GetComponentsInChildren<Text>()[0].text = name != null ? name : type;
         playerInventory.GetComponent<RectTransform>().transform.localPosition = new Vector2(-120, 0);
         otherInventory.GetComponent<RectTransform>().transform.localPosition = new Vector2(120, 0);
         otherInventory.SetActive(true);
         ShowBackButton();
+        instance.HidePlayerStats();
     }
 
     public void HideInventories()
@@ -172,7 +185,6 @@ public class MenuManager : MonoBehaviour
         healthText.GetComponent<Text>().text = "❤️ " + target.GetHealth().ToString() + "/" + target.maxHealth;
         movesText.GetComponent<Text>().text = (character != null) ? ("➤  " + character.totalMoves.ToString()) : "";
         playerStats.SetActive(true);
-        // ShowBackButton();
     }
 
     public void HidePlayerStats()
@@ -303,14 +315,10 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    // public void UpdateHealth(double health)
-    // {
-    //     healthText.text = "Health: " + health;
-    // }
-
     public static void ActionButtonPressed(String action)
     {
         GameManager.instance.activeCharacter.GetActionInput(action);
+        instance.HidePlayerStats();
     }
 
     public static void BackButtonPressed()

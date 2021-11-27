@@ -14,8 +14,6 @@ public class Player : Character
     public bool gettingTarget;
     public bool gettingItem;
     public bool looting;
-    private MenuManager menuManager;
-    private MouseManager mouseManager;
     private bool backButton;
 
     // Start is called before the first frame update
@@ -27,8 +25,6 @@ public class Player : Character
         gettingTarget = false;
         looting = false;
         backButton = false;
-        menuManager = GameObject.Find("MenuManager").GetComponent<MenuManager>();
-        mouseManager = GameObject.Find("MouseManager").GetComponent<MouseManager>();
 
         base.Start();
     }
@@ -41,7 +37,7 @@ public class Player : Character
 
         if (gettingMove)
         {
-            gettingMove = mouseManager.GetMoveInput(this, paths);
+            gettingMove = MouseManager.instance.GetMoveInput(this, paths);
             if (!gettingMove)
             {
                 StartCoroutine(SelectedPath());
@@ -49,7 +45,7 @@ public class Player : Character
         }
         if (gettingTarget)
         {
-            gettingTarget = mouseManager.GetTargetInput(this, GetObjects());
+            gettingTarget = MouseManager.instance.GetTargetInput(this, GetObjects());
             if (!gettingTarget)
             {
                 Act();
@@ -73,9 +69,9 @@ public class Player : Character
         GameManager.instance.CameraTarget(this.gameObject);
         //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
         if ((movesLeft != totalMoves || actionsLeft != totalActions) && lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
-            menuManager.HideBackButton();
+            MenuManager.instance.HideBackButton();
         else
-            menuManager.ShowBackButton();
+            MenuManager.instance.ShowBackButton();
         UpdateObjectives();
         GetPaths();
         yield return new WaitForSeconds(moveTime);
@@ -154,7 +150,7 @@ public class Player : Character
         }
         else
         {
-            menuManager.ShowPaths(paths);
+            MenuManager.instance.ShowPaths(paths);
             gettingMove = true;
             backButton = false;
             Debug.Log("Player waiting for move input");
@@ -166,7 +162,7 @@ public class Player : Character
         if (pathToObjective.Length > 1)
         {
             pathToObjective = pathToObjective.Skip(1).ToArray();
-            menuManager.HideBackButton();
+            MenuManager.instance.HideBackButton();
             yield return StartCoroutine(FollowPath());
             StartCoroutine(NextStep());
         }
@@ -184,15 +180,15 @@ public class Player : Character
             StartCoroutine(EndTurn());
         else
         {
-            menuManager.SetupActionMenu(actions);
-            menuManager.ShowBackButton();
+            MenuManager.instance.SetupActionMenu(actions);
+            MenuManager.instance.ShowBackButton();
             gettingAction = true;
         }
     }
 
     public void GetActionInput(string action)
     {
-        menuManager.HideActionMenu();
+        MenuManager.instance.HideActionMenu();
         if (currentObjective == null) { //temp due to weird error
             Debug.Log("Objective Null!");
             currentObjective = new Objective(null, null);
@@ -207,7 +203,7 @@ public class Player : Character
 
     protected void SelectTarget()
     {
-        menuManager.ShowObjects(GetObjects());
+        MenuManager.instance.ShowObjects(GetObjects());
         gettingTarget = true;
         Debug.Log("Player waiting for target input");
     }
@@ -226,7 +222,7 @@ public class Player : Character
             return;
         }
 
-        menuManager.ShowPlayerInventory(type, inventory, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
+        MenuManager.instance.ShowPlayerInventory(type, inventory, type == "Weapon" ? GetDistance(currentObjective.target) : 0);
         gettingItem = true;
         Debug.Log("Player waiting for item input");
     }
@@ -239,7 +235,7 @@ public class Player : Character
             if (storage != null)
             {
                 storage.Remove(item);
-                menuManager.ShowOtherInventory("", inventory, 0, storage.items);
+                MenuManager.instance.ShowOtherInventory("", inventory, 0, storage.items, storage.name);
                 Pickup(item);
             }
             else
@@ -260,16 +256,16 @@ public class Player : Character
                     character.Remove(item);
                     Pickup(item);
                 }
-                menuManager.ShowOtherInventory("", inventory, 0, character.inventory);
+                MenuManager.instance.ShowOtherInventory("", inventory, 0, character.inventory, character.name.Replace("(Clone)", ""));
             }
-            menuManager.ShowPlayerInventory("", inventory, 0, inventory);
+            MenuManager.instance.ShowPlayerInventory("", inventory, 0, inventory, name);
             actionsLeft--;
             UpdateState();
             return;
         }
         
         gettingItem = false;
-        menuManager.HideInventories();
+        MenuManager.instance.HideInventories();
         base.ChooseItem(item);
     }
 
@@ -279,8 +275,10 @@ public class Player : Character
         GameManager.instance.CameraTarget(toLoot.gameObject);
         Storage storage = toLoot.gameObject.GetComponent<Storage>();
         storage.Open();
-        menuManager.ShowPlayerInventory("", inventory, 0, inventory);
-        menuManager.ShowOtherInventory("", inventory, 0, storage.items);
+        MenuManager.instance.ShowPlayerInventory("", inventory, 0, inventory, name);
+        MenuManager.instance.ShowOtherInventory("", inventory, 0, storage.items, toLoot.name
+            .Replace("(Clone)", "").Replace("1", "").Replace("2", "").Replace("3", "").Replace("4", "")
+            .Replace("5", "").Replace("6", "").Replace("7", "").Replace("8", "").Replace("9", "").Replace("0", ""));
     }
 
     protected override void Steal(InteractableObject toStealFrom)
@@ -289,8 +287,8 @@ public class Player : Character
         this.weightStolen = 0;
         GameManager.instance.CameraTarget(toStealFrom.gameObject);
         Player character = toStealFrom.gameObject.GetComponent<Player>();
-        menuManager.ShowPlayerInventory("", inventory, 0, inventory);
-        menuManager.ShowOtherInventory("", inventory, 0, character.inventory);
+        MenuManager.instance.ShowPlayerInventory("", inventory, 0, inventory, name);
+        MenuManager.instance.ShowOtherInventory("", inventory, 0, character.inventory, toStealFrom.name.Replace("(Clone)", ""));
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)
@@ -319,7 +317,7 @@ public class Player : Character
 
     protected override void TalkTo(InteractableObject toTalkTo)
     {
-        menuManager.HideBackButton();
+        MenuManager.instance.HideBackButton();
         base.TalkTo(toTalkTo);
     }
 
@@ -332,8 +330,8 @@ public class Player : Character
             Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
             if (storage != null)
                 storage.Close();
-            menuManager.HideInventories();
-            menuManager.HideBackButton();
+            MenuManager.instance.HideInventories();
+            MenuManager.instance.HideBackButton();
             StartCoroutine(NextStep());
             return;
         }
@@ -342,8 +340,8 @@ public class Player : Character
         {
             if (movesLeft == totalMoves && actionsLeft == totalActions && lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
             {
-                menuManager.HideIndicators();
-                menuManager.HideBackButton();
+                MenuManager.instance.HideIndicators();
+                MenuManager.instance.HideBackButton();
                 isTurn = false;
                 gettingMove = false;
                 StartCoroutine(GameManager.instance.NextTurn());
@@ -351,24 +349,24 @@ public class Player : Character
             }
             else
             {
-                menuManager.HideIndicators();
+                MenuManager.instance.HideIndicators();
                 gettingMove = false;
                 ResetState();
             }
         }
         else if (gettingAction)
         {
-            menuManager.HideActionMenu();
+            MenuManager.instance.HideActionMenu();
             gettingAction = false;
         }
         else if (gettingTarget)
         {
-            menuManager.HideIndicators();
+            MenuManager.instance.HideIndicators();
             gettingTarget = false;
         }
         else if (gettingItem)
         {
-            menuManager.HideInventories();
+            MenuManager.instance.HideInventories();
             gettingItem = false;
         }
         StartCoroutine(NextStep());
@@ -387,7 +385,7 @@ public class Player : Character
 
     protected override IEnumerator EndTurn()
     {
-        menuManager.HideBackButton();
+        MenuManager.instance.HideBackButton();
         yield return StartCoroutine(base.EndTurn());
     }
 }

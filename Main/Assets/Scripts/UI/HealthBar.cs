@@ -21,21 +21,20 @@ public class HealthBar : MonoBehaviour
 
     public IEnumerator UpdateHealth(int currentHealth, int totalHealth, Vector3 position)
     {
-        Debug.Log("UPDATE HEALTHBAR: " + currentHealth + " / " + totalHealth);
         spriteRenderer.enabled = true;
         float targetWidth = (float)currentHealth / (float)totalHealth;
         transform.localPosition = new Vector3(position.x - (maxWidth - spriteRenderer.size.x) / 2, position.y + 0.7f, position.y + 0.7f);
         float remaining = 1;
         try
         {
-            remaining = spriteRenderer.size.x - targetWidth;
+            remaining = targetWidth < spriteRenderer.size.x ? spriteRenderer.size.x - targetWidth : targetWidth - spriteRenderer.size.x;
         }
         catch { yield break;  }
         Vector2 end = new Vector2(targetWidth, 0.2f);
         while (remaining > float.Epsilon)
         {
             Vector2 newSize = Vector2.MoveTowards(spriteRenderer.size, end, inverseUpdateTime * Time.deltaTime);
-            remaining = spriteRenderer.size.x - targetWidth;
+            remaining = targetWidth < spriteRenderer.size.x ? spriteRenderer.size.x - targetWidth : targetWidth - spriteRenderer.size.x;
             spriteRenderer.size = newSize;
             transform.localPosition = new Vector3(position.x - (maxWidth - spriteRenderer.size.x) / 2, position.y + 0.7f, position.y + 0.7f);
             yield return null;

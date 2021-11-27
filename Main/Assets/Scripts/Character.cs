@@ -49,7 +49,9 @@ public class Character : InteractableObject
     public int totalActions;
     public float actionDelay;
     public double strength; //multiplier for range 1 weapon
-    public double rationale;
+    public double accuracy;
+    public double dexterity;
+    public double agility;
     public bool isTurn;
     public bool hasGone;
     public bool isMoving;

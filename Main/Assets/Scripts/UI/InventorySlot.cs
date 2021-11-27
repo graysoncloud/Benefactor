@@ -7,7 +7,7 @@ public class InventorySlot : MonoBehaviour
 {
     public Image icon;
     public Button button;
-    public Player player;
+    public Text text;
 
     HoldableObject item;
 
@@ -16,6 +16,7 @@ public class InventorySlot : MonoBehaviour
         item = newItem;
         icon.sprite = item.icon;
         icon.enabled = true;
+        text.text = "x" + newItem.uses;
         button.interactable = true;
     }
 
@@ -25,6 +26,7 @@ public class InventorySlot : MonoBehaviour
 
         icon.sprite = null;
         icon.enabled = false;
+        text.text = "";
         button.interactable = false;
     }
 

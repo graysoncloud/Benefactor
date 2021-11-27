@@ -167,7 +167,7 @@ MonoBehaviour:
   name: Scientist
   moveTime: 0.1
   totalMoves: 3
-  talkingRange: 0
+  talkingRange: 1
   totalActions: 1
   actionDelay: 0.5
   strength: 1

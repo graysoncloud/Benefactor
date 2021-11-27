@@ -297,7 +297,6 @@ public class Player : Character
     {
         if (other.tag == "Exit")
         {
-            rationale += 3;
             Invoke("Restart", 1f);
             enabled = false;
         }

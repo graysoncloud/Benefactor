@@ -167,7 +167,7 @@ MonoBehaviour:
   name: Big Brother
   moveTime: 0.1
   totalMoves: 5
-  talkingRange: 5
+  talkingRange: 1
   totalActions: 1
   actionDelay: 0.5
   strength: 1

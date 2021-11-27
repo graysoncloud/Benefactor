@@ -211,7 +211,7 @@ public class DialogueManager : MonoBehaviour
         if (conversationType == "reason")
         {
             // Reasoning algorithm (requires a certain threshold of rational AND reputation)
-            if (player.GetComponent<Player>().rationale > 50)
+            if (player.GetComponent<Player>().GetHealth() > player.GetComponent<Player>().maxHealth/2)
             {
                 // Insert code to convert enemy into an ally here (reasoning worked)
                 System.Random rand = new System.Random();

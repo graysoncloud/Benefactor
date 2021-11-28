@@ -679,20 +679,22 @@ public class Character : InteractableObject
                 toAttack.gameObject.GetComponent<Character>().subdued = true;
             }
         }
-
-        weapon.uses--;
-        if (weapon.uses == 0)
-            Remove(weapon);
-
-        // animator.SetTrigger("enemyAttack");
-
         else
         {
             Character character = toAttack.gameObject.GetComponent<Character>();
             if (character != null)
                 character.Enemy(this);
         }
-        currentObjective = null; //TEMP
+
+        weapon.uses--;
+        if (weapon.uses == 0)
+            Remove(weapon);
+
+        // animator.SetTrigger("enemyAttack");
+        if (toAttack.GetHealth() <= 0)
+            currentObjective = null; //TEMP
+        else
+            Debug.Log("TARGET SURVIVED");
     }
 
     protected virtual IEnumerator Heal(InteractableObject toHeal, HoldableObject medicine)

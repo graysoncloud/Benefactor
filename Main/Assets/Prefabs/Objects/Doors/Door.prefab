@@ -164,6 +164,7 @@ MonoBehaviour:
   takesKey: 0
   doorSprite: {fileID: 0}
   trigger: {fileID: 0}
+  openTime: 0.5
 --- !u!95 &-5755080771419565434
 Animator:
   serializedVersion: 4

@@ -79,12 +79,12 @@ public class InteractableObject : MonoBehaviour
         Debug.Log(this + " took " + damage + " damage");
     }
 
-    public void Heal(double amount)
+    public virtual IEnumerator Heal(double amount)
     {
-        if (!damageable) return;
+        if (!damageable) yield break;
         health = Math.Min(health + amount, maxHealth);
         SoundManager.instance.Heal();
-        StartCoroutine(UpdateHealthBar());
+        yield return StartCoroutine(UpdateHealthBar());
         UpdatePosition();
     }
 

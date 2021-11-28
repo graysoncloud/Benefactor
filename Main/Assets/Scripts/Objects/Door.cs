@@ -9,6 +9,7 @@ public class Door : InteractableObject
     public bool takesKey;
     public DoorSprite doorSprite;
     public Lever trigger;
+    public float openTime;
 
     protected bool open;
     protected Animator animator;
@@ -20,12 +21,14 @@ public class Door : InteractableObject
         animator = GetComponent<Animator>();
     }
 
-    public void Toggle()
+    public IEnumerator Toggle()
     {
         if (open)
             Close();
         else
             Open();
+
+        yield return new WaitForSeconds(openTime);
     }
 
     void Open()

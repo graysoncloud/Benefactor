@@ -32,6 +32,6 @@ public class InventorySlot : MonoBehaviour
 
     public void OnPress()
     {
-        GameManager.instance.activeCharacter.ChooseItem(item);
+        StartCoroutine(GameManager.instance.activeCharacter.ChooseItem(item));
     }
 }

@@ -160,7 +160,7 @@ public class BoardManager : MonoBehaviour
                 bottomTilemap.SetTile(new Vector3Int(x, y, 0), dirtTile);
                 if (x >= 0 && x < columns && y >= 0 && y < rows)
                 {
-                    Grid[x].Add(new Node(new Vector2(x, y), true, 1));
+                    Grid[x].Add(new Node(new Vector2(x, y), true));
                 }
             }
         }
@@ -542,7 +542,7 @@ public class BoardManager : MonoBehaviour
                     if ((!cells.left && x == start.x) || (!cells.right && x == end.x - 1) || (!cells.up && y == end.y - 1) || (!cells.down && y == start.y)) {
                         if (placedFrontDoor == new Vector2Int(0,0) && gridPositions.Contains(position - new Vector3Int(0,1,1)) && !otherRooms.down && y == start.y && (x == (start.x*2 + roomLength)/2 || x == (end.x*2 - roomLength)/2)) {
                             Instantiate(basicDoor, position, Quaternion.identity);
-                            placedFrontDoor = new Vector2Int(position.x, position.y - 1);
+                            placedFrontDoor = new Vector2Int(position.x, position.y);
                             gridPositions.Remove(position - new Vector3Int(0, 1, 1));
                         } else {
                             GameObject newWall = Instantiate(wall, position, Quaternion.identity);
@@ -562,56 +562,46 @@ public class BoardManager : MonoBehaviour
 
     private void SpawnPaths()
     {
-        Dictionary<Vector2Int, List<Vector2Int>> paths = new Dictionary<Vector2Int, List<Vector2Int>>();
-        foreach (Vector2Int position in pathPositions) {
-            List<Vector2Int> toTarget = new List<Vector2Int>();
-            foreach (Vector2Int pos in pathPositions) {
-                if (position != pos)
-                    toTarget.Add(pos);
-            }
-            paths[position] = toTarget;
-        }
-
         List<List<Node>> pathGrid = new List<List<Node>>();
-        for (int x = 0; x < columns; x++) {
+        for (int x = 0; x < columns; x++)
+        {
             pathGrid.Add(new List<Node>());
-            for (int y = 0; y < rows; y++) {
-                pathGrid[x].Add(new Node(new Vector2(x, y), Grid[x][y].Weight == 0, Grid[x][y].Weight > 1 ? 10 : 5));
+            for (int y = 0; y < rows; y++)
+            {
+                pathGrid[x].Add(new Node(new Vector2(x, y), Grid[x][y].Weight == 1, 100));
             }
         }
         Astar astar = new Astar(pathGrid);
 
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
-        List<Vector2Int> targets = new List<Vector2Int>();
-        while (pathPositions.Count > 0) {
+        visited.Add(pathPositions[0]);
+        pathPositions.Remove(pathPositions[0]);
+        while (pathPositions.Count > 0)
+        {
             Vector2Int start = pathPositions[0];
-            targets = paths[start];
             pathPositions.Remove(start);
-            while (targets.Count > 0) {
-                Vector2Int end = targets[0];
-                targets.RemoveAt(0);
-                Stack<Node> stack = astar.FindPath(start, end, false);
-                List<Node> path = new List<Node>();
-                if (stack == null)
-                    continue;
-                else
-                    path = stack.ToList();
-                for (int i = 0; i < path.Count; i++) {
-                    Node node = path[i];
-                    Vector2Int newPos = new Vector2Int((int) node.Position.x, (int) node.Position.y);
-                    if (newPos != start && newPos != end && !visited.Contains(newPos)) {
-                        int radius = Random.Range(pathRadius.minimum, pathRadius.maximum + 1);
-                        Vector2Int prevPos = (i == 0) ? new Vector2Int(-2,-2) : new Vector2Int((int) path[i - 1].Position.x, (int) path[i - 1].Position.y);
-                        Vector2Int nextPos = (i == path.Count - 1) ? new Vector2Int(-2,-2) : new Vector2Int((int) path[i + 1].Position.x, (int) path[i + 1].Position.y);
-                        Connections connections = new Connections(
-                            newPos + new Vector2Int(0,1) == prevPos || newPos + new Vector2Int(0,1) == nextPos,
-                            newPos + new Vector2Int(0,-1) == prevPos || newPos + new Vector2Int(0,-1) == nextPos,
-                            newPos + new Vector2Int(-1,0) == prevPos || newPos + new Vector2Int(-1,0) == nextPos,
-                            newPos + new Vector2Int(1,0) == prevPos || newPos + new Vector2Int(1,0) == nextPos);
-                        PlaceTiles(overGroundTilemap, pathTile, newPos, radius, true, connections);
-                        pathGrid[(int) node.Position.x][(int) node.Position.y] = new Node(new Vector2(newPos.x, newPos.y), true, -2);
-                        visited.Add(newPos);
-                    }
+            Stack<Node> stack = astar.FindPath(start, visited.ToList());
+            List<Node> path;
+            if (stack == null)
+                break;
+            path = stack.ToList();
+            for (int i = 0; i < path.Count; i++)
+            {
+                Node node = path[i];
+                Vector2Int newPos = new Vector2Int((int)node.Position.x, (int)node.Position.y);
+                if (!visited.Contains(newPos))
+                {
+                    int radius = Random.Range(pathRadius.minimum, pathRadius.maximum + 1);
+                    Vector2Int prevPos = (i == 0) ? new Vector2Int(-2, -2) : new Vector2Int((int)path[i - 1].Position.x, (int)path[i - 1].Position.y);
+                    Vector2Int nextPos = (i == path.Count - 1) ? new Vector2Int(-2, -2) : new Vector2Int((int)path[i + 1].Position.x, (int)path[i + 1].Position.y);
+                    Connections connections = new Connections(
+                        newPos + new Vector2Int(0, 1) == prevPos || newPos + new Vector2Int(0, 1) == nextPos,
+                        newPos + new Vector2Int(0, -1) == prevPos || newPos + new Vector2Int(0, -1) == nextPos,
+                        newPos + new Vector2Int(-1, 0) == prevPos || newPos + new Vector2Int(-1, 0) == nextPos,
+                        newPos + new Vector2Int(1, 0) == prevPos || newPos + new Vector2Int(1, 0) == nextPos);
+                    PlaceTiles(overGroundTilemap, pathTile, newPos, radius, true, connections);
+                    pathGrid[newPos.x][(int)newPos.y] = new Node(new Vector2(newPos.x, newPos.y), true, 0);
+                    visited.Add(newPos);
                 }
                 astar = new Astar(pathGrid);
             }
@@ -718,9 +708,9 @@ public class BoardManager : MonoBehaviour
                             }
                             if (!onEdge)
                                 plantTilemap.SetTile(newPos, waterFloraTile);
-                        } else {
-                            plantTilemap.SetTile(newPos, Random.Range(0,5) > 0 ? flowerTile : mushroomTile);
                         }
+                        else
+                            plantTilemap.SetTile(newPos, Random.Range(0,5) > 0 ? flowerTile : mushroomTile);
                     if ((path || pond) && gridPositions.Contains(newPosGrid))
                         gridPositions.Remove(newPosGrid);
                 }

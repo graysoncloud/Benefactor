@@ -300,7 +300,6 @@ public class GameManager : MonoBehaviour
     public void UpdateNode(Vector2 position, bool damageable, float health)
     {
         Grid[(int)position.x][(int)position.y] = new Node(position, damageable, health + 1);
-        //Debug.Log(position.x + ", " + position.y + ": " + damageable + "; " + (health + 1));
     }
 
     public void CameraTarget(GameObject toTarget)

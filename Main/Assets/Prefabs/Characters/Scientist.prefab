@@ -169,7 +169,7 @@ MonoBehaviour:
   totalMoves: 3
   talkingRange: 1
   totalActions: 1
-  actionDelay: 0.5
+  actionDelay: 1
   strength: 1
   accuracy: 0
   dexterity: 0

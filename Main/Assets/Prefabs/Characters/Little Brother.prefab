@@ -166,10 +166,10 @@ MonoBehaviour:
     type: 3}
   name: Little Brother
   moveTime: 0.15
-  totalMoves: 5
+  totalMoves: 4
   talkingRange: 1
   totalActions: 1
-  actionDelay: 0.5
+  actionDelay: 1
   strength: 1
   accuracy: 0
   dexterity: 0

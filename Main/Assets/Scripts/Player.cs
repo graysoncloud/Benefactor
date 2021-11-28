@@ -53,7 +53,7 @@ public class Player : Character
         }
     }
 
-    protected override IEnumerator NextStep(bool delay = false)
+    protected override IEnumerator NextStep()
     {
         if (!playable) {
             StartCoroutine(base.NextStep());
@@ -64,10 +64,7 @@ public class Player : Character
         if (GameManager.instance.dialogueInProgress)
             yield return new WaitUntil(() => GameManager.instance.dialogueInProgress == false);
 
-        if (delay)
-            yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
-        //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
         if ((movesLeft != totalMoves || actionsLeft != totalActions) && lastState.moves == movesLeft && lastState.actions == actionsLeft && lastState.position == (Vector2)transform.position)
             MenuManager.instance.HideBackButton();
         else
@@ -228,7 +225,7 @@ public class Player : Character
         Debug.Log("Player waiting for item input");
     }
 
-    public override void ChooseItem(HoldableObject item)
+    public override IEnumerator ChooseItem(HoldableObject item)
     {
         if (looting)
         {
@@ -247,7 +244,7 @@ public class Player : Character
                 {
                     character.Enemy(this);
                     Back();
-                    return;
+                    yield break;
                 }
                 if (inventory.Contains(item)) {
                     Remove(item);
@@ -262,12 +259,12 @@ public class Player : Character
             MenuManager.instance.ShowPlayerInventory("", inventory, 0, inventory, name);
             actionsLeft--;
             UpdateState();
-            return;
+            yield break;
         }
         
         gettingItem = false;
         MenuManager.instance.HideInventories();
-        base.ChooseItem(item);
+        StartCoroutine(base.ChooseItem(item));
     }
 
     protected override void Loot(InteractableObject toLoot)

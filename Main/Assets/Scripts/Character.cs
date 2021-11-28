@@ -113,12 +113,9 @@ public class Character : InteractableObject
         StartCoroutine(NextStep());
     }
 
-    protected virtual IEnumerator NextStep(bool delay = false)
+    protected virtual IEnumerator NextStep()
     {
-        if (delay)
-            yield return new WaitForSeconds(actionDelay);
         GameManager.instance.CameraTarget(this.gameObject);
-        //Debug.Log("Moves: " + movesLeft + ", Actions: " + actionsLeft);
 
         if (subdued)
         {
@@ -160,28 +157,28 @@ public class Character : InteractableObject
 
     protected virtual void UpdateObjectives()
     {
-        currentObjective = null; //temp fix?
-        if (currentObjective != null && currentObjective.action == "Wait")
-            currentObjective = null;
         Objective healClosest = new Objective(GetClosest(allies), "Heal");
-        if (healClosest.target != null && IsDamaged() && HasItemType("Medicine") && !HasObjective(healClosest))
-            objectives.Prepend(healClosest);
+        if (healClosest.target != null && healClosest.target.IsDamaged() && HasItemType("Medicine") && !HasObjective(healClosest))
+        {
+            objectives.Prepend(currentObjective);
+            currentObjective = healClosest;
+        }
 
         Objective attackClosest = new Objective(GetClosest(enemies), "Attack");
         if (attackClosest.target != null && destructive && !subdued && !HasObjective(attackClosest))
             objectives.Add(attackClosest);
 
-        if ((currentObjective == null && objectives.Count == 0) || (actionsLeft <= 0 && movesLeft <= 0))
+        if (currentObjective == null && objectives.Count > 0)
+        {
+            currentObjective = objectives[0];
+            objectives.Remove(currentObjective);
+        }
+
+        if (currentObjective == null || movesLeft <= 0 || (GetDistance(currentObjective.target) <= 1 && actionsLeft == 0))
         {
             if (currentObjective != null && currentObjective.action != "Wait")
                 objectives.Prepend(new Objective(currentObjective.target, currentObjective.action));
             currentObjective = new Objective(this, "Wait");
-        }
-
-        if (currentObjective == null)
-        {
-            currentObjective = objectives[0];
-            objectives.Remove(currentObjective);
         }
     }
 
@@ -224,8 +221,9 @@ public class Character : InteractableObject
 
     virtual protected void FindPath()
     {
+        List<HoldableObject> weapons = MenuManager.instance.SortedInventory("Weapon", inventory);
         Astar astar = new Astar(GameManager.instance.Grid);
-        Stack<Node> path = astar.FindPath(transform.position, currentObjective.target.transform.position, destructive);
+        Stack<Node> path = astar.FindPath(transform.position, currentObjective.target.transform.position, destructive, totalMoves, weapons);
         int space = 1; //temporarily until adjust for targets you can stand on (interactable  vs holdable)
         pathToObjective = new Vector2[Math.Min(movesLeft, path.Count - space)];
         if (pathToObjective.Length == 0) { return; }
@@ -374,7 +372,7 @@ public class Character : InteractableObject
         attackRange = 1;
         if (HasItemType("Weapon"))
         {
-            List<HoldableObject> weapons = GameObject.Find("MenuManager").GetComponent<MenuManager>().SortedInventory("Weapon", inventory);
+            List<HoldableObject> weapons = MenuManager.instance.SortedInventory("Weapon", inventory);
             foreach (HoldableObject weapon in weapons)
             {
                 if (weapon.range > attackRange)
@@ -449,13 +447,13 @@ public class Character : InteractableObject
                 if (objects != null && objects.Contains(currentObjective.target))
                     SelectItem("Weapon");
                 else
-                    StartCoroutine(EndTurn());
+                    StartCoroutine(NextStep());
                 break;
             case "Heal":
                 if (objects != null && objects.Contains(currentObjective.target))
                     SelectItem("Medicine");
                 else
-                    StartCoroutine(EndTurn());
+                    StartCoroutine(NextStep());
                 break;
             case "Talk":
                 if (objects != null && objects.Contains(currentObjective.target))
@@ -467,24 +465,21 @@ public class Character : InteractableObject
                 break;
             case "Door":
                 if (objects != null && objects.Contains(currentObjective.target))
-                    Toggle(currentObjective.target);
-                actionsLeft--;
-                UpdateState();
-                currentObjective = null;
-                StartCoroutine(NextStep());
+                    StartCoroutine(Toggle(currentObjective.target));
+                else
+                    StartCoroutine(NextStep());
                 break;
             case "Unlock":
                 if (objects != null && objects.Contains(currentObjective.target))
                     SelectItem("Key");
                 else
-                    StartCoroutine(EndTurn());
+                    StartCoroutine(NextStep());
                 break;
             case "Lever":
                 if (objects != null && objects.Contains(currentObjective.target))
-                    Toggle(currentObjective.target);
-                actionsLeft--;
-                UpdateState();
-                currentObjective = null;
+                    StartCoroutine(Toggle(currentObjective.target));
+                else
+                    StartCoroutine(NextStep());
                 StartCoroutine(NextStep());
                 break;
             case "Loot":
@@ -500,8 +495,8 @@ public class Character : InteractableObject
                     Steal(currentObjective.target);
                 break;
             case "Wait":
-                StartCoroutine(EndTurn());
                 currentObjective = null;
+                StartCoroutine(EndTurn());
                 break;
             default:
                 throw new Exception("Unknown action");
@@ -510,28 +505,28 @@ public class Character : InteractableObject
 
     protected virtual void SelectItem(String type)
     {
-        List<HoldableObject> items = GameObject.Find("MenuManager").GetComponent<MenuManager>().SortedInventory(type, inventory);
+        List<HoldableObject> items = MenuManager.instance.SortedInventory(type, inventory);
 
         int i = 0;
         if (type == "Weapon")
             while (items[i].range < GetDistance(currentObjective.target))
                 i++;
-        ChooseItem(items[i]);
+        StartCoroutine(ChooseItem(items[i]));
     }
 
-    public virtual void ChooseItem(HoldableObject item)
+    public virtual IEnumerator ChooseItem(HoldableObject item)
     {
         actionsLeft--;
         UpdateState();
         switch (item.type)
         {
             case "Weapon":
-                Attack(currentObjective.target, item);
-                StartCoroutine(NextStep(true));
+                yield return StartCoroutine(Attack(currentObjective.target, item));
+                StartCoroutine(NextStep());
                 break;
             case "Medicine":
-                Heal(currentObjective.target, item);
-                StartCoroutine(NextStep(true));
+                yield return StartCoroutine(Heal(currentObjective.target, item));
+                StartCoroutine(NextStep());
                 break;
             case "Key":
                 Unlock(currentObjective.target, item);
@@ -541,18 +536,23 @@ public class Character : InteractableObject
         }
     }
 
-    protected virtual void Toggle(InteractableObject toToggle)
+    protected virtual IEnumerator Toggle(InteractableObject toToggle)
     {
         GameManager.instance.CameraTarget(toToggle.gameObject);
 
         Door door = toToggle.gameObject.GetComponent<Door>();
         if (door != null)
-            door.Toggle();
+            yield return StartCoroutine(door.Toggle());
         else
         {
             Lever lever = toToggle.gameObject.GetComponent<Lever>();
             lever.Toggle();
         }
+
+        actionsLeft--;
+        UpdateState();
+        currentObjective = null;
+        StartCoroutine(NextStep());
     }
 
     protected virtual void Unlock(InteractableObject toUnlock, HoldableObject key)
@@ -639,7 +639,7 @@ public class Character : InteractableObject
 
     public bool HasItemType(String type)
     {
-        return GameObject.Find("MenuManager").GetComponent<MenuManager>().SortedInventory(type, inventory).Count > 0;
+        return MenuManager.instance.SortedInventory(type, inventory).Count > 0;
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
@@ -664,11 +664,11 @@ public class Character : InteractableObject
         inventory.Remove(item);
     }
 
-    protected void Attack (InteractableObject toAttack, HoldableObject weapon)
+    protected IEnumerator Attack (InteractableObject toAttack, HoldableObject weapon)
     {
         GameManager.instance.CameraTarget(toAttack.gameObject);
 
-        StartCoroutine(toAttack.TakeDamage(weapon.amount * (weapon.range == 1 ? strength : 1)));
+        yield return StartCoroutine(toAttack.TakeDamage(weapon.amount * (weapon.range == 1 ? strength : 1)));
 
         // Check for subdued
         if (toAttack.GetHealth() / toAttack.maxHealth < subduedRatio)
@@ -695,11 +695,11 @@ public class Character : InteractableObject
         currentObjective = null; //TEMP
     }
 
-    protected virtual void Heal(InteractableObject toHeal, HoldableObject medicine)
+    protected virtual IEnumerator Heal(InteractableObject toHeal, HoldableObject medicine)
     {
         GameManager.instance.CameraTarget(toHeal.gameObject);
 
-        toHeal.Heal(medicine.amount);
+        yield return StartCoroutine(toHeal.Heal(medicine.amount));
 
         Remove(medicine);
 

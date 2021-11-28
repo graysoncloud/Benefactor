@@ -165,7 +165,7 @@ public class Character : InteractableObject
         }
 
         Objective attackClosest = new Objective(GetClosest(enemies), "Attack");
-        if (attackClosest.target != null && destructive && !subdued && !HasObjective(attackClosest))
+        if (attackClosest.target != null && destructive && !subdued && HasItemType("Weapon") && !HasObjective(attackClosest))
             objectives.Add(attackClosest);
 
         if (currentObjective == null && objectives.Count > 0)
@@ -506,6 +506,12 @@ public class Character : InteractableObject
     protected virtual void SelectItem(String type)
     {
         List<HoldableObject> items = MenuManager.instance.SortedInventory(type, inventory);
+        if (items.Count == 0)
+        {
+            objectives.Prepend(currentObjective);
+            StartCoroutine(NextStep());
+            return;
+        }
 
         int i = 0;
         if (type == "Weapon")

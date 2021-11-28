@@ -182,8 +182,9 @@ public class MenuManager : MonoBehaviour
         characterName.GetComponent<Text>().text = (character != null) ? character.name : target.name
             .Replace("(Clone)", "").Replace("1", "").Replace("2", "").Replace("3", "").Replace("4", "")
             .Replace("5", "").Replace("6", "").Replace("7", "").Replace("8", "").Replace("9", "").Replace("0", "");
-        healthText.GetComponent<Text>().text = "❤️ " + target.GetHealth().ToString() + "/" + target.maxHealth;
-        movesText.GetComponent<Text>().text = (character != null) ? ("➤  " + character.totalMoves.ToString()) : "";
+        healthText.GetComponent<Text>().text = target.GetHealth().ToString() + "/" + target.maxHealth;
+        movesText.GetComponent<Text>().text = (character != null) ? (character.totalMoves.ToString()) : "";
+        movesText.GetComponent<Text>().gameObject.SetActive(character != null);
         playerStats.SetActive(true);
     }
 

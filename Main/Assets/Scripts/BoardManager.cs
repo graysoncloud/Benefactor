@@ -100,6 +100,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] storage;
     public GameObject[] shelves;
     public GameObject[] bar;
+    public GameObject[] atBack;
     public GameObject table;
     public GameObject chair;
     public GameObject bed;
@@ -460,7 +461,6 @@ public class BoardManager : MonoBehaviour
         Vector2Int widthHeight = GetBuildingWidthHeight(rooms, roomLength);
         Vector2Int minXY = GetBuildingMinXY(rooms, roomLength);
         Vector2Int bottomLeft = new Vector2Int(center.x - widthHeight.x/2, center.y - widthHeight.y/2);
-        //Debug.Log(widthHeight.x + ", " + widthHeight.y + " " + bottomLeft.x + ", " + bottomLeft.y + " " + (bottomLeft.x + widthHeight.x) + ", " + (bottomLeft.y + widthHeight.y));
         List<int> completed = new List<int>() { 0 };
         Vector2Int placedFrontDoor = new Vector2Int(0,0);
 
@@ -496,9 +496,11 @@ public class BoardManager : MonoBehaviour
             }
 
             Connections otherRooms = new Connections(false, false, false, false);
-            for (int x = 0; x < buildingRoomGrid.x; x++) {
-                for (int y = 0; y < buildingRoomGrid.y; y++) {
-                    if (rooms[x,y] == 0)
+            for (int x = 0; x < buildingRoomGrid.x; x++)
+            {
+                for (int y = 0; y < buildingRoomGrid.y; y++)
+                {
+                    if (rooms[x, y] == 0)
                         continue;
                     Vector2Int other = new Vector2Int(x, y);
                     if (cell + new Vector2Int(-1, 0) == other)
@@ -515,48 +517,98 @@ public class BoardManager : MonoBehaviour
             Vector2Int newCell = cell - minXY;
             Vector2Int start = new Vector2Int(bottomLeft.x + (newCell.x * roomLength), bottomLeft.y + (newCell.y * roomLength));
             Vector2Int end = new Vector2Int(bottomLeft.x + ((newCell.x + 1) * roomLength), bottomLeft.y + ((newCell.y + 1) * roomLength));
-            Vector2Int offset = new Vector2Int(buildingRoomGrid.x/2 - newCell.x - 1, buildingRoomGrid.y/2 - newCell.y - 1);
+            Vector2Int offset = new Vector2Int(buildingRoomGrid.x / 2 - newCell.x - 1, buildingRoomGrid.y / 2 - newCell.y - 1);
             start = start + offset;
             end = end + offset;
-            // Debug.Log("Start: " + start + ", End: " + end);
 
-            for (int x = start.x; x < end.x; x++) {
-                for (int y = start.y; y < end.y; y++) {
+            for (int x = start.x; x < end.x; x++)
+            {
+                for (int y = start.y; y < end.y; y++)
+                {
                     Vector3Int position = new Vector3Int(x, y, y);
-                    if (!gridPositions.Contains(position)) {
-                        if (x == (start.x*2 + roomLength)/2 || x == (end.x*2 - roomLength)/2 || y == (start.y*2 + roomLength)/2 || y == (end.y*2 - roomLength)/2) {
-                            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(new Vector2(x,y), 0.5f);
-                            foreach (Collider2D hitCollider in hitColliders)
+
+                    Collider2D[] hitColliders = Physics2D.OverlapCircleAll(new Vector2(x, y), 0.5f);
+                    bool visited = false;
+                    foreach (Collider2D hitCollider in hitColliders)
+                    {
+                        Wall wall = hitCollider.GetComponent<Wall>();
+                        if (wall != null)
+                        {
+                            if (x == (start.x * 2 + roomLength) / 2 || x == (end.x * 2 - roomLength) / 2 || y == (start.y * 2 + roomLength) / 2 || y == (end.y * 2 - roomLength) / 2)
                             {
-                                Wall wall = hitCollider.GetComponent<Wall>();
-                                if (wall != null) {
-                                    GameObject.Destroy(wall.gameObject);
-                                    Instantiate(basicDoor, position, Quaternion.identity);
-                                }
+                                GameObject.Destroy(wall.gameObject);
+                                Instantiate(Random.Range(0, 4) == 0 ? keyDoor : basicDoor, position, Quaternion.identity);
+                                gridPositions.Remove(position);
+                                gridPositions.Remove(position - new Vector3Int(0, 1, 1));
+                                gridPositions.Remove(position + new Vector3Int(0, 1, 1));
+                                gridPositions.Remove(position - new Vector3Int(1, 0, 0));
+                                gridPositions.Remove(position + new Vector3Int(1, 0, 0));
                             }
+                            visited = true;
                         }
-                        continue;
                     }
+                    if (visited)
+                        continue;
+
                     if (otherRooms.up || cells.up || y != end.y - 1)
                         floorTilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
-                    if ((!cells.left && x == start.x) || (!cells.right && x == end.x - 1) || (!cells.up && y == end.y - 1) || (!cells.down && y == start.y)) {
-                        if (placedFrontDoor == new Vector2Int(0,0) && gridPositions.Contains(position - new Vector3Int(0,1,1)) && !otherRooms.down && y == start.y && (x == (start.x*2 + roomLength)/2 || x == (end.x*2 - roomLength)/2)) {
+
+                    if ((!cells.left && x == start.x) || (!cells.right && x == end.x - 1) || (!cells.up && y == end.y - 1) || (!cells.down && y == start.y))
+                    {
+                        if (placedFrontDoor == new Vector2Int(0, 0) && gridPositions.Contains(position - new Vector3Int(0, 1, 1)) && !otherRooms.down && y == start.y && (x == (start.x * 2 + roomLength) / 2 || x == (end.x * 2 - roomLength) / 2))
+                        {
                             Instantiate(basicDoor, position, Quaternion.identity);
                             placedFrontDoor = new Vector2Int(position.x, position.y);
+                            gridPositions.Remove(position);
                             gridPositions.Remove(position - new Vector3Int(0, 1, 1));
-                        } else {
+                            gridPositions.Remove(position + new Vector3Int(0, 1, 1));
+                        }
+                        else
+                        {
                             GameObject newWall = Instantiate(wall, position, Quaternion.identity);
-                            if (gridPositions.Contains(position - new Vector3Int(0,1,1)) && !otherRooms.down && y == start.y)
+                            if (gridPositions.Contains(position - new Vector3Int(0, 1, 1)) && !otherRooms.down && y == start.y)
                                 newWall.GetComponent<Wall>().IsFront();
                         }
                     }
-                    gridPositions.Remove(position);
+                    else if (x > start.x && x < end.x - 1)
+                    {
+                        if (!cells.up && y == end.y - 2 && (!otherRooms.up || (x != (start.x * 2 + roomLength) / 2 && x != (end.x * 2 - roomLength) / 2)))
+                        {
+                            if (Random.Range(0, 3) > 0)
+                            {
+                                Instantiate(RandomObject(atBack), position, Quaternion.identity);
+                                gridPositions.Remove(position);
+                            }
+                        }
+                    }
+
                     Grid[position.x][position.y] = new Node(new Vector2(position.x, position.y), true, 2);
                     roof.positions.Add(new Vector2Int(x, y));
                     roof.tiles.SetTile(new Vector3Int(x, y + 1, 0), roofTile);
                 }
             }
+
+            if (Random.Range(0, 2) == 0)
+            {
+                Vector2Int tablePos = new Vector2Int(-2, -2);
+                while (!gridPositions.Contains(new Vector3Int(tablePos.x, tablePos.y, tablePos.y)))
+                {
+                    tablePos = new Vector2Int(Random.Range(start.x + 1, end.x - 1), Random.Range(start.y + 1, end.y - 2));
+                }
+                PlaceTable(tablePos, start, end);
+            }
+
+            for (int x = start.x; x < end.x; x++)
+            {
+                for (int y = start.y; y < end.y; y++)
+                {
+                    Vector3Int position = new Vector3Int(x, y, y);
+                    if (gridPositions.Contains(position))
+                        gridPositions.Remove(position);
+                }
+            }
         }
+
         return placedFrontDoor;
     }
 
@@ -649,22 +701,28 @@ public class BoardManager : MonoBehaviour
         return rooms[Random.Range(0, rooms.Length)].type;
     }
 
-    void PlaceTable(Vector2Int coords)
+    void PlaceTable(Vector2Int coords, Vector2Int start, Vector2Int end)
     {
         Vector3Int position = new Vector3Int(coords.x, coords.y, coords.y);
+        if (!gridPositions.Contains(position))
+            return;
         Instantiate(table, position, Quaternion.identity);
         Vector3Int chairPosition = position + new Vector3Int(1,0,0);
-        if (gridPositions.Contains(chairPosition))
-            Instantiate(chair, chairPosition, Quaternion.identity);
+        if (gridPositions.Contains(chairPosition) && chairPosition.x > start.x && chairPosition.x < end.x - 1 && chairPosition.y > start.y && chairPosition.y < end.y - 2)
+            //Instantiate(chair, chairPosition, Quaternion.identity);
+            Instantiate(stool, chairPosition, Quaternion.identity);
         chairPosition = position + new Vector3Int(-1,0,0);
-        if (gridPositions.Contains(chairPosition))
-            Instantiate(chair, chairPosition, Quaternion.identity);
+        if (gridPositions.Contains(chairPosition) && chairPosition.x > start.x && chairPosition.x < end.x - 1 && chairPosition.y > start.y && chairPosition.y < end.y - 2)
+            //Instantiate(chair, chairPosition, Quaternion.identity);
+            Instantiate(stool, chairPosition, Quaternion.identity);
         chairPosition = position + new Vector3Int(0,1,1);
-        if (gridPositions.Contains(chairPosition))
-            Instantiate(chair, chairPosition, Quaternion.identity);
+        if (gridPositions.Contains(chairPosition) && chairPosition.x > start.x && chairPosition.x < end.x - 1 && chairPosition.y > start.y && chairPosition.y < end.y - 2)
+            //Instantiate(chair, chairPosition, Quaternion.identity);
+            Instantiate(stool, chairPosition, Quaternion.identity);
         chairPosition = position + new Vector3Int(0,-1,-1);
-        if (gridPositions.Contains(chairPosition))
-            Instantiate(chair, chairPosition, Quaternion.identity);
+        if (gridPositions.Contains(chairPosition) && chairPosition.x > start.x && chairPosition.x < end.x - 1 && chairPosition.y > start.y && chairPosition.y < end.y - 2)
+            //Instantiate(chair, chairPosition, Quaternion.identity);
+            Instantiate(stool, chairPosition, Quaternion.identity);
     }
 
     void PlaceTiles(Tilemap tilemap, RuleTile tile, Vector2Int position, int radius, bool path = false, Connections connections = null, bool pond = false)

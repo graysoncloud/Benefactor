@@ -24,46 +24,46 @@ public class Chair : InteractableObject
         bool isLeft = false;
         bool isRight = false;
        
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(0, 1), 0.5f);
-            foreach (Collider2D hitCollider in hitColliders) {
-                if (hitCollider.GetComponent<InteractableObject>() != null && hitCollider.gameObject.tag == "Table")
-                    isUp = true;
-            }
-            hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(0, -1), 0.5f);
-            foreach (Collider2D hitCollider in hitColliders) {
-                if (hitCollider.GetComponent<InteractableObject>() != null && hitCollider.gameObject.tag == "Table")
-                    isDown = true;
-            }
-            hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(-1, 0), 0.5f);
-            foreach (Collider2D hitCollider in hitColliders) {
-                if (hitCollider.GetComponent<InteractableObject>() != null && hitCollider.gameObject.tag == "Table")
-                    isLeft = true;
-            }
-            hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(1, 0), 0.5f);
-            foreach (Collider2D hitCollider in hitColliders) {
-                if (hitCollider.GetComponent<InteractableObject>() != null && hitCollider.gameObject.tag == "Table")
-                    isRight = true;
-            }
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(0, 1), 0.5f);
+        foreach (Collider2D hitCollider in hitColliders) {
+            if (hitCollider.GetComponent<InteractableObject>() != null && hitCollider.gameObject.tag == "Table")
+                isUp = true;
+        }
+        hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(0, -1), 0.5f);
+        foreach (Collider2D hitCollider in hitColliders) {
+            if (hitCollider.GetComponent<InteractableObject>() != null && hitCollider.gameObject.tag == "Table")
+                isDown = true;
+        }
+        hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(-1, 0), 0.5f);
+        foreach (Collider2D hitCollider in hitColliders) {
+            if (hitCollider.GetComponent<InteractableObject>() != null && hitCollider.gameObject.tag == "Table")
+                isLeft = true;
+        }
+        hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(1, 0), 0.5f);
+        foreach (Collider2D hitCollider in hitColliders) {
+            if (hitCollider.GetComponent<InteractableObject>() != null && hitCollider.gameObject.tag == "Table")
+                isRight = true;
+        }
         
         if (!isUp && !isDown && !isLeft && !isRight) {
             hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(0, 1), 0.5f);
             foreach (Collider2D hitCollider in hitColliders) {
-                if (hitCollider.GetComponent<InteractableObject>() != null)
+                if (hitCollider.GetComponent<Wall>() != null)
                     isDown = true;
             }
             hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(0, -1), 0.5f);
             foreach (Collider2D hitCollider in hitColliders) {
-                if (hitCollider.GetComponent<InteractableObject>() != null)
+                if (hitCollider.GetComponent<Wall>() != null)
                     isUp = true;
             }
             hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(-1, 0), 0.5f);
             foreach (Collider2D hitCollider in hitColliders) {
-                if (hitCollider.GetComponent<InteractableObject>() != null)
+                if (hitCollider.GetComponent<Wall>() != null)
                     isRight = true;
             }
             hitColliders = Physics2D.OverlapCircleAll(((Vector2) transform.position) + new Vector2(1, 0), 0.5f);
             foreach (Collider2D hitCollider in hitColliders) {
-                if (hitCollider.GetComponent<InteractableObject>() != null)
+                if (hitCollider.GetComponent<Wall>() != null)
                     isLeft = true;
             }
         }

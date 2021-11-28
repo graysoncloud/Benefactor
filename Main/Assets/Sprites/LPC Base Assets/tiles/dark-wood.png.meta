@@ -6050,11 +6050,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 416
-        y: 576
+        y: 544
         width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -6071,11 +6071,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 448
-        y: 576
+        y: 544
         width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -6092,11 +6092,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 480
-        y: 576
+        y: 544
         width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -10928,7 +10928,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      dark-wood_140: -7585504814835866813
+      dark-wood_8: -511008183825844202
       dark-wood_211: 5892547152140870230
       dark-wood_313: 8008001608747310542
       dark-wood_2: 7847184370984379951
@@ -11054,11 +11054,11 @@ TextureImporter:
       dark-wood_35: -20506419346031293
       dark-wood_17: -544213277231949546
       dark-wood_169: -7348668942691138067
-      dark-wood_174: -216128687833317052
-      dark-wood_359: 5424406269874717412
       dark-wood_290: 7141593430674590715
+      dark-wood_174: -216128687833317052
       dark-wood_155: -5175195436029624041
       dark-wood_387: -7595646868605016694
+      dark-wood_359: 5424406269874717412
       dark-wood_379: 3824105114468959430
       dark-wood_146: 631674253167844839
       dark-wood_284: 5800863757574680299
@@ -11163,13 +11163,13 @@ TextureImporter:
       dark-wood_287: 6974382902484193960
       dark-wood_170: -8829082205681200974
       dark-wood_1: -2827963797853479945
-      dark-wood_197: 1577077029727382740
-      dark-wood_314: 5248394429687806572
       dark-wood_360: 7330022176850908465
-      dark-wood_423: 7931148570622949837
+      dark-wood_314: 5248394429687806572
+      dark-wood_197: 1577077029727382740
       dark-wood_320: -6537040405310951648
-      dark-wood_433: 8653548938394591770
+      dark-wood_423: 7931148570622949837
       dark-wood_405: -6474479741343069675
+      dark-wood_433: 8653548938394591770
       dark-wood_271: -3574599468637140754
       dark-wood_117: 5485109747086635499
       dark-wood_430: -7341985393791324122
@@ -11221,9 +11221,9 @@ TextureImporter:
       dark-wood_150: -2064018547330856633
       dark-wood_207: 2692722129651659852
       dark-wood_165: 8787792774686282734
-      dark-wood_227: -5762574751247005498
-      dark-wood_78: 8528075843222735370
       dark-wood_341: -2369058366065832774
+      dark-wood_78: 8528075843222735370
+      dark-wood_227: -5762574751247005498
       dark-wood_136: 6731726898326866299
       dark-wood_340: 4107074564422381535
       dark-wood_138: -5853616537619808144
@@ -11263,8 +11263,8 @@ TextureImporter:
       dark-wood_388: 2859223286654273914
       dark-wood_41: -1148786158633331239
       dark-wood_74: -6628361742774574192
-      dark-wood_127: -7383648173327141681
       dark-wood_363: 953796924359946501
+      dark-wood_127: -7383648173327141681
       dark-wood_144: -5769801819113530653
       dark-wood_370: 4746520348233338320
       dark-wood_316: -5533794077816986931
@@ -11378,7 +11378,7 @@ TextureImporter:
       dark-wood_377: -4568682248225241764
       dark-wood_413: 4000458167792465248
       dark-wood_62: 102117506620636913
-      dark-wood_8: -511008183825844202
+      dark-wood_140: -7585504814835866813
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 

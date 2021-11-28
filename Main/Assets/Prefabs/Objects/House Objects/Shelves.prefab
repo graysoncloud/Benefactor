@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 7732909630141236205}
   - component: {fileID: 4260946265005922778}
   - component: {fileID: 3250592248702125131}
-  - component: {fileID: -2388374184263182209}
+  - component: {fileID: 6590007514430339704}
   m_Layer: 8
-  m_Name: Table
-  m_TagString: Table
+  m_Name: Shelves
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 1183741245
   m_SortingLayer: 6
   m_SortingOrder: 0
-  m_Sprite: {fileID: 4540334852527006005, guid: fbc06fafcaa923e4fb511fa62188ed29,
+  m_Sprite: {fileID: 9211646168690293479, guid: 733dc285e4227c746a0bc57aa043472c,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -103,8 +103,8 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    pivot: {x: 0.5, y: 0.25}
+    oldSize: {x: 1, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -113,7 +113,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-2388374184263182209
+--- !u!114 &6590007514430339704
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,14 +122,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7991227353612988546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2600fd7fc31304e4f9e29d9ff040aeae, type: 3}
+  m_Script: {fileID: 11500000, guid: 2970312397af6a849b12db0cac210ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Collisions:
     serializedVersion: 2
     m_Bits: 0
-  maxHealth: 2
-  damageable: 1
+  maxHealth: 1
+  damageable: 0
   repairable: 0
   leavesCorpse: 0
   walkOver: 0
@@ -137,4 +137,12 @@ MonoBehaviour:
   corpseSprite: {fileID: 0}
   fire: {fileID: 0}
   healthBar: {fileID: -3089663232832473053, guid: 9796aa1dfd0ae534ea62b22b00df3157,
+    type: 3}
+  locked: 0
+  takesKey: 0
+  items:
+  - {fileID: -5498856414594888391, guid: bc0edcda2f618f14eb2a7804bd691c91, type: 3}
+  openSprite: {fileID: 9211646168690293479, guid: 733dc285e4227c746a0bc57aa043472c,
+    type: 3}
+  closedSprite: {fileID: 5742650686957145614, guid: 733dc285e4227c746a0bc57aa043472c,
     type: 3}

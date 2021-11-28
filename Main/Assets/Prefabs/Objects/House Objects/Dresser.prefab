@@ -141,7 +141,7 @@ MonoBehaviour:
   locked: 0
   takesKey: 0
   items:
-  - {fileID: 2648351601887277121, guid: d7223e9ce65c5ff40a98ff9432da0fcf, type: 3}
+  - {fileID: -5498856414594888391, guid: ae876cd8e3a9f8c4c9af44a00acef1e0, type: 3}
   openSprite: {fileID: -4668774321457962561, guid: 733dc285e4227c746a0bc57aa043472c,
     type: 3}
   closedSprite: {fileID: -4668774321457962561, guid: 733dc285e4227c746a0bc57aa043472c,

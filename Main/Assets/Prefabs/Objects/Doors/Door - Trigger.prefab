@@ -165,6 +165,7 @@ MonoBehaviour:
   doorSprite: {fileID: 0}
   trigger: {fileID: -3614986126182399283, guid: 5448e8f368a921546b079e3deeeaf140,
     type: 3}
+  openTime: 0.5
 --- !u!95 &-5755080771419565434
 Animator:
   serializedVersion: 4

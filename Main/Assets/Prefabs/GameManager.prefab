@@ -159,8 +159,15 @@ MonoBehaviour:
   bar:
   - {fileID: 7991227353612988546, guid: 06284a21fc37d6c43a27511e1aca41d9, type: 3}
   - {fileID: 7991227353612988546, guid: c0985990a45ad9548b8f2addb6808c11, type: 3}
+  atBack:
+  - {fileID: 7991227353612988546, guid: e3d8529ed90ca0d469c9ac9b92a2e60d, type: 3}
+  - {fileID: 7991227353612988546, guid: 07e6558f8ebef41449ffa5ddb1989344, type: 3}
+  - {fileID: 7991227353612988546, guid: 91cab95606af37b4f909b8ab93d727f9, type: 3}
+  - {fileID: 7991227353612988546, guid: c9f9bf2a8236fba4cbd82a0c0cf9610a, type: 3}
+  - {fileID: 7991227353612988546, guid: 7a99bdff91c8cf04fbda6a59f2a23abe, type: 3}
+  - {fileID: 7991227353612988546, guid: fcf18b76e6d62734b97415eb793208b2, type: 3}
   table: {fileID: 7991227353612988546, guid: 61ac70d0452c5154b9b26b283eb70995, type: 3}
-  chair: {fileID: 0}
+  chair: {fileID: 7991227353612988546, guid: 757e290814b57654db46c3aac8dd7d3f, type: 3}
   bed: {fileID: 0}
   stool: {fileID: 7991227353612988546, guid: 06f8a59fda86f8442a8d82193b2f9057, type: 3}
   stove: {fileID: 7991227353612988546, guid: fcf18b76e6d62734b97415eb793208b2, type: 3}

@@ -68,6 +68,9 @@ TagManager:
   - name: Floor
     uniqueID: 2400453149
     locked: 0
+  - name: Walkover
+    uniqueID: 2750118713
+    locked: 0
   - name: Objects
     uniqueID: 1183741245
     locked: 0

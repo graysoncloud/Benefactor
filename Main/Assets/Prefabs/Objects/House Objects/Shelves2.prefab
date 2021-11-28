@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3250592248702125131}
   - component: {fileID: 6590007514430339704}
   m_Layer: 8
-  m_Name: China Shelves
+  m_Name: Shelves2
   m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -141,7 +141,7 @@ MonoBehaviour:
   locked: 0
   takesKey: 0
   items:
-  - {fileID: 2648351601887277121, guid: d7223e9ce65c5ff40a98ff9432da0fcf, type: 3}
+  - {fileID: -5498856414594888391, guid: b67a25e2dbb90a64ba4959583c7d4227, type: 3}
   openSprite: {fileID: 5112451828119714632, guid: 733dc285e4227c746a0bc57aa043472c,
     type: 3}
   closedSprite: {fileID: 4244326121947651600, guid: 733dc285e4227c746a0bc57aa043472c,

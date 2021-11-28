@@ -226,9 +226,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 1c5a0000
+      m_SelectedIDs: a0010000
       m_LastClickedID: 0
-      m_ExpandedIDs: beeff5fffaeff5ff56f1f5ff687cf8ffa47cf8ff007ef8ff461df9ff841df9ffc41ef9ff1022f9ff4e22f9ffaa23f9ff14fbffff16fbffff18fbfffff4ffffff52520000bc520000c2520000ce5200000e5300002c5300004053000056530000625300008a530000e65300001c54000046540000525400006a5400007e54000092540000bc540000ec540000f8540000ba550000
+      m_ExpandedIDs: beeff5fffaeff5ff56f1f5ff687cf8ffa47cf8ff007ef8ff0e0ef9ff460ef9ffa20ff9ffb215f9ffe815f9ff4417f9ff461df9ff841df9ffc41ef9ff1022f9ff4e22f9ffaa23f9ff14fbffff16fbffff18fbfffff4ffffff52520000bc520000c2520000ce5200000e5300002c5300004053000056530000625300008a530000e65300001c54000046540000525400006a5400007e54000092540000bc540000ec540000f8540000ba550000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -719,22 +719,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs/Items/Weapons
+    - Assets/Sprites/UI
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 71
   m_LastFolders:
-  - Assets/Prefabs/Items/Weapons
+  - Assets/Sprites/UI
   m_LastFoldersGridSize: 71
   m_LastProjectPath: C:\Users\booke\Documents\Projects\Capstone\Main
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 6}
-    m_SelectedIDs: ce6a0000
-    m_LastClickedID: 27342
-    m_ExpandedIDs: 00000000e860000030980000fc9a00007ea300002ebf0000
+    scrollPos: {x: 0, y: 86}
+    m_SelectedIDs: 9e6a0000
+    m_LastClickedID: 27294
+    m_ExpandedIDs: 00000000e86000009695000030980000fc9a00007ea300002ebf0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -787,10 +787,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 1c5a0000
-    m_LastClickedInstanceID: 23068
-    m_HadKeyboardFocusLastEvent: 0
-    m_ExpandedInstanceIDs: c623000030570000c857000000000000
+    m_SelectedInstanceIDs: a0010000
+    m_LastClickedInstanceID: 416
+    m_HadKeyboardFocusLastEvent: 1
+    m_ExpandedInstanceIDs: c623000030570000c8570000000000004c5a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

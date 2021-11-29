@@ -19,9 +19,10 @@ public class HealthBar : MonoBehaviour
         inverseUpdateTime = 1 / updateTime;
     }
 
-    public IEnumerator UpdateHealth(int currentHealth, int totalHealth, Vector3 position)
+    public IEnumerator UpdateHealth(int currentHealth, int totalHealth, Vector3 position, bool animate = true)
     {
-        spriteRenderer.enabled = true;
+        if (animate)
+            spriteRenderer.enabled = true;
         float targetWidth = (float)currentHealth / (float)totalHealth;
         transform.localPosition = new Vector3(position.x - (maxWidth - spriteRenderer.size.x) / 2, position.y + 0.7f, position.y + 0.7f);
         float remaining = 1;
@@ -33,7 +34,7 @@ public class HealthBar : MonoBehaviour
         Vector2 end = new Vector2(targetWidth, 0.2f);
         while (remaining > float.Epsilon)
         {
-            Vector2 newSize = Vector2.MoveTowards(spriteRenderer.size, end, inverseUpdateTime * Time.deltaTime);
+            Vector2 newSize = animate ? Vector2.MoveTowards(spriteRenderer.size, end, inverseUpdateTime * Time.deltaTime) : end;
             remaining = targetWidth < spriteRenderer.size.x ? spriteRenderer.size.x - targetWidth : targetWidth - spriteRenderer.size.x;
             spriteRenderer.size = newSize;
             transform.localPosition = new Vector3(position.x - (maxWidth - spriteRenderer.size.x) / 2, position.y + 0.7f, position.y + 0.7f);

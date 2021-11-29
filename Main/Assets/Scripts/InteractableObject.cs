@@ -126,9 +126,9 @@ public class InteractableObject : MonoBehaviour
         GameManager.instance.UpdateNode(transform.position, damageable, walkOver ? 0 : (float)health);
     }
 
-    protected IEnumerator UpdateHealthBar()
+    protected IEnumerator UpdateHealthBar(bool animate = true)
     {
         Debug.Log("Updating Health");
-        yield return StartCoroutine(healthBar.UpdateHealth((int)health, (int)maxHealth, transform.position));
+        yield return StartCoroutine(healthBar.UpdateHealth((int)health, (int)maxHealth, transform.position, animate));
     }
 }

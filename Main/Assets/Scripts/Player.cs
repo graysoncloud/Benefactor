@@ -232,9 +232,19 @@ public class Player : Character
             Storage storage = currentObjective.target.gameObject.GetComponent<Storage>();
             if (storage != null)
             {
-                storage.Remove(item);
-                MenuManager.instance.ShowOtherInventory("", inventory, 0, storage.items, storage.name);
-                Pickup(item);
+                if (storage.items.Contains(item)) {
+                    storage.Remove(item);
+                    MenuManager.instance.ShowOtherInventory("", inventory, 0, storage.items, storage.name
+                        .Replace("(Clone)", "").Replace("1", "").Replace("2", "").Replace("3", "").Replace("4", "")
+                        .Replace("5", "").Replace("6", "").Replace("7", "").Replace("8", "").Replace("9", "").Replace("0", ""));
+                    Pickup(item);
+                } else {
+                    Remove(item);
+                    storage.items.Add(item);
+                    MenuManager.instance.ShowOtherInventory("", inventory, 0, storage.items, storage.name
+                        .Replace("(Clone)", "").Replace("1", "").Replace("2", "").Replace("3", "").Replace("4", "")
+                        .Replace("5", "").Replace("6", "").Replace("7", "").Replace("8", "").Replace("9", "").Replace("0", ""));
+                }
             }
             else
             {
@@ -378,6 +388,7 @@ public class Player : Character
         ErasePosition();
         transform.position = lastState.position;
         UpdatePosition();
+        StartCoroutine(UpdateHealthBar(false));
         CheckRoof();
     }
 

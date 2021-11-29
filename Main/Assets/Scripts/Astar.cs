@@ -109,7 +109,7 @@ namespace AStarSharp
                         {
                             float damage = usableWeapons[0].amount;
                             destroyCost = (int) Mathf.Max(0, Mathf.Ceil((n.Weight - 1) / damage) * movement - movesTaken);
-                            Debug.Log("Destroy Cost: " + destroyCost);
+                            //Debug.Log("Destroy Cost: " + destroyCost);
                         }
                     }
 

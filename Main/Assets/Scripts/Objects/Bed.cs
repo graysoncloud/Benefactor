@@ -7,9 +7,7 @@ public class Bed : InteractableObject
 
     protected override void UpdatePosition()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y - 1, transform.position.y - 1);
-        base.UpdatePosition();
-        transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.y + 1);
+        GameManager.instance.UpdateNode(transform.position - new Vector3(0,1,1), damageable, walkOver ? 0 : (float)health);
         base.UpdatePosition();
     }
 }

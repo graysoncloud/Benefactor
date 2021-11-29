@@ -79,7 +79,8 @@ public class MouseManager : MonoBehaviour
         
         foreach (InteractableObject o in objects)
         {
-            if ((Vector2)o.transform.position == currentMouseCoords)
+            if ((Vector2)o.transform.position == currentMouseCoords || 
+                (o.gameObject.GetComponent<Bed>() != null && (Vector2)o.transform.position - new Vector2(0,1) == currentMouseCoords))
             {
                 MenuManager.instance.HighlightPath(new Vector2[] { currentMouseCoords });
 

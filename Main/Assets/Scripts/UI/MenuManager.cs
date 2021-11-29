@@ -260,7 +260,10 @@ public class MenuManager : MonoBehaviour
             if (o.gameObject.tag == "Character") {
                 color = o.gameObject.GetComponent<Player>().playable ? defaultPlayerColor : defaultEnemyColor;
             }
-            ShowIndicator(o.transform.position, defaultColor);
+            if (o.gameObject.GetComponent<Bed>() != null) {
+                ShowIndicator(o.transform.position - new Vector3(0,1,1), color);
+            }
+            ShowIndicator(o.transform.position, color);
         }
     }
 

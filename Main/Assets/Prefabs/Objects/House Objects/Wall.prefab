@@ -73,9 +73,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1183741245
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: -610229144, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  m_Sprite: {fileID: 1381283504, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -137,19 +137,32 @@ MonoBehaviour:
   fire: {fileID: 0}
   healthBar: {fileID: -3089663232832473053, guid: 9796aa1dfd0ae534ea62b22b00df3157,
     type: 3}
-  front: {fileID: -1335499793, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  frontLeft: {fileID: -1847647211, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  frontRight: {fileID: 1121036322, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  frontUp: {fileID: -2037735604, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  back: {fileID: -610229144, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  backLeft: {fileID: -200366622, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  backRight: {fileID: -1255369917, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  backUp: {fileID: 518650283, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  backDown: {fileID: -691603128, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  backUpLeft: {fileID: 1899295622, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  backUpRight: {fileID: 580944101, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  backUpDownLeft: {fileID: 666137232, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  backUpDownRight: {fileID: -1867864570, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
-  backUpDownLeftRight: {fileID: 1933204036, guid: badc89a8cbce6664e9d459b7fee29d69,
+  front: {fileID: 1381283504, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  frontWindow: {fileID: 5108324, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  frontWindowPlanter: {fileID: 958453102, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
     type: 3}
-  side: {fileID: -269522963, guid: badc89a8cbce6664e9d459b7fee29d69, type: 3}
+  frontLeft: {fileID: 112474170, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  frontRight: {fileID: 1945214217, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  frontUpDownLeft: {fileID: -2138748212, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  frontUpDownRight: {fileID: -623269970, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  frontUp: {fileID: -812258116, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  back: {fileID: -749111036, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  backLeft: {fileID: -203718517, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  backRight: {fileID: 1306556769, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  backUp: {fileID: -1628389042, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  backDown: {fileID: -1224786277, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  DownLeftBackRightFront: {fileID: -1721735996, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+    type: 3}
+  DownLeftFrontRightBack: {fileID: -1950641505, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+    type: 3}
+  backUpLeft: {fileID: 1420202710, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  backUpRight: {fileID: 942647510, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  backUpDownLeft: {fileID: 1432298609, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  backUpDownRight: {fileID: 1117162361, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  backUpDownLeftRight: {fileID: 2083366625, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+    type: 3}
+  UpDownLeftBackRightFront: {fileID: -1310520513, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+    type: 3}
+  UpDownLeftFrontRightBack: {fileID: -1500282542, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+    type: 3}
+  side: {fileID: 2082036781, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}

@@ -6,8 +6,8 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Door - Close
-  serializedVersion: 6
+  m_Name: Door (Front) - Open
+  serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
@@ -20,17 +20,13 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: -1461241000704778182, guid: 18c08cb5aa2459a45b831201aaa8951a,
-        type: 3}
+      value: {fileID: -844194578, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
     - time: 0.083333336
-      value: {fileID: 2955244180297683540, guid: 18c08cb5aa2459a45b831201aaa8951a,
-        type: 3}
+      value: {fileID: 1904247291, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
     - time: 0.16666667
-      value: {fileID: -555855029263698050, guid: 18c08cb5aa2459a45b831201aaa8951a,
-        type: 3}
+      value: {fileID: 117118734, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
     - time: 0.25
-      value: {fileID: -4061873745718759341, guid: 18c08cb5aa2459a45b831201aaa8951a,
-        type: 3}
+      value: {fileID: 39773874, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -49,11 +45,12 @@ AnimationClip:
       typeID: 212
       customType: 23
       isPPtrCurve: 1
+      isIntCurve: 0
     pptrCurveMapping:
-    - {fileID: -1461241000704778182, guid: 18c08cb5aa2459a45b831201aaa8951a, type: 3}
-    - {fileID: 2955244180297683540, guid: 18c08cb5aa2459a45b831201aaa8951a, type: 3}
-    - {fileID: -555855029263698050, guid: 18c08cb5aa2459a45b831201aaa8951a, type: 3}
-    - {fileID: -4061873745718759341, guid: 18c08cb5aa2459a45b831201aaa8951a, type: 3}
+    - {fileID: -844194578, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+    - {fileID: 1904247291, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+    - {fileID: 117118734, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+    - {fileID: 39773874, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

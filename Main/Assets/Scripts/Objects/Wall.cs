@@ -30,8 +30,11 @@ public class Wall : InteractableObject
     public Sprite UpDownLeftFrontRightBack;
     public Sprite side;
 
+    public GameObject edge;
+
     private int wallIndex;
     private bool isFront = false;
+    private bool isDown = false;
 
     //Start is called before the first frame update
     void Start()
@@ -49,7 +52,7 @@ public class Wall : InteractableObject
     void SetSprite()
     {
         bool isUp = false;
-        bool isDown = false;
+        isDown = false;
         bool isLeft = false;
         bool isRight = false;
         bool isRightFront = false;
@@ -111,6 +114,9 @@ public class Wall : InteractableObject
             spriteRenderer.sprite = isFront ? ((nearWindow || Random.Range(0,3) > 0) ? front : Random.Range(0,2) == 0 ? frontWindow : frontWindowPlanter) : back;
         else if (isUp && isDown)
             spriteRenderer.sprite = side;
+
+        if (isDown)
+            edge = Instantiate(edge, transform.position - new Vector3(0,1,0.1f), Quaternion.identity);
     }
 
     public void IsFront(bool inFront = true) {
@@ -123,5 +129,12 @@ public class Wall : InteractableObject
 
     public bool IsWindow() {
         return spriteRenderer.sprite == frontWindow || spriteRenderer.sprite == frontWindowPlanter;
+    }
+
+    protected override void ErasePosition()
+    {
+        if (isDown)
+            GameObject.Destroy(edge.gameObject);
+        base.ErasePosition();
     }
 }

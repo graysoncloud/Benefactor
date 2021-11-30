@@ -75,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1183741245
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -165,6 +165,9 @@ MonoBehaviour:
   doorSprite: {fileID: 0}
   trigger: {fileID: 0}
   openTime: 0.5
+  edge: {fileID: 7991227353612988546, guid: be532381564888a4ba1aedc2c741fcc4, type: 3}
+  backEdge: {fileID: 7991227353612988546, guid: 7de926e0223f004498989e2d3d7181f2,
+    type: 3}
 --- !u!95 &-5755080771419565434
 Animator:
   serializedVersion: 4

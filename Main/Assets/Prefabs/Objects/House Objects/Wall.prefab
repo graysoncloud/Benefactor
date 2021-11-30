@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 1183741245
   m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1381283504, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  m_Sprite: {fileID: -2029538757, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -137,32 +137,33 @@ MonoBehaviour:
   fire: {fileID: 0}
   healthBar: {fileID: -3089663232832473053, guid: 9796aa1dfd0ae534ea62b22b00df3157,
     type: 3}
-  front: {fileID: 1381283504, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  frontWindow: {fileID: 5108324, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  frontWindowPlanter: {fileID: 958453102, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+  front: {fileID: -2029538757, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  frontWindow: {fileID: -1606236187, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  frontWindowPlanter: {fileID: 1754844080, guid: 2c3997decd12f884785c18fba4a80239,
     type: 3}
-  frontLeft: {fileID: 112474170, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  frontRight: {fileID: 1945214217, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  frontUpDownLeft: {fileID: -2138748212, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  frontUpDownRight: {fileID: -623269970, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  frontUp: {fileID: -812258116, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  back: {fileID: -749111036, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  backLeft: {fileID: -203718517, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  backRight: {fileID: 1306556769, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  backUp: {fileID: -1628389042, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  backDown: {fileID: -1224786277, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  DownLeftBackRightFront: {fileID: -1721735996, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+  frontLeft: {fileID: 669459890, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  frontRight: {fileID: 833665598, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  frontUpDownLeft: {fileID: -1591138112, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  frontUpDownRight: {fileID: 1021861440, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  frontUp: {fileID: -1945112616, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  back: {fileID: -295955608, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  backLeft: {fileID: 596789775, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  backRight: {fileID: 1773925, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  backUp: {fileID: 1510688361, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  backDown: {fileID: -429029419, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  DownLeftBackRightFront: {fileID: -1820371435, guid: 2c3997decd12f884785c18fba4a80239,
     type: 3}
-  DownLeftFrontRightBack: {fileID: -1950641505, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+  DownLeftFrontRightBack: {fileID: 877071204, guid: 2c3997decd12f884785c18fba4a80239,
     type: 3}
-  backUpLeft: {fileID: 1420202710, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  backUpRight: {fileID: 942647510, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  backUpDownLeft: {fileID: 1432298609, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  backUpDownRight: {fileID: 1117162361, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
-  backUpDownLeftRight: {fileID: 2083366625, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+  backUpLeft: {fileID: -1302042432, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  backUpRight: {fileID: -2069021947, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  backUpDownLeft: {fileID: -2091173218, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  backUpDownRight: {fileID: -585818541, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  backUpDownLeftRight: {fileID: -284032047, guid: 2c3997decd12f884785c18fba4a80239,
     type: 3}
-  UpDownLeftBackRightFront: {fileID: -1310520513, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+  UpDownLeftBackRightFront: {fileID: 579820371, guid: 2c3997decd12f884785c18fba4a80239,
     type: 3}
-  UpDownLeftFrontRightBack: {fileID: -1500282542, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd,
+  UpDownLeftFrontRightBack: {fileID: 239511901, guid: 2c3997decd12f884785c18fba4a80239,
     type: 3}
-  side: {fileID: 2082036781, guid: 6fa835bc84ab7414b90c72dc0d1ffbcd, type: 3}
+  side: {fileID: 151894062, guid: 2c3997decd12f884785c18fba4a80239, type: 3}
+  edge: {fileID: 7991227353612988546, guid: be532381564888a4ba1aedc2c741fcc4, type: 3}

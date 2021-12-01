@@ -289,7 +289,7 @@ public class BoardManager : MonoBehaviour
             added.Add(next);
             Vector2Int randomRoom = added[Random.Range(0, added.Count)];
             next = randomRoom + directions[Random.Range(0, directions.Count)];
-            if (!added.Contains(next) && next.x >= 0 && next.x < buildingRoomGrid.x && next.y >= 0 && next.y < buildingRoomGrid.y) {
+            if (!added.Contains(next) && InRange(next, new Vector2(0,0), buildingRoomGrid)) {
                 bool merge = Random.Range(0, 2) == 0;
                 if (!merge) {
                     room++;
@@ -312,7 +312,7 @@ public class BoardManager : MonoBehaviour
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Vector2Int coords = new Vector2Int(x + i, y + j);
-                if (((i == 0 && j != 0) || (j == 0 && i != 0)) && coords.x >= 0 && coords.x < buildingRoomGrid.x && coords.y >= 0 && coords.y < buildingRoomGrid.y)
+                if (((i == 0 && j != 0) || (j == 0 && i != 0)) && InRange(coords, new Vector2(0,0), buildingRoomGrid))
                 {
                     if (rooms[coords.x, coords.y] > 0)
                         neighbor = true;
@@ -328,7 +328,7 @@ public class BoardManager : MonoBehaviour
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Vector2Int coords = new Vector2Int(x + i, y + j);
-                if (((i == 0 && j != 0) || (j == 0 && i != 0)) && coords.x >= 0 && coords.x < buildingRoomGrid.x && coords.y >= 0 && coords.y < buildingRoomGrid.y)
+                if (((i == 0 && j != 0) || (j == 0 && i != 0)) && InRange(coords, new Vector2(0,0), buildingRoomGrid))
                 {
                     if (rooms[coords.x, coords.y] != 0 && !RoomHasMerged(coords.x, coords.y, rooms))
                         unmergedNeighbors.Add(coords);
@@ -343,7 +343,7 @@ public class BoardManager : MonoBehaviour
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Vector2Int coords = new Vector2Int(x + i, y + j);
-                if (((i == 0 && j != 0) || (j == 0 && i != 0)) && coords.x >= 0 && coords.x < buildingRoomGrid.x && coords.y >= 0 && coords.y < buildingRoomGrid.y)
+                if (((i == 0 && j != 0) || (j == 0 && i != 0)) && InRange(coords, new Vector2(0,0), buildingRoomGrid))
                 {
                     if (rooms[x,y] > 0 && rooms[coords.x, coords.y] == rooms[x,y])
                         mergedNeighbors.Add(coords);
@@ -358,7 +358,7 @@ public class BoardManager : MonoBehaviour
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Vector2Int coords = new Vector2Int(x + i, y + j);
-                if (((i == 0 && j != 0) || (j == 0 && i != 0)) && coords.x >= 0 && coords.x < buildingRoomGrid.x && coords.y >= 0 && coords.y < buildingRoomGrid.y)
+                if (((i == 0 && j != 0) || (j == 0 && i != 0)) && InRange(coords, new Vector2(0,0), buildingRoomGrid))
                 {
                     if (rooms[coords.x, coords.y] == rooms[x, y])
                         merged = true;
@@ -731,6 +731,7 @@ public class BoardManager : MonoBehaviour
             for (int y = 1 - radius; y <= radius - 1; y++) {
                 Vector3Int newPos = new Vector3Int(position.x + x, position.y + y, 0);
                 Vector3Int newPosGrid = new Vector3Int(newPos.x, newPos.y, newPos.y);
+                Vector2 gridSize = new Vector2(columns, rows);
                 if (newPos.x < -1 || newPos.x > columns || newPos.y < -1 || newPos.y > rows)
                     continue;
 
@@ -746,7 +747,8 @@ public class BoardManager : MonoBehaviour
                     Instantiate(RandomObject(streetObjects), newPosGrid, Quaternion.identity);
                 
                 List<Vector3Int> added = new List<Vector3Int>();
-                if ((path || !pond || gridPositions.Contains(newPosGrid) || newPos.x < 0 || newPos.x >= columns || newPos.y < 0 || newPos.y >= rows) && (!path || connected || Random.Range(0,3) > 0) && (!pond || 0.01 > (Math.Pow((Math.Max(x, 0 - x) * Math.Max(y, 0 - y)), 2) / Math.Pow((2*radius * 2*radius), 2)))) {
+                if ((path || !pond || gridPositions.Contains(newPosGrid) || newPos.x < 0 || newPos.x >= columns || newPos.y < 0 || newPos.y >= rows) && 
+                        (!path || connected || Random.Range(0,3) > 0) && (!pond || 0.01 > (Math.Pow((Math.Max(x, 0 - x) * Math.Max(y, 0 - y)), 2) / Math.Pow((2*radius * 2*radius), 2)))) {
                     tilemap.SetTile(newPos, tile);
                     added.Add(newPosGrid);
                     if (pond && newPos.x >= 0 && newPos.x < columns && newPos.y >= 0 && newPos.y < rows) {
@@ -774,6 +776,14 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private bool InRange(Vector2 position, Vector2 start, Vector2 end, bool endExclusive = true) {
+        if (endExclusive)
+            return position.x >= start.x && position.y >= start.y && position.x < end.x && position.y < end.y;
+        else
+            return position.x >= start.x && position.y >= start.y && position.x <= end.x && position.y <= end.y;
+
     }
 
     public List<List<Node>> SetupScene(int level)

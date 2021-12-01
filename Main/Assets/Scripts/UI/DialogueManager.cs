@@ -193,7 +193,7 @@ public class DialogueManager : MonoBehaviour
             if (player.GetComponent<Character>().HasItemType("Weapon"))
             {
                 // Insert code to set a "fleeing" variable to true here (threat worked)
-                talkingNPC.GetComponent<Character>().subdued = true;
+                talkingNPC.GetComponent<Character>().Subdue();
                 System.Random rand = new System.Random();
                 int index = rand.Next(intimidationSuccessResponses.Length);
                 string randomResponse = intimidationSuccessResponses[index];

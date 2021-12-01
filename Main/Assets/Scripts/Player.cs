@@ -9,12 +9,12 @@ using UnityEngine.SocialPlatforms;
 
 public class Player : Character
 {
-    public bool gettingMove;
-    public bool gettingAction;
-    public bool gettingTarget;
-    public bool gettingItem;
-    public bool looting;
-    private bool backButton;
+    protected bool gettingMove;
+    protected bool gettingAction;
+    protected bool gettingTarget;
+    protected bool gettingItem;
+    protected bool looting;
+    protected bool backButton;
 
     // Start is called before the first frame update
     protected override void Start()

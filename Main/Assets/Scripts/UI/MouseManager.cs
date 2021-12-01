@@ -56,8 +56,10 @@ public class MouseManager : MonoBehaviour
 
         if (paths.ContainsKey(currentMouseCoords))
         {
-            paths.TryGetValue(currentMouseCoords, out character.pathToObjective);
-            MenuManager.instance.HighlightPath(character.pathToObjective);
+            Vector2[] path;
+            paths.TryGetValue(currentMouseCoords, out path);
+            character.SetPathToObjective(path);
+            MenuManager.instance.HighlightPath(character.GetPathToObjective());
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -86,7 +88,7 @@ public class MouseManager : MonoBehaviour
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    character.currentObjective.target = o;
+                    character.SetCurrentObjectiveTarget(o);
                     GameManager.instance.CameraTarget(o.gameObject);
                     MenuManager.instance.HideIndicators();
                     return false;

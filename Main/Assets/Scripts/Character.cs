@@ -41,6 +41,7 @@ public class Character : InteractableObject
     }
 
     public bool playable;
+    public bool talkable;
     public Sprite portrait;
     public string name;
     public float moveTime;
@@ -52,21 +53,20 @@ public class Character : InteractableObject
     public double accuracy;
     public double dexterity;
     public double agility;
-    public bool isTurn;
-    public bool hasGone;
-    public bool isMoving;
-    public bool talkable;
-    public bool subdued;
-    public Objective currentObjective;
     public List<Objective> objectives;
+    public List<HoldableObject> inventory;
 
+    protected bool subdued;
+    protected Objective currentObjective;
+    protected bool isTurn;
+    protected bool hasGone;
+    protected bool isMoving;
     protected Animator animator;
     private float inverseMoveTime;
-    public Vector2[] pathToObjective;
+    protected Vector2[] pathToObjective;
     protected Dictionary<Vector2, Vector2[]> paths;
     protected Dictionary<String, List<InteractableObject>> actableObjects;
     protected SortedSet<String> actions;
-    public List<HoldableObject> inventory;
     protected int attackRange;
     protected List<InteractableObject> allies;
     protected List<InteractableObject> enemies;
@@ -802,4 +802,31 @@ public class Character : InteractableObject
         yield return new WaitForSeconds(actionDelay);
     }
 
+    public bool HasGone() {
+        return hasGone;
+    }
+
+    public void SetHasGone(bool gone) {
+        hasGone = gone;
+    }
+
+    public bool IsSubdued() {
+        return subdued;
+    }
+
+    public void Subdue() {
+        subdued = true;
+    }
+
+    public Vector2[] GetPathToObjective() {
+        return pathToObjective;
+    }
+
+    public void SetPathToObjective(Vector2[] path) {
+        pathToObjective = path;
+    }
+
+    public void SetCurrentObjectiveTarget(InteractableObject target) {
+        currentObjective.target = target;
+    }
 }

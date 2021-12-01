@@ -235,7 +235,7 @@ public class GameManager : MonoBehaviour
 
         foreach (Player character in characters)
         {
-            character.hasGone = false;
+            character.SetHasGone(false);
         }
 
         StartCoroutine(NextTurn());
@@ -255,7 +255,7 @@ public class GameManager : MonoBehaviour
         List<Player> playableCharacters = new List<Player>();
         foreach (Player character in characters)
         {
-            if (character.playable && (ignoreGone || !character.hasGone))
+            if (character.playable && (ignoreGone || !character.HasGone()))
             {
                 playableCharacters.Add(character);
             }
@@ -269,7 +269,7 @@ public class GameManager : MonoBehaviour
         List<Player> nonplayableCharacters = new List<Player>();
         foreach (Player character in characters)
         {
-            if (!character.playable && (ignoreGone || !character.hasGone))
+            if (!character.playable && (ignoreGone || !character.HasGone()))
             //if (!character.playable && !character.hasGone && character.currentObjective != null && character.objectives.Count > 0)
             {
                 nonplayableCharacters.Add(character);

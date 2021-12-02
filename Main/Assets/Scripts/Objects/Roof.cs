@@ -56,6 +56,9 @@ public class Roof : MonoBehaviour
         bool isDownLeft = false;
         bool isDownRight = false;
 
+        // Label the code commmented out below if you're not gonna use it. If it is necessary for later, 
+        // then label what it will be used for. If not, delete the code commented segment.
+
         // foreach (Roof roof in GameManager.instance.Roofs[roofIndex])
         // {
         //     if ((Vector2) roof.transform.position == ((Vector2) transform.position) + new Vector2(0, 1))
